@@ -1,0 +1,27 @@
+{
+    "name": "enlitepro/enlite-monolog",
+    "description": "Monolog integration to Zend Framework 2",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Evgeny Shpilevsky",
+            "email": "evgeny@shpilevsky.com"
+        }
+    ],
+    "keywords": [
+        "Zend Framework 2",
+        "Monolog"
+    ],
+    "require": {
+        "monolog/monolog":                      "~1.6.0",
+        "zendframework/zendframework":          "2.2.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit":                      "~3.7"
+    },
+    "autoload": {
+        "psr-0": {
+            "EnliteMonolog": "src"
+        }
+    }
+}
