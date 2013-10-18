@@ -1,4 +1,4 @@
-Monolog integration to Zend Framework 2
+Monolog integration to ZF2 [![Build Status](https://travis-ci.org/enlitepro/enlite-monolog.png)](https://travis-ci.org/enlitepro/enlite-monolog)
 ==============
 
 
