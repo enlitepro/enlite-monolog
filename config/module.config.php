@@ -19,8 +19,8 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'EnliteMonologService' => 'EnliteMonolog\MonologServiceFactory',
-            'EnliteMonologOptions' => 'EnliteMonolog\MonologOptionsFactory',
+            'EnliteMonologService' => 'EnliteMonolog\Service\MonologServiceFactory',
+            'EnliteMonologOptions' => 'EnliteMonolog\Service\MonologOptionsFactory',
         ),
         'initializers' => array(
             'EnliteMonolog\Service\MonologServiceInitializer'
