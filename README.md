@@ -1,6 +1,7 @@
 Monolog integration to ZF2 [![Build Status](https://travis-ci.org/enlitepro/enlite-monolog.png)](https://travis-ci.org/enlitepro/enlite-monolog)
 ==============
 
+Integration to Zend Framework 2 grate log system [monolog](https://github.com/Seldaek/monolog)
 
 INSTALL
 =======

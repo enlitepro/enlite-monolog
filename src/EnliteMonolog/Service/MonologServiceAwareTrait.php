@@ -35,12 +35,12 @@ trait MonologServiceAwareTrait
     {
         if (null === $this->monologService) {
             if ($this instanceof ServiceLocatorAwareInterface || method_exists($this, 'getServiceLocator')) {
-                $this->analyseService = $this->getServiceLocator()->get('EnliteMonologService');
+                $this->monologService = $this->getServiceLocator()->get('EnliteMonologService');
             } else {
                 if (property_exists($this, 'serviceLocator')
                     && $this->monologService instanceof ServiceLocatorInterface
                 ) {
-                    $this->analyseService = $this->serviceLocator->get('EnliteMonologService');
+                    $this->monologService = $this->serviceLocator->get('EnliteMonologService');
                 } else {
                     throw new RuntimeException('Service locator not found');
                 }
