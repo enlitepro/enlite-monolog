@@ -52,7 +52,7 @@ class MonologServiceAbstractFactory implements AbstractFactoryInterface
         if (isset($config['EnliteMonolog'])) {
             $this->config = $config['EnliteMonolog'];
         } else {
-            $this->config = [];
+            $this->config = array();
         }
 
         return $this->config;
