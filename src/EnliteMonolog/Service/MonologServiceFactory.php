@@ -7,6 +7,7 @@ namespace EnliteMonolog\Service;
 
 
 use Monolog\Logger;
+use RuntimeException;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Log\LoggerInterface;
 use Zend\ServiceManager\FactoryInterface;
@@ -22,6 +23,16 @@ class MonologServiceFactory implements FactoryInterface
     {
         /** @var MonologOptions $options */
         $options = $serviceLocator->get('EnliteMonologOptions');
+        return $this->createLogger($serviceLocator, $options);
+    }
+
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     * @param MonologOptions $options
+     * @return Logger
+     */
+    public function createLogger(ServiceLocatorInterface $serviceLocator, MonologOptions $options)
+    {
         $logger = new Logger($options->getName());
 
         foreach ($options->getHandlers() as $handler) {
@@ -35,7 +46,8 @@ class MonologServiceFactory implements FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @param string|array $handler
      * @return LoggerInterface
-     * @throws \RuntimeException
+     *
+     * @throws RuntimeException
      */
     public function createHandler(ServiceLocatorInterface $serviceLocator, $handler)
     {
@@ -43,16 +55,16 @@ class MonologServiceFactory implements FactoryInterface
             return $serviceLocator->get($handler);
         } else {
             if (!isset($handler['name'])) {
-                throw new \RuntimeException('Cannot create logger handler');
+                throw new RuntimeException('Cannot create logger handler');
             }
 
             if (!class_exists($handler['name'])) {
-                throw new \RuntimeException('Cannot create logger handler (' . $handler['name'] . ')');
+                throw new RuntimeException('Cannot create logger handler (' . $handler['name'] . ')');
             }
 
             if (isset($handler['args'])) {
                 if (!is_array($handler['args'])) {
-                    throw new \RuntimeException('Arguments of handler(' . $handler['name'] . ') must be array');
+                    throw new RuntimeException('Arguments of handler(' . $handler['name'] . ') must be array');
                 }
 
                 $reflection = new ClassReflection($handler['name']);
