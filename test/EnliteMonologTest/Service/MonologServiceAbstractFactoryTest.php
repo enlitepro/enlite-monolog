@@ -16,9 +16,9 @@ class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new MonologServiceAbstractFactory();
         $serviceLocator = new ServiceManager();
-        $serviceLocator->setService('config', []);
+        $serviceLocator->setService('config', array());
 
-        $this->assertEquals([], $factory->getConfig($serviceLocator));
+        $this->assertEquals(array(), $factory->getConfig($serviceLocator));
     }
 
     public function testGetConfigWithConfig()
@@ -29,22 +29,22 @@ class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
             'config',
             array(
                  'EnliteMonolog' => array(
-                    'EnliteMonolog' => []
+                    'EnliteMonolog' => array()
                  )
             )
         );
 
-        $this->assertEquals(['EnliteMonolog' => []], $factory->getConfig($serviceLocator));
+        $this->assertEquals(array('EnliteMonolog' => array()), $factory->getConfig($serviceLocator));
     }
 
     public function testGetConfigWithAlreadyFetchConfig()
     {
         $factory = new MonologServiceAbstractFactory();
-        $factory->setConfig(['a' => 'b']);
+        $factory->setConfig(array('a' => 'b'));
         $serviceLocator = new ServiceManager();
 
 
-        $this->assertEquals(['a' => 'b'], $factory->getConfig($serviceLocator));
+        $this->assertEquals(array('a' => 'b'), $factory->getConfig($serviceLocator));
     }
 
     public function testCanCreateServiceWithName()
@@ -55,7 +55,7 @@ class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
             'config',
             array(
                  'EnliteMonolog' => array(
-                     'default' => []
+                     'default' => array()
                  )
             )
         );
@@ -71,12 +71,12 @@ class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
             'config',
             array(
                  'EnliteMonolog' => array(
-                     'default' => []
+                     'default' => array()
                  )
             )
         );
 
-        $service = $factory->createServiceWithName($serviceLocator, 'default', 'default');
+        $factory->createServiceWithName($serviceLocator, 'default', 'default');
 
     }
 

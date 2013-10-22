@@ -20,6 +20,11 @@ trait MonologServiceAwareTrait
     protected $monologService;
 
     /**
+     * @var string
+     */
+    protected $monologLoggerName = 'EnliteMonologService';
+
+    /**
      * @param Logger $monologService
      */
     public function setMonologService(Logger $monologService)
@@ -35,12 +40,12 @@ trait MonologServiceAwareTrait
     {
         if (null === $this->monologService) {
             if ($this instanceof ServiceLocatorAwareInterface || method_exists($this, 'getServiceLocator')) {
-                $this->monologService = $this->getServiceLocator()->get('EnliteMonologService');
+                $this->monologService = $this->getServiceLocator()->get($this->monologLoggerName);
             } else {
                 if (property_exists($this, 'serviceLocator')
                     && $this->monologService instanceof ServiceLocatorInterface
                 ) {
-                    $this->monologService = $this->serviceLocator->get('EnliteMonologService');
+                    $this->monologService = $this->serviceLocator->get($this->monologLoggerName);
                 } else {
                     throw new RuntimeException('Service locator not found');
                 }
