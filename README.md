@@ -11,7 +11,7 @@ The recommended way to install is through composer.
 ```json
 {
     "require": {
-        "enlitepro/enlite-monolog": "~1.1"
+        "enlitepro/enlite-monolog": "~1.1.0"
     }
 }
 ```
