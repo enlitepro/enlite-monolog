@@ -7,6 +7,7 @@ namespace EnliteMonolog\Service;
 
 
 use Monolog\Logger;
+use Monolog\Formatter\FormatterInterface;
 use RuntimeException;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Log\LoggerInterface;
@@ -68,12 +69,56 @@ class MonologServiceFactory implements FactoryInterface
                 }
 
                 $reflection = new ClassReflection($handler['name']);
-                return call_user_func_array(array($reflection, 'newInstance'), $handler['args']);
+
+                $instance = call_user_func_array(array($reflection, 'newInstance'), $handler['args']);
+            } else {
+	            $class = $handler['name'];
+
+	            $instance = new $class();
             }
 
-            $class = $handler['name'];
+	        if (isset($handler['formatter'])) {
+		        $formatter = $this->createFormatter($serviceLocator, $handler['formatter']);
+		        $instance->setFormatter($formatter);
+	        }
 
-            return new $class();
+            return $instance;
         }
     }
+
+	/**
+	 * @param ServiceLocatorInterface $serviceLocator
+	 * @param string|array $handler
+	 * @return FormatterInterface
+	 *
+	 * @throws RuntimeException
+	 */
+	public function createFormatter(ServiceLocatorInterface $serviceLocator, $formatter)
+	{
+		if (is_string($formatter) && $serviceLocator->has($formatter)) {
+			return $serviceLocator->get($formatter);
+		} else {
+			if (!isset($formatter['name'])) {
+				throw new RuntimeException('Cannot create logger formatter');
+			}
+
+			if (!class_exists($formatter['name'])) {
+				throw new RuntimeException('Cannot create logger formatter (' . $formatter['name'] . ')');
+			}
+
+			if (isset($formatter['args'])) {
+				if (!is_array($formatter['args'])) {
+					throw new RuntimeException('Arguments of formatter(' . $formatter['name'] . ') must be array');
+				}
+
+				$reflection = new ClassReflection($formatter['name']);
+
+				return call_user_func_array(array($reflection, 'newInstance'), $formatter['args']);
+			}
+
+			$class = $formatter['name'];
+
+			return new $class();
+		}
+	}
 }
