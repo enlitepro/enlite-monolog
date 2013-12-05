@@ -58,7 +58,13 @@ By default it write logs to `data/logs/application.log`. If you want change this
                         'path' => 'data/log/application.log',
                         'level' => \Monolog\Logger::DEBUG,
                         'bubble' => true
-                    )
+                    ),
+                    'formatter' => array(
+                        'name' => 'Monolog\Formatter\LogstashFormatter',
+                        'args' => array(
+                            'application' => 'My Application',
+                        ),
+                    ),
                 ),
 
                 // by service locator

@@ -88,7 +88,7 @@ class MonologServiceFactory implements FactoryInterface
 
 	/**
 	 * @param ServiceLocatorInterface $serviceLocator
-	 * @param string|array $handler
+	 * @param string|array $formatter
 	 * @return FormatterInterface
 	 *
 	 * @throws RuntimeException
