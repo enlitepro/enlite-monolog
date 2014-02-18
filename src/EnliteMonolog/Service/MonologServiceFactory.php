@@ -6,6 +6,7 @@
 namespace EnliteMonolog\Service;
 
 
+use Closure;
 use Monolog\Logger;
 use Monolog\Formatter\FormatterInterface;
 use RuntimeException;
@@ -38,6 +39,10 @@ class MonologServiceFactory implements FactoryInterface
 
         foreach ($options->getHandlers() as $handler) {
             $logger->pushHandler($this->createHandler($serviceLocator, $handler));
+        }
+
+        foreach ($options->getProcessors() as $processor) {
+            $logger->pushProcessor($this->createProcessor($serviceLocator, $processor));
         }
 
         return $logger;
@@ -121,4 +126,28 @@ class MonologServiceFactory implements FactoryInterface
 			return new $class();
 		}
 	}
+
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     * @param $processor
+     * @return Closure
+     *
+     * @throws RuntimeException
+     */
+    public function createProcessor(ServiceLocatorInterface $serviceLocator, $processor)
+    {
+        if ($processor instanceof Closure) {
+            return $processor;
+        }
+
+        if (is_string($processor)) {
+            $processor = new $processor();
+
+            if (is_callable($processor)) {
+                return $processor;
+            }
+        }
+
+        throw new RuntimeException('Unknown processor type, must be a Closure or the FQCN of an invokable class');
+    }
 }
