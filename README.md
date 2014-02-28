@@ -19,7 +19,7 @@ The recommended way to install is through composer.
 USAGE
 =====
 
-Add `EnliteMonolog` to your `config/application.config.php` to enable module.
+1. Add `EnliteMonolog` to your `config/application.config.php` to enable module.
 
 ```php
 // usage over service locator
@@ -40,6 +40,8 @@ class MyService implements MonologServiceAwareInterface
 }
 
 ```
+
+2. Copy the config file `config/monolog.global.php.dist` from the module to config/autoload your project.
 
 By default it write logs to `data/logs/application.log`. If you want change this behaviour, add your config following:
 
