@@ -26,6 +26,11 @@ class MonologOptions extends AbstractOptions
     protected $handlers = array();
 
     /**
+     * @var array
+     */
+    protected $processors = array();
+
+    /**
      * @param string $name
      */
     public function setName($name)
@@ -57,6 +62,20 @@ class MonologOptions extends AbstractOptions
         return $this->handlers;
     }
 
+    /**
+     * @param array $processors
+     */
+    public function setProcessors($processors = array())
+    {
+        $this->processors = $processors;
+    }
 
+    /**
+     * @return array
+     */
+    public function getProcessors()
+    {
+        return $this->processors;
+    }
 
 }
