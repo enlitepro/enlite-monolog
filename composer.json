@@ -14,7 +14,7 @@
         "Monolog"
     ],
     "require": {
-        "monolog/monolog":                      "~1.6",
+        "monolog/monolog":                      "~1.7",
         "zendframework/zendframework":          "~2.2"
     },
     "require-dev": {
