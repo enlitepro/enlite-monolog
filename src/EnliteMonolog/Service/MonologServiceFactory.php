@@ -38,7 +38,7 @@ class MonologServiceFactory implements FactoryInterface
         $logger = new Logger($options->getName());
 
         foreach ($options->getHandlers() as $handler) {
-            $logger->pushHandler($this->createHandler($serviceLocator, $handler));
+            $logger->pushHandler($this->createHandler($serviceLocator, $options, $handler));
         }
 
         foreach ($options->getProcessors() as $processor) {
@@ -50,12 +50,13 @@ class MonologServiceFactory implements FactoryInterface
 
     /**
      * @param ServiceLocatorInterface $serviceLocator
+     * @param MonologOptions $options
      * @param string|array $handler
+     * @throws \RuntimeException
      * @return LoggerInterface
      *
-     * @throws RuntimeException
      */
-    public function createHandler(ServiceLocatorInterface $serviceLocator, $handler)
+    public function createHandler(ServiceLocatorInterface $serviceLocator, MonologOptions $options, $handler)
     {
         if (is_string($handler) && $serviceLocator->has($handler)) {
             return $serviceLocator->get($handler);
@@ -74,6 +75,15 @@ class MonologServiceFactory implements FactoryInterface
                 }
 
                 $reflection = new ClassReflection($handler['name']);
+
+                if (isset($handler['args']['handler'])) {
+                    foreach ($options->getHandlers() as $key => $option) {
+                        if ($handler['args']['handler'] == $key) {
+                            $handler['args']['handler'] = $this->createHandler($serviceLocator, $options, $option);
+                            break;
+                        }
+                    }
+                }
 
                 $instance = call_user_func_array(array($reflection, 'newInstance'), $handler['args']);
             } else {
