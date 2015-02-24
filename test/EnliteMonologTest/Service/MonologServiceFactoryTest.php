@@ -31,33 +31,40 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateHandlerFromServiceLocator()
     {
+        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+
         $serviceManager = new ServiceManager();
         $serviceManager->setService('TestHandler', 'works');
 
         $factory = new MonologServiceFactory();
 
-        $this->assertEquals('works', $factory->createHandler($serviceManager, 'TestHandler'));
+
+        $this->assertEquals('works', $factory->createHandler($serviceManager, new MonologOptions($config), 'TestHandler'));
     }
 
     public function testCreateHandlerByClassNameWithoutArgs()
     {
+        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+
         $serviceManager = new ServiceManager();
         $handler = array('name' => 'Monolog\Handler\TestHandler');
 
         $factory = new MonologServiceFactory();
 
-        $this->assertInstanceOf('Monolog\Handler\TestHandler', $factory->createHandler($serviceManager, $handler));
+        $this->assertInstanceOf('Monolog\Handler\TestHandler', $factory->createHandler($serviceManager, new MonologOptions($config), $handler));
     }
 
     public function testCreateHandlerByClassNameWithArgs()
     {
+        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+
         $serviceManager = new ServiceManager();
 
         $handler = array('name' => 'EnliteMonologTest\Service\HandlerMock', 'args' => array('some.log'));
 
         $factory = new MonologServiceFactory();
 
-        $logger = $factory->createHandler($serviceManager, $handler);
+        $logger = $factory->createHandler($serviceManager, new MonologOptions($config), $handler);
         $this->assertInstanceOf('EnliteMonologTest\Service\HandlerMock', $logger);
         $this->assertEquals('some.log', $logger->getPath());
     }
@@ -67,10 +74,12 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateHandlerByEmptyClassname()
     {
+        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
 
-        $factory->createHandler($serviceManager, array());
+        $factory->createHandler($serviceManager, new MonologOptions($config), array());
     }
 
     /**
@@ -78,10 +87,12 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateHandlerNotExistsClassname()
     {
+        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
 
-        $factory->createHandler($serviceManager, array('name' => 'unknown_class_name'));
+        $factory->createHandler($serviceManager, new MonologOptions($config), array('name' => 'unknown_class_name'));
     }
 
     /**
@@ -89,10 +100,12 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateHandlerWithBadArgs()
     {
+        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
 
-        $factory->createHandler($serviceManager, array('name' => 'Monolog\Handler\TestHandler', 'args' => ''));
+        $factory->createHandler($serviceManager, new MonologOptions($config), array('name' => 'Monolog\Handler\TestHandler', 'args' => ''));
     }
 
 }
