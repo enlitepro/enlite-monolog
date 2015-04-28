@@ -7,6 +7,7 @@ namespace EnliteMonolog\Service;
 
 
 use Closure;
+use Exception;
 use Monolog\Logger;
 use Monolog\Formatter\FormatterInterface;
 use RuntimeException;
@@ -151,6 +152,16 @@ class MonologServiceFactory implements FactoryInterface
         }
 
         if (is_string($processor)) {
+            try {
+                $instance = $serviceLocator->get($processor);
+            } catch (Exception $ex) {
+                $instance = null;
+            }
+
+            if ($instance && is_callable($instance)) {
+                return $instance;
+            }
+            
             $processor = new $processor();
 
             if (is_callable($processor)) {
