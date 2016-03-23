@@ -8,6 +8,7 @@ namespace EnliteMonolog\Service;
 
 use Closure;
 use Exception;
+use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
 use Monolog\Formatter\FormatterInterface;
 use RuntimeException;
@@ -54,7 +55,7 @@ class MonologServiceFactory implements FactoryInterface
      * @param MonologOptions $options
      * @param string|array $handler
      * @throws \RuntimeException
-     * @return LoggerInterface
+     * @return HandlerInterface
      *
      */
     public function createHandler(ServiceLocatorInterface $serviceLocator, MonologOptions $options, $handler)
