@@ -12,8 +12,6 @@ use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
 use Monolog\Formatter\FormatterInterface;
 use RuntimeException;
-use Zend\Code\Reflection\ClassReflection;
-use Zend\Log\LoggerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -76,7 +74,7 @@ class MonologServiceFactory implements FactoryInterface
                     throw new RuntimeException('Arguments of handler(' . $handler['name'] . ') must be array');
                 }
 
-                $reflection = new ClassReflection($handler['name']);
+                $reflection = new \ReflectionClass($handler['name']);
 
                 if (isset($handler['args']['handler'])) {
                     foreach ($options->getHandlers() as $key => $option) {
@@ -128,7 +126,7 @@ class MonologServiceFactory implements FactoryInterface
 					throw new RuntimeException('Arguments of formatter(' . $formatter['name'] . ') must be array');
 				}
 
-				$reflection = new ClassReflection($formatter['name']);
+				$reflection = new \ReflectionClass($formatter['name']);
 
 				return call_user_func_array(array($reflection, 'newInstance'), $formatter['args']);
 			}
