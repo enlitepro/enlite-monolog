@@ -140,9 +140,9 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
 
-        $actual = $factory->createProcessor($serviceManager, '\Monolog\Processor\UidProcessor');
+        $actual = $factory->createProcessor($serviceManager, '\Monolog\Processor\MemoryUsageProcessor');
 
-        self::assertInstanceOf('\Monolog\Processor\UidProcessor', $actual);
+        self::assertInstanceOf('\Monolog\Processor\MemoryUsageProcessor', $actual);
     }
 
     /**
@@ -240,7 +240,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $options = new MonologOptions();
         $options->setProcessors(array(
-            '\Monolog\Processor\UidProcessor',
+            '\Monolog\Processor\MemoryUsageProcessor',
         ));
         
         $serviceManager = new ServiceManager();
@@ -249,8 +249,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $actual = $factory->createLogger($serviceManager, $options);
         
         self::assertInstanceOf('\Monolog\Logger', $actual);
-        self::assertCount(1, $processors = $actual->getProcessors());
-        self::assertInstanceOf('\Monolog\Processor\UidProcessor', $processors[0]);
+        self::assertInstanceOf('\Monolog\Processor\MemoryUsageProcessor', $actual->popProcessor());
     }
     
     public function testCreateHandlerWithFormatter()

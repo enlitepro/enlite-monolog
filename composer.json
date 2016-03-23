@@ -14,7 +14,7 @@
         "Monolog"
     ],
     "require": {
-        "monolog/monolog": "^1.1",
+        "monolog/monolog": "^1.0.2",
         "zendframework/zend-modulemanager": "^2",
         "zendframework/zend-stdlib": "^2",
         "zendframework/zend-servicemanager": "^2"
