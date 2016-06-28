@@ -85,7 +85,27 @@ class MonologServiceFactory implements FactoryInterface
                     }
                 }
 
-                $instance = call_user_func_array(array($reflection, 'newInstance'), $handler['args']);
+                $parameters = array();
+                $handlerOptions = $handler['args'];
+
+                $requiredArgsCount = $reflection->getConstructor()->getNumberOfRequiredParameters();
+
+                if ($requiredArgsCount < sizeof($handlerOptions)) {
+                    throw new RuntimeException(sprintf('Handler(%s) requires at least %d params. Only %d passed.', $handler['name'], $requiredArgsCount, sizeof($handlerOptions)));
+                }
+
+                foreach($reflection->getConstructor()->getParameters() as $parameter) {
+                    if (!$parameter->isOptional() && !isset($handlerOptions[$parameter->getName()])) {
+                        $argumentValue = array_shift($handlerOptions);
+                    } elseif (isset($handlerOptions[$parameter->getName()])) {
+                        $argumentValue = $handlerOptions[$parameter->getName()];
+                        unset($handlerOptions[$parameter->getName()]);
+                    } else {
+                        $argumentValue = $parameter->getDefaultValue();
+                    }
+                    $parameters[$parameter->getPosition()] = $argumentValue;
+                }
+                $instance = $reflection->newInstanceArgs($parameters);
             } else {
 	            $class = $handler['name'];
 
@@ -160,7 +180,7 @@ class MonologServiceFactory implements FactoryInterface
             if ($instance && is_callable($instance)) {
                 return $instance;
             }
-            
+
             $processor = new $processor();
 
             if (is_callable($processor)) {
