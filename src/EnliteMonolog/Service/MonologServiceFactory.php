@@ -90,7 +90,7 @@ class MonologServiceFactory implements FactoryInterface
 
                 $requiredArgsCount = $reflection->getConstructor()->getNumberOfRequiredParameters();
 
-                if ($requiredArgsCount < sizeof($handlerOptions)) {
+                if ($requiredArgsCount > sizeof($handlerOptions)) {
                     throw new RuntimeException(sprintf('Handler(%s) requires at least %d params. Only %d passed.', $handler['name'], $requiredArgsCount, sizeof($handlerOptions)));
                 }
 
