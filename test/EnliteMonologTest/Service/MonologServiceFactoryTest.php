@@ -159,7 +159,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateFormatterFromServiceName()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('MyFormatter', $expected = self::createMock('\Monolog\Formatter\FormatterInterface'));
+        $serviceManager->setService('MyFormatter', $expected = $this->getMock('\Monolog\Formatter\FormatterInterface'));
 
         $factory = new MonologServiceFactory();
 
