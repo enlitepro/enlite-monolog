@@ -115,9 +115,9 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new MonologServiceFactory();
 
         $actual = $factory->createProcessor($serviceManager, $expected = function () {
-            
+
         });
-        
+
         self::assertSame($expected, $actual);
     }
 
@@ -127,7 +127,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $serviceManager->setService('MyProcessor', $expected = function () {
 
         });
-        
+
         $factory = new MonologServiceFactory();
 
         $actual = $factory->createProcessor($serviceManager, 'MyProcessor');
@@ -155,16 +155,16 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory->createProcessor($serviceManager, '\stdClass');
     }
-    
+
     public function testCreateFormatterFromServiceName()
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService('MyFormatter', $expected = $this->getMock('\Monolog\Formatter\FormatterInterface'));
-        
+
         $factory = new MonologServiceFactory();
 
         $actual = $factory->createFormatter($serviceManager, 'MyFormatter');
-        
+
         self::assertSame($expected, $actual);
     }
 
@@ -177,7 +177,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new MonologServiceFactory();
 
         $factory->createFormatter($serviceManager, array(
-            
+
         ));
     }
 
@@ -207,7 +207,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
             'args' => 'MyArgs',
         ));
     }
-    
+
     public function testCreateFormatterWithArguments()
     {
         $serviceManager = new ServiceManager();
@@ -220,10 +220,10 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
                 'dateFormat' => 'Y-m-d H:i:s',
             ),
         ));
-        
+
         self::assertInstanceOf('\Monolog\Formatter\LineFormatter', $actual);
     }
-    
+
     public function testCreateFormatterWithoutArguments()
     {
         $serviceManager = new ServiceManager();
@@ -235,36 +235,54 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
         self::assertInstanceOf('\Monolog\Formatter\LineFormatter', $actual);
     }
-    
+
     public function testCreateLoggerWithProcessor()
     {
         $options = new MonologOptions();
         $options->setProcessors(array(
             '\Monolog\Processor\MemoryUsageProcessor',
         ));
-        
+
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
-        
+
         $actual = $factory->createLogger($serviceManager, $options);
-        
+
         self::assertInstanceOf('\Monolog\Logger', $actual);
         self::assertInstanceOf('\Monolog\Processor\MemoryUsageProcessor', $actual->popProcessor());
     }
-    
+
     public function testCreateHandlerWithFormatter()
     {
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
-        
+
         $actual = $factory->createHandler($serviceManager, new MonologOptions(), array(
             'name' => '\Monolog\Handler\NullHandler',
             'formatter' => array(
                 'name' => '\Monolog\Formatter\LineFormatter',
             ),
         ));
-        
+
         self::assertInstanceOf('\Monolog\Handler\NullHandler', $actual);
         self::assertInstanceOf('\Monolog\Formatter\LineFormatter', $actual->getFormatter());
+    }
+
+    public function testCreateHandlerWithRandomOrderArgs()
+    {
+        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+
+        $serviceManager = new ServiceManager();
+        $factory = new MonologServiceFactory();
+
+        /** @var \Monolog\Handler\TestHandler $handler */
+        $handler = $factory->createHandler($serviceManager, new MonologOptions($config), array(
+            'name' => 'Monolog\Handler\TestHandler',
+            'args' => array(
+                'bubble' => false
+            )
+        ));
+
+        self::assertFalse($handler->getBubble());
     }
 }
