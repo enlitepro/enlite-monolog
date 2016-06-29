@@ -37,9 +37,11 @@ class MonologServiceFactory implements FactoryInterface
     {
         $logger = new Logger($options->getName());
 
+        $handlers = array();
         foreach ($options->getHandlers() as $handler) {
-            $logger->pushHandler($this->createHandler($serviceLocator, $options, $handler));
+            $handlers[] = $this->createHandler($serviceLocator, $options, $handler);
         }
+        $logger->setHandlers($handlers);
 
         foreach ($options->getProcessors() as $processor) {
             $logger->pushProcessor($this->createProcessor($serviceLocator, $processor));
