@@ -285,4 +285,36 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
         self::assertFalse($handler->getBubble());
     }
+
+
+    public function testHandlersOrder()
+    {
+        $config = array(
+            'name' => 'test',
+            'handlers' => array(
+                'testHandler' => 'TestHandler',
+                'nullHandler' => array('name' => 'Monolog\Handler\NullHandler'),
+            )
+        );
+
+        $serviceManager = new ServiceManager();
+        $factory = new MonologServiceFactory();
+
+        /** @var \Monolog\Handler\TestHandler $handler */
+        $handler = $factory->createHandler($serviceManager, new MonologOptions($config), array(
+            'name' => 'Monolog\Handler\TestHandler',
+            'args' => array(
+                'bubble' => false
+            )
+        ));
+        $serviceManager->setService('TestHandler', $handler);
+        $serviceManager->setService('EnliteMonologOptions', new MonologOptions($config));
+
+        $service = $factory->createService($serviceManager);
+
+        $service->addError('HandleThis!');
+        $handlers = $service->getHandlers();
+        self::assertCount(2, $handlers);
+        self::assertTrue($handler->hasErrorRecords());
+    }
 }
