@@ -1,6 +1,6 @@
 {
     "name": "enlitepro/enlite-monolog",
-    "description": "Monolog integration to Zend Framework 2",
+    "description": "Monolog integration to Zend Framework v2 and v3",
     "minimum-stability": "stable",
     "license": "MIT",
     "authors": [
