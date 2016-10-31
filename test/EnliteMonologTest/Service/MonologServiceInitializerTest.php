@@ -43,6 +43,6 @@ class MonologServiceInitializerTest extends \PHPUnit_Framework_TestCase
 
     private function isZF2()
     {
-        return class_exists(\Zend\Stdlib\CallbackHandler::class);
+        return class_exists('\Zend\Stdlib\CallbackHandler');
     }
 }
