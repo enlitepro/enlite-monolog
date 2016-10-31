@@ -313,8 +313,13 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $service = $factory->createService($serviceManager);
 
         $service->addError('HandleThis!');
-        $handlers = $service->getHandlers();
-        self::assertCount(2, $handlers);
+
+        $handler1 = $service->popHandler();
+        $this->assertInstanceOf('Monolog\Handler\TestHandler', $handler1);
+
+        $handler2 = $service->popHandler();
+        $this->assertInstanceOf('Monolog\Handler\NullHandler', $handler2);
+
         self::assertTrue($handler->hasErrorRecords());
     }
 }
