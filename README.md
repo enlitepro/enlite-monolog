@@ -1,19 +1,15 @@
-Monolog integration to ZF2 [![Build Status](https://travis-ci.org/enlitepro/enlite-monolog.png)](https://travis-ci.org/enlitepro/enlite-monolog)
+Monolog integration to ZF2+ZF3 [![Build Status](https://travis-ci.org/enlitepro/enlite-monolog.png)](https://travis-ci.org/enlitepro/enlite-monolog)
 ==============
 
-Integration to Zend Framework 2 great log system [monolog](https://github.com/Seldaek/monolog)
+Integration to Zend Framework 2 and 3 with great logging system [monolog](https://github.com/Seldaek/monolog)
 
 INSTALL
 =======
 
-The recommended way to install is through composer.
+The recommended way to install is through composer from command line.
 
-```json
-{
-    "require": {
-        "enlitepro/enlite-monolog": "~1.1.0"
-    }
-}
+```
+composer require enlitepro/enlite-monolog
 ```
 
 USAGE

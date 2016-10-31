@@ -1,6 +1,6 @@
 {
     "name": "enlitepro/enlite-monolog",
-    "description": "Monolog integration to Zend Framework 2",
+    "description": "Monolog integration to Zend Framework v2 and v3",
     "minimum-stability": "stable",
     "license": "MIT",
     "authors": [
@@ -20,7 +20,6 @@
         "zendframework/zend-servicemanager": "^2 || ^3"
     },
     "require-dev": {
-        "monolog/monolog": "^1.16.0",
         "phpunit/phpunit": "^5|^4|^3"
     },
     "autoload": {
