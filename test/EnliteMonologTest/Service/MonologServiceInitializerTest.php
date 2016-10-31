@@ -14,30 +14,35 @@ use Zend\ServiceManager\ServiceManager;
 
 class MonologServiceInitializerTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testInitialize()
     {
-        $serviceManager = new ServiceManager(
-            new Config(
-                array(
-                     'invokables' => array(
-                         'test' => 'EnliteMonologTest\Service\ServiceMock',
-                     ),
-                     'factories' => array(
-                         'EnliteMonologService' => function () {
-                             return new Logger('abc');
-                         }
-                     ),
-                     'initializers' => array(
-                         'EnliteMonolog\Service\MonologServiceInitializer'
-                     )
-                )
+        $configArray = array(
+            'invokables' => array(
+                'test' => 'EnliteMonologTest\Service\ServiceMock',
+            ),
+            'factories' => array(
+                'EnliteMonologService' => function () {
+                    return new Logger('abc');
+                }
+            ),
+            'initializers' => array(
+                'EnliteMonolog\Service\MonologServiceInitializer'
             )
         );
+
+        if ($this->isZF2()) {
+            $serviceManager = new ServiceManager(new Config($configArray));
+        } else { //ZF3
+            $serviceManager = new ServiceManager($configArray);
+        }
 
         /** @var MonologServiceAwareInterface $service */
         $service = $serviceManager->get('test');
         $this->assertInstanceOf('Monolog\Logger', $service->getMonologService());
     }
 
+    private function isZF2()
+    {
+        return class_exists(\Zend\Stdlib\CallbackHandler::class);
+    }
 }

@@ -6,12 +6,12 @@
 namespace EnliteMonolog\Service;
 
 
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class MonologServiceAbstractFactory implements AbstractFactoryInterface
 {
-
     /**
      * @var array
      */
@@ -22,7 +22,25 @@ class MonologServiceAbstractFactory implements AbstractFactoryInterface
      */
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        $config = $this->getConfig($serviceLocator);
+        return $this->has($serviceLocator, $requestedName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function canCreate(ContainerInterface $container, $requestedName)
+    {
+        return $this->has($container, $requestedName);
+    }
+
+    /**
+     * @param ServiceLocatorInterface|ContainerInterface $container
+     * @param $requestedName
+     * @return bool
+     */
+    private function has($container, $requestedName)
+    {
+        $config = $this->getConfig($container);
         return isset($config[$requestedName]);
     }
 
@@ -31,23 +49,36 @@ class MonologServiceAbstractFactory implements AbstractFactoryInterface
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        $config = $this->getConfig($serviceLocator);
-
-        $factory = new MonologServiceFactory();
-        return $factory->createLogger($serviceLocator, new MonologOptions($config[$requestedName]));
+        return $this->createLogger($serviceLocator, $requestedName);
     }
 
     /**
-     * @param ServiceLocatorInterface $serviceLocator
+     * {@inheritdoc}
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        return $this->createLogger($container, $requestedName);
+    }
+
+    private function createLogger($container, $requestedName)
+    {
+        $config = $this->getConfig($container);
+
+        $factory = new MonologServiceFactory();
+        return $factory->createLogger($container, new MonologOptions($config[$requestedName]));
+    }
+
+    /**
+     * @param ServiceLocatorInterface|ContainerInterface $container
      * @return array
      */
-    public function getConfig(ServiceLocatorInterface $serviceLocator)
+    public function getConfig($container)
     {
         if (null !== $this->config) {
             return $this->config;
         }
 
-        $config = $serviceLocator->get('config');
+        $config = $container->get('config');
 
         if (isset($config['EnliteMonolog'])) {
             $this->config = $config['EnliteMonolog'];
