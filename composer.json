@@ -20,6 +20,7 @@
         "zendframework/zend-servicemanager": "^2 || ^3"
     },
     "require-dev": {
+        "monolog/monolog": "^1.16.0",
         "phpunit/phpunit": "^5|^4|^3"
     },
     "autoload": {
