@@ -159,7 +159,10 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateFormatterFromServiceName()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('MyFormatter', $expected = $this->getMock('\Monolog\Formatter\FormatterInterface'));
+        $serviceManager->setService(
+            'MyFormatter',
+            $expected = $this->getMockBuilder('\Monolog\Formatter\FormatterInterface')->getMock()
+        );
 
         $factory = new MonologServiceFactory();
 
@@ -321,5 +324,18 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Monolog\Handler\NullHandler', $handler2);
 
         self::assertTrue($handler->hasErrorRecords());
+    }
+
+    public function testCreateLoggerIsErrorHandler()
+    {
+        $options = new MonologOptions();
+        $options->setIsErrorHandler(true);
+
+        $serviceManager = new ServiceManager();
+        $factory = new MonologServiceFactory();
+
+        $actual = $factory->createLogger($serviceManager, $options);
+
+        self::assertInstanceOf('\Monolog\Logger', $actual);
     }
 }
