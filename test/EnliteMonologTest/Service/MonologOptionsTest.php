@@ -4,6 +4,9 @@ namespace EnliteMonologTest\Service;
 
 use EnliteMonolog\Service\MonologOptions;
 
+/**
+ * @covers \EnliteMonolog\Service\MonologOptions
+ */
 class MonologOptionsTest extends \PHPUnit_Framework_TestCase
 {
     /** @var MonologOptions */
@@ -62,5 +65,19 @@ class MonologOptionsTest extends \PHPUnit_Framework_TestCase
 
         self::assertInternalType('array', $this->sut->getProcessors());
         self::assertContains($expected, $this->sut->getProcessors());
+    }
+
+    public function testDefaultIsErrorHandler()
+    {
+        $actual = $this->sut->isErrorHandler();
+
+        self::assertFalse($actual);
+    }
+
+    public function testSetIsErrorHandler()
+    {
+        $this->sut->setIsErrorHandler(true);
+
+        self::assertTrue($this->sut->isErrorHandler());
     }
 }

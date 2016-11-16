@@ -9,6 +9,7 @@ namespace EnliteMonolog\Service;
 use Closure;
 use Exception;
 use Interop\Container\ContainerInterface;
+use Monolog\ErrorHandler;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
 use Monolog\Formatter\FormatterInterface;
@@ -55,6 +56,10 @@ class MonologServiceFactory implements FactoryInterface
 
         foreach ($options->getProcessors() as $processor) {
             $logger->pushProcessor($this->createProcessor($container, $processor));
+        }
+
+        if (class_exists('\Monolog\ErrorHandler') && $options->isErrorHandler()) {
+            ErrorHandler::register($logger);
         }
 
         return $logger;

@@ -31,6 +31,13 @@ class MonologOptions extends AbstractOptions
     protected $processors = array();
 
     /**
+     * Register logger as error, exception, and fatal handler.
+     *
+     * @var bool
+     */
+    protected $isErrorHandler = false;
+
+    /**
      * @param string $name
      */
     public function setName($name)
@@ -78,4 +85,20 @@ class MonologOptions extends AbstractOptions
         return $this->processors;
     }
 
+    /**
+     * @return boolean
+     */
+    public function isErrorHandler()
+    {
+        return $this->isErrorHandler;
+    }
+
+    /**
+     * @param boolean $isErrorHandler
+     * @return void
+     */
+    public function setIsErrorHandler($isErrorHandler)
+    {
+        $this->isErrorHandler = (bool) $isErrorHandler;
+    }
 }
