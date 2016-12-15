@@ -8,6 +8,7 @@ namespace EnliteMonologTest\Service;
 
 use EnliteMonolog\Service\MonologOptions;
 use EnliteMonolog\Service\MonologServiceFactory;
+use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
 use Zend\ServiceManager\ServiceManager;
 
@@ -159,7 +160,10 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateFormatterFromServiceName()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('MyFormatter', $expected = $this->getMock('\Monolog\Formatter\FormatterInterface'));
+        $serviceManager->setService(
+            'MyFormatter',
+            $expected = $this->getMockBuilder('\Monolog\Formatter\FormatterInterface')->getMock()
+        );
 
         $factory = new MonologServiceFactory();
 
@@ -321,5 +325,42 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Monolog\Handler\NullHandler', $handler2);
 
         self::assertTrue($handler->hasErrorRecords());
+    }
+
+    /**
+     * @return FormatterInterface
+     */
+    public function testHandlerGetsDefaultFormatter()
+    {
+        $serviceManager = new ServiceManager();
+
+        $monologOptions = new MonologOptions();
+
+        $factory = new MonologServiceFactory();
+        $handler = $factory->createHandler($serviceManager, $monologOptions, array(
+            'name' => '\Monolog\Handler\NullHandler',
+        ));
+
+        $formatter = $handler->getFormatter();
+
+        self::assertInstanceOf('\Monolog\Formatter\FormatterInterface', $formatter);
+
+        return $formatter;
+    }
+
+    public function testHandlerGetsDefaultFormatterWithDefaultDateFormat()
+    {
+        $formatter = $this->testHandlerGetsDefaultFormatter();
+
+        $line = $formatter->format(array(
+            'datetime' => new \DateTime('2016-01-01 00:00:00', timezone_open('UTC')),
+            'channel' => 'test',
+            'level_name' => 'ERROR',
+            'message' => 'foobar',
+            'extra' => array(),
+            'context' => array(),
+        ));
+
+        self::assertContains('[2016-01-01 00:00:00]', $line);
     }
 }
