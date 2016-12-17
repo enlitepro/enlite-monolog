@@ -9,6 +9,7 @@ namespace EnliteMonolog\Service;
 use Closure;
 use Exception;
 use Interop\Container\ContainerInterface;
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
 use Monolog\Formatter\FormatterInterface;
@@ -21,6 +22,9 @@ class MonologServiceFactory implements FactoryInterface
 
     /**
      * {@inheritdoc}
+     * @throws \Interop\Container\Exception\ContainerException
+     * @throws \RuntimeException
+     * @throws \Interop\Container\Exception\NotFoundException
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -31,6 +35,8 @@ class MonologServiceFactory implements FactoryInterface
 
     /**
      * {@inheritdoc}
+     * @throws \Interop\Container\Exception\NotFoundException
+     * @throws \RuntimeException
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
@@ -43,6 +49,9 @@ class MonologServiceFactory implements FactoryInterface
      * @param ServiceLocatorInterface|ContainerInterface $container
      * @param MonologOptions $options
      * @return Logger
+     * @throws \Interop\Container\Exception\NotFoundException
+     * @throws \RuntimeException
+     * @throws \Interop\Container\Exception\ContainerException
      */
     public function createLogger($container, MonologOptions $options)
     {
@@ -66,6 +75,8 @@ class MonologServiceFactory implements FactoryInterface
      * @param string|array $handler
      * @throws \RuntimeException
      * @return HandlerInterface
+     * @throws \Interop\Container\Exception\NotFoundException
+     * @throws \Interop\Container\Exception\ContainerException
      *
      */
     public function createHandler($container, MonologOptions $options, $handler)
@@ -102,8 +113,8 @@ class MonologServiceFactory implements FactoryInterface
 
                 $requiredArgsCount = $reflection->getConstructor()->getNumberOfRequiredParameters();
 
-                if ($requiredArgsCount > sizeof($handlerOptions)) {
-                    throw new RuntimeException(sprintf('Handler(%s) requires at least %d params. Only %d passed.', $handler['name'], $requiredArgsCount, sizeof($handlerOptions)));
+                if ($requiredArgsCount > count($handlerOptions)) {
+                    throw new RuntimeException(sprintf('Handler(%s) requires at least %d params. Only %d passed.', $handler['name'], $requiredArgsCount, count($handlerOptions)));
                 }
 
                 foreach($reflection->getConstructor()->getParameters() as $parameter) {
@@ -117,10 +128,13 @@ class MonologServiceFactory implements FactoryInterface
                     }
                     $parameters[$parameter->getPosition()] = $argumentValue;
                 }
+
+                /** @var HandlerInterface $instance */
                 $instance = $reflection->newInstanceArgs($parameters);
             } else {
 	            $class = $handler['name'];
 
+                /** @var HandlerInterface $instance */
 	            $instance = new $class();
             }
 
@@ -133,13 +147,14 @@ class MonologServiceFactory implements FactoryInterface
         }
     }
 
-	/**
-	 * @param ServiceLocatorInterface|ContainerInterface $container
-	 * @param string|array $formatter
-	 * @return FormatterInterface
-	 *
-	 * @throws RuntimeException
-	 */
+    /**
+     * @param ServiceLocatorInterface|ContainerInterface $container
+     * @param string|array $formatter
+     * @return FormatterInterface
+     * @throws \Interop\Container\Exception\NotFoundException
+     * @throws \Interop\Container\Exception\ContainerException
+     * @throws RuntimeException
+     */
 	public function createFormatter($container, $formatter)
 	{
 		if (is_string($formatter) && $container->has($formatter)) {
@@ -173,7 +188,8 @@ class MonologServiceFactory implements FactoryInterface
      * @param ServiceLocatorInterface|ContainerInterface $container
      * @param $processor
      * @return Closure
-     *
+     * @throws \Interop\Container\Exception\NotFoundException
+     * @throws \Interop\Container\Exception\ContainerException
      * @throws RuntimeException
      */
     public function createProcessor($container, $processor)
