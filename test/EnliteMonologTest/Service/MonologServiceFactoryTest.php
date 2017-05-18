@@ -240,6 +240,27 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf('\Monolog\Formatter\LineFormatter', $actual);
     }
 
+    public function testCreateFormatterWithNamedArguments()
+    {
+        $serviceManager = new ServiceManager();
+        $factory = new MonologServiceFactory();
+
+        $dateFormat = 'Y-m-d\TH:i:sZ';
+        $actual = $factory->createFormatter($serviceManager, array(
+            'name' => '\Monolog\Formatter\LineFormatter',
+            'args' => array(
+                'dateFormat' => $dateFormat,
+            ),
+        ));
+
+        self::assertInstanceOf('\Monolog\Formatter\LineFormatter', $actual);
+        $reflection = new \ReflectionClass($actual);
+        $property = $reflection->getProperty('dateFormat');
+        $property->setAccessible(true);
+        self::assertSame($dateFormat, $property->getValue($actual), 'Unable to set arguments by name');
+    }
+
+
     public function testCreateLoggerWithProcessor()
     {
         $options = new MonologOptions();
