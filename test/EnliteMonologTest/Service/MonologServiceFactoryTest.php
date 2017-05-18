@@ -12,7 +12,6 @@ use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\TestHandler;
-use Monolog\Logger;
 use Monolog\Processor\MemoryUsageProcessor;
 use Zend\ServiceManager\ServiceManager;
 
@@ -29,7 +28,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new MonologServiceFactory();
 
         $service = $factory->createService($serviceManager);
-        $this->assertInstanceOf(Logger::class, $service);
+        $this->assertInstanceOf('Monolog\Logger', $service);
         $this->assertEquals('test', $service->getName());
 
         $this->assertInstanceOf(TestHandler::class, $service->popHandler());
