@@ -3,14 +3,6 @@ language: php
 matrix:
   fast_finish: true
   include:
-    - php: 5.3
-      env: DEPS=lowest
-    - php: 5.3
-      env: DEPS=latest
-    - php: 5.4
-      env: DEPS=lowest
-    - php: 5.4
-      env: DEPS=latest
     - php: 5.5
       env: DEPS=lowest
     - php: 5.5
