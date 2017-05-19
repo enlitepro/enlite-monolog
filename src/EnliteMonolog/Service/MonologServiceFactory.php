@@ -9,7 +9,6 @@ namespace EnliteMonolog\Service;
 use Closure;
 use Exception;
 use Interop\Container\ContainerInterface;
-use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
 use Monolog\Formatter\FormatterInterface;
@@ -83,68 +82,50 @@ class MonologServiceFactory implements FactoryInterface
     {
         if (is_string($handler) && $container->has($handler)) {
             return $container->get($handler);
-        } else {
-            if (!isset($handler['name'])) {
-                throw new RuntimeException('Cannot create logger handler');
-            }
-
-            if (!class_exists($handler['name'])) {
-                throw new RuntimeException('Cannot create logger handler (' . $handler['name'] . ')');
-            }
-
-            if (isset($handler['args'])) {
-                if (!is_array($handler['args'])) {
-                    throw new RuntimeException('Arguments of handler(' . $handler['name'] . ') must be array');
-                }
-
-                $reflection = new \ReflectionClass($handler['name']);
-
-                if (isset($handler['args']['handler'])) {
-                    foreach ($options->getHandlers() as $key => $option) {
-                        if ($handler['args']['handler'] == $key) {
-                            $handler['args']['handler'] = $this->createHandler($container, $options, $option);
-                            break;
-                        }
-                    }
-                }
-
-                $parameters = array();
-                $handlerOptions = $handler['args'];
-
-                $requiredArgsCount = $reflection->getConstructor()->getNumberOfRequiredParameters();
-
-                if ($requiredArgsCount > count($handlerOptions)) {
-                    throw new RuntimeException(sprintf('Handler(%s) requires at least %d params. Only %d passed.', $handler['name'], $requiredArgsCount, count($handlerOptions)));
-                }
-
-                foreach($reflection->getConstructor()->getParameters() as $parameter) {
-                    if (!$parameter->isOptional() && !isset($handlerOptions[$parameter->getName()])) {
-                        $argumentValue = array_shift($handlerOptions);
-                    } elseif (isset($handlerOptions[$parameter->getName()])) {
-                        $argumentValue = $handlerOptions[$parameter->getName()];
-                        unset($handlerOptions[$parameter->getName()]);
-                    } else {
-                        $argumentValue = $parameter->getDefaultValue();
-                    }
-                    $parameters[$parameter->getPosition()] = $argumentValue;
-                }
-
-                /** @var HandlerInterface $instance */
-                $instance = $reflection->newInstanceArgs($parameters);
-            } else {
-	            $class = $handler['name'];
-
-                /** @var HandlerInterface $instance */
-	            $instance = new $class();
-            }
-
-	        if (isset($handler['formatter'])) {
-		        $formatter = $this->createFormatter($container, $handler['formatter']);
-		        $instance->setFormatter($formatter);
-	        }
-
-            return $instance;
         }
+
+
+        if (!isset($handler['name'])) {
+            throw new RuntimeException('Cannot create logger handler');
+        }
+
+        $handlerClassName = $handler['name'];
+
+        if (!class_exists($handlerClassName)) {
+            throw new RuntimeException('Cannot create logger handler (' . $handlerClassName . ')');
+        }
+
+        $arguments = array_key_exists('args', $handler) ? $handler['args'] : array();
+
+        if (!is_array($arguments)) {
+            throw new RuntimeException('Arguments of handler(' . $handlerClassName . ') must be array');
+        }
+
+        if (isset($arguments['handler'])) {
+            foreach ($options->getHandlers() as $key => $option) {
+                if ($arguments['handler'] == $key) {
+                    $arguments['handler'] = $this->createHandler($container, $options, $option);
+                    break;
+                }
+            }
+        }
+
+        try {
+            /** @var HandlerInterface $instance */
+            $instance = $this->createInstanceFromArguments($handlerClassName, $arguments);
+        } catch (\InvalidArgumentException $exception) {
+            throw new RuntimeException(sprintf(
+                'Handler(%s) has an invalid argument configuration',
+                $handlerClassName
+            ), 0, $exception);
+        }
+
+        if (isset($handler['formatter'])) {
+            $formatter = $this->createFormatter($container, $handler['formatter']);
+            $instance->setFormatter($formatter);
+        }
+
+        return $instance;
     }
 
     /**
@@ -159,29 +140,35 @@ class MonologServiceFactory implements FactoryInterface
 	{
 		if (is_string($formatter) && $container->has($formatter)) {
 			return $container->get($formatter);
-		} else {
-			if (!isset($formatter['name'])) {
-				throw new RuntimeException('Cannot create logger formatter');
-			}
-
-			if (!class_exists($formatter['name'])) {
-				throw new RuntimeException('Cannot create logger formatter (' . $formatter['name'] . ')');
-			}
-
-			if (isset($formatter['args'])) {
-				if (!is_array($formatter['args'])) {
-					throw new RuntimeException('Arguments of formatter(' . $formatter['name'] . ') must be array');
-				}
-
-				$reflection = new \ReflectionClass($formatter['name']);
-
-				return call_user_func_array(array($reflection, 'newInstance'), $formatter['args']);
-			}
-
-			$class = $formatter['name'];
-
-			return new $class();
 		}
+
+        if (!isset($formatter['name'])) {
+            throw new RuntimeException('Cannot create logger formatter');
+        }
+
+        $formatterClassName = $formatter['name'];
+
+        if (!class_exists($formatter['name'])) {
+            throw new RuntimeException('Cannot create logger formatter (' . $formatterClassName . ')');
+        }
+
+        $arguments = array_key_exists('args', $formatter) ? $formatter['args'] : array();
+
+        if (!is_array($arguments)) {
+            throw new RuntimeException('Arguments of formatter(' . $formatterClassName . ') must be array');
+        }
+
+        try {
+            /** @var FormatterInterface $instance */
+            $instance = $this->createInstanceFromArguments($formatterClassName, $arguments);
+        } catch (\InvalidArgumentException $exception) {
+            throw new RuntimeException(sprintf(
+                'Formatter(%s) has an invalid argument configuration',
+                $formatterClassName
+            ), 0, $exception);
+        }
+
+        return $instance;
 	}
 
     /**
@@ -217,5 +204,72 @@ class MonologServiceFactory implements FactoryInterface
         }
 
         throw new RuntimeException('Unknown processor type, must be a Closure or the FQCN of an invokable class');
+    }
+
+    /**
+     * Handles the constructor arguments and if they're named, just sort them to fit constructor ordering.
+     *
+     * @param string $className
+     * @param array  $arguments
+     *
+     * @return object
+     * @throws \InvalidArgumentException If given arguments are not valid for provided className constructor.
+     */
+    private function createInstanceFromArguments($className, array $arguments)
+    {
+        $reflection = new \ReflectionClass($className);
+        $constructor = $reflection->getConstructor();
+
+        // There is no or at least a non-accessible constructor for provided class name,
+        // therefore there is no need to handle arguments anyway
+        if ($constructor === null) {
+            return $reflection->newInstanceArgs($arguments);
+        }
+
+        if (!$constructor->isPublic()) {
+            throw new \InvalidArgumentException(sprintf(
+                '%s::__construct is not accessible',
+                $className
+            ));
+        }
+
+        $requiredArgsCount = $constructor->getNumberOfRequiredParameters();
+        $argumentCount = count($arguments);
+
+        if ($requiredArgsCount > $argumentCount) {
+            throw new \InvalidArgumentException(sprintf(
+                '%s::__construct() requires at least %d arguments; %d given',
+                $className,
+                $requiredArgsCount,
+                $argumentCount
+            ));
+        }
+
+        // Arguments supposed to be ordered
+        if (isset($arguments[0])) {
+            return $reflection->newInstanceArgs($arguments);
+        }
+
+        $parameters = array();
+
+        foreach($constructor->getParameters() as $parameter) {
+            $parameterName = $parameter->getName();
+
+            if (array_key_exists($parameterName, $arguments)) {
+                $parameters[$parameter->getPosition()] = $arguments[$parameterName];
+                continue;
+            }
+
+            if (!$parameter->isOptional()) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Missing at least one required parameters `%s`',
+                    $parameterName
+                ));
+            }
+
+            $parameters[$parameter->getPosition()] = $parameter->getDefaultValue();
+        }
+
+        return $reflection->newInstanceArgs($parameters);
     }
 }
