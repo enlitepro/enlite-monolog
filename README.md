@@ -1,4 +1,4 @@
-Monolog integration to ZF2+ZF3 [![Build Status](https://travis-ci.org/enlitepro/enlite-monolog.png)](https://travis-ci.org/enlitepro/enlite-monolog)
+Monolog integration to ZF2+ZF3 [![Build Status](https://travis-ci.org/enlitepro/enlite-monolog.png)](https://travis-ci.org/enlitepro/enlite-monolog) [![Code Coverage](https://scrutinizer-ci.com/g/enlitepro/enlite-monolog/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/enlitepro/enlite-monolog/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/enlitepro/enlite-monolog/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/enlitepro/enlite-monolog/?branch=master)
 ==============
 
 Integration to Zend Framework 2 and 3 with great logging system [monolog](https://github.com/Seldaek/monolog)

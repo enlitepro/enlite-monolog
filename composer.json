@@ -20,7 +20,10 @@
         "zendframework/zend-servicemanager": "^2 || ^3"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5|^4|^3"
+        "jakub-onderka/php-parallel-lint": "^0.9",
+        "johnkary/phpunit-speedtrap": "^1.0",
+        "squizlabs/php_codesniffer": "^2.9",
+        "phpunit/phpunit": "^5|^4.8"
     },
     "autoload": {
         "psr-4": {
@@ -31,5 +34,13 @@
         "psr-4": {
             "EnliteMonologTest\\": "test/EnliteMonologTest"
         }
+    },
+    "scripts": {
+        "lint:beautify": "vendor/bin/phpcbf --standard=PSR2 --extensions=php --severity=1 config/ src/ test/ -v",
+        "lint:style": "vendor/bin/phpcs --standard=PSR2 --extensions=php --severity=1 config/ src/ test/ -v",
+        "lint:syntax": "vendor/bin/parallel-lint config/ src/ test/",
+        "lint:syntax-php53": "vendor/bin/parallel-lint --exclude src/EnliteMonolog/Service/MonologServiceAwareTrait.php config/ src/ test/",
+        "test:coverage": "vendor/bin/phpunit --coverage-text",
+        "test:units": "vendor/bin/phpunit"
     }
 }

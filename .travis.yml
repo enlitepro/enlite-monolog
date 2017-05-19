@@ -29,7 +29,9 @@ install:
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --no-interaction --prefer-source --prefer-lowest ; fi
 
 script:
-  - vendor/bin/phpunit --coverage-text
+  - if [ "$TRAVIS_PHP_VERSION" == "5.3" ]; then composer lint:syntax-php53; else composer lint:syntax; fi
+  - composer lint:style || true
+  - composer test:units
 
 notifications:
   email: false
