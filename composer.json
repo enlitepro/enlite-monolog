@@ -13,6 +13,11 @@
         "Zend Framework 2",
         "Monolog"
     ],
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4.x-dev"
+        }
+    },
     "require": {
         "monolog/monolog": "^1.0.2",
         "zendframework/zend-modulemanager": "^2",
