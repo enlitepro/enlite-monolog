@@ -5,7 +5,6 @@
 
 namespace EnliteMonologTest\Service;
 
-
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\HandlerInterface;
 
