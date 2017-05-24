@@ -5,7 +5,6 @@
 
 namespace EnliteMonologTest\Service;
 
-
 use EnliteMonolog\Service\MonologOptions;
 use EnliteMonolog\Service\MonologServiceFactory;
 use Monolog\Formatter\FormatterInterface;
@@ -40,8 +39,8 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new MonologServiceFactory();
 
-
-        $this->assertEquals('works', $factory->createHandler($serviceManager, new MonologOptions($config), 'TestHandler'));
+        $handler = $factory->createHandler($serviceManager, new MonologOptions($config), 'TestHandler');
+        $this->assertEquals('works', $handler);
     }
 
     public function testCreateHandlerByClassNameWithoutArgs()
@@ -52,8 +51,9 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $handler = array('name' => 'Monolog\Handler\TestHandler');
 
         $factory = new MonologServiceFactory();
-
-        $this->assertInstanceOf('Monolog\Handler\TestHandler', $factory->createHandler($serviceManager, new MonologOptions($config), $handler));
+    
+        $actual = $factory->createHandler($serviceManager, new MonologOptions($config), $handler);
+        $this->assertInstanceOf('Monolog\Handler\TestHandler', $actual);
     }
 
     public function testCreateHandlerByClassNameWithArgs()
@@ -107,7 +107,10 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
 
-        $factory->createHandler($serviceManager, new MonologOptions($config), array('name' => 'Monolog\Handler\TestHandler', 'args' => ''));
+        $factory->createHandler($serviceManager, new MonologOptions($config), array(
+            'name' => 'Monolog\Handler\TestHandler',
+            'args' => ''
+        ));
     }
 
     public function testCreateProcessorFromAnonymousFunction()
@@ -116,7 +119,6 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new MonologServiceFactory();
 
         $actual = $factory->createProcessor($serviceManager, $expected = function () {
-
         });
 
         self::assertSame($expected, $actual);
@@ -126,7 +128,6 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService('MyProcessor', $expected = function () {
-
         });
 
         $factory = new MonologServiceFactory();

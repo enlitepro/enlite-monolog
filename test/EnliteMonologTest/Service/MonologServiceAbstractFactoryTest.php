@@ -5,7 +5,6 @@
 
 namespace EnliteMonologTest\Service;
 
-
 use EnliteMonolog\Service\MonologServiceAbstractFactory;
 use Zend\ServiceManager\ServiceManager;
 
@@ -77,8 +76,5 @@ class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $factory->createServiceWithName($serviceLocator, 'default', 'default');
-
     }
-
-
 }

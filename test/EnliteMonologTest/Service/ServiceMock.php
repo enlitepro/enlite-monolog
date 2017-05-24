@@ -5,7 +5,6 @@
 
 namespace EnliteMonologTest\Service;
 
-
 use EnliteMonolog\Service\MonologServiceAwareInterface;
 use Monolog\Logger;
 
