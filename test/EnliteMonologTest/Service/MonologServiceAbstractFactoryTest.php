@@ -75,6 +75,8 @@ class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $factory->createServiceWithName($serviceLocator, 'default', 'default');
+        $logger = $factory->createServiceWithName($serviceLocator, 'default', 'default');
+        
+        self::assertInstanceOf('\Monolog\Logger', $logger);
     }
 }
