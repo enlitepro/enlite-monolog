@@ -5,7 +5,6 @@
 
 namespace EnliteMonolog\Service;
 
-
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\InitializerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;

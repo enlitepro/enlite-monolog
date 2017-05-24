@@ -5,7 +5,6 @@
 
 namespace EnliteMonolog\Service;
 
-
 use Monolog\Logger;
 use RuntimeException;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -53,5 +52,4 @@ trait MonologServiceAwareTrait
         }
         return $this->monologService;
     }
-
 }
