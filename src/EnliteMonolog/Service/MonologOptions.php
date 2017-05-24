@@ -5,7 +5,6 @@
 
 namespace EnliteMonolog\Service;
 
-
 use Zend\Stdlib\AbstractOptions;
 
 class MonologOptions extends AbstractOptions
@@ -77,5 +76,4 @@ class MonologOptions extends AbstractOptions
     {
         return $this->processors;
     }
-
 }

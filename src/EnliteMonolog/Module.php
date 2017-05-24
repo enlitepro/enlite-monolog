@@ -5,7 +5,6 @@
 
 namespace EnliteMonolog;
 
-
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 

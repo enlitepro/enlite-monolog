@@ -34,7 +34,7 @@ install:
 
 script:
   - if [ "$TRAVIS_PHP_VERSION" == "5.3" ]; then composer lint:syntax-php53; else composer lint:syntax; fi
-  - composer lint:style || true
+  - composer lint:style
   - composer test:units
 
 notifications:

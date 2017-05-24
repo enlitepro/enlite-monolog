@@ -5,7 +5,6 @@
 
 namespace EnliteMonolog\Service;
 
-
 use Closure;
 use Exception;
 use Interop\Container\ContainerInterface;
@@ -136,11 +135,11 @@ class MonologServiceFactory implements FactoryInterface
      * @throws \Interop\Container\Exception\ContainerException
      * @throws RuntimeException
      */
-	public function createFormatter($container, $formatter)
-	{
-		if (is_string($formatter) && $container->has($formatter)) {
-			return $container->get($formatter);
-		}
+    public function createFormatter($container, $formatter)
+    {
+        if (is_string($formatter) && $container->has($formatter)) {
+            return $container->get($formatter);
+        }
 
         if (!isset($formatter['name'])) {
             throw new RuntimeException('Cannot create logger formatter');
@@ -169,7 +168,7 @@ class MonologServiceFactory implements FactoryInterface
         }
 
         return $instance;
-	}
+    }
 
     /**
      * @param ServiceLocatorInterface|ContainerInterface $container
@@ -252,7 +251,7 @@ class MonologServiceFactory implements FactoryInterface
 
         $parameters = array();
 
-        foreach($constructor->getParameters() as $parameter) {
+        foreach ($constructor->getParameters() as $parameter) {
             $parameterName = $parameter->getName();
 
             if (array_key_exists($parameterName, $arguments)) {

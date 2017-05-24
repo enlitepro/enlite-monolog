@@ -5,7 +5,6 @@
 
 namespace EnliteMonolog\Service;
 
-
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -96,5 +95,4 @@ class MonologServiceAbstractFactory implements AbstractFactoryInterface
     {
         $this->config = $config;
     }
-
 }
