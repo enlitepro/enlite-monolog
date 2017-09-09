@@ -8,6 +8,7 @@ namespace EnliteMonologTest\Service;
 use EnliteMonolog\Service\MonologServiceAbstractFactory;
 use Interop\Container\ContainerInterface;
 use Monolog\Logger;
+use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 
 /**
@@ -127,6 +128,23 @@ class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $logger = $sut($services, 'default');
+
+        self::assertInstanceOf('\Monolog\Logger', $logger);
+    }
+
+    public function testCreateServiceFromServiceManager()
+    {
+        $services = new ServiceManager();
+        $services->addAbstractFactory(new MonologServiceAbstractFactory());
+        $services->setService('config', array(
+            'EnliteMonolog' => array(
+                'FooBar' => array(
+                    'name' => 'FooBar',
+                ),
+            ),
+        ));
+
+        $logger = $services->get('FooBar');
 
         self::assertInstanceOf('\Monolog\Logger', $logger);
     }
