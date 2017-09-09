@@ -42,7 +42,7 @@ trait MonologServiceAwareTrait
                 $this->monologService = $this->getServiceLocator()->get($this->monologLoggerName);
             } else {
                 if (property_exists($this, 'serviceLocator')
-                    && $this->monologService instanceof ServiceLocatorInterface
+                    && $this->serviceLocator instanceof ServiceLocatorInterface
                 ) {
                     $this->monologService = $this->serviceLocator->get($this->monologLoggerName);
                 } else {
