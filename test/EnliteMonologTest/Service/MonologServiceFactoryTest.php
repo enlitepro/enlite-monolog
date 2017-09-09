@@ -77,6 +77,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionCode 0
      */
     public function testCreateHandlerByEmptyClassname()
     {
@@ -90,6 +91,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionCode 0
      */
     public function testCreateHandlerNotExistsClassname()
     {
@@ -103,6 +105,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionCode 0
      */
     public function testCreateHandlerWithBadArgs()
     {
@@ -153,6 +156,8 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionCode 0
+     * @expectedExceptionMessage Unknown processor type, must be a Closure or the FQCN of an invokable class
      */
     public function testCreateProcessorNotExistsClassName()
     {
@@ -160,6 +165,21 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new MonologServiceFactory();
 
         $factory->createProcessor($serviceManager, '\stdClass');
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionCode 0
+     * @expectedExceptionMessage Unknown processor type, must be a Closure or the FQCN of an invokable class
+     */
+    public function testCreateNonCallableProcessorFromServiceName()
+    {
+        $services = new ServiceManager();
+        $services->setService('\stdClass', new \stdClass());
+
+        $sut = new MonologServiceFactory();
+
+        $sut->createProcessor($services, '\stdClass');
     }
 
     public function testCreateFormatterFromServiceName()
@@ -179,6 +199,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionCode 0
      */
     public function testCreateFormatterWithMissingFormatterNameConfig()
     {
@@ -192,6 +213,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionCode 0
      */
     public function testCreateFormatterNotExistsClassName()
     {
@@ -205,6 +227,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionCode 0
      */
     public function testCreateFormatterWithInvalidFormatterArgumentConfig()
     {
@@ -440,6 +463,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionCode 0
      * @expectedExceptionMessage Handler(\EnliteMonologTest\Service\HandlerMock) has an invalid argument configuration
      */
     public function testCreateHandlerWithInvalidArguments()
@@ -458,6 +482,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionCode 0
      * @expectedExceptionMessage Formatter(\EnliteMonologTest\Service\FormatterMock) has an invalid argument config
      */
     public function testCreateFormatterWithMissingArguments()
@@ -474,6 +499,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionCode 0
      * @expectedExceptionMessage Formatter(\EnliteMonologTest\Service\FormatterMock) has an invalid argument config
      */
     public function testCreateFormatterWithInvalidArguments()
@@ -492,6 +518,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionCode 0
      * @expectedExceptionMessage Formatter(\EnliteMonologTest\Service\FormatterPrivateConstructorMock) has an invalid
      */
     public function testCreateFormatterWithPrivateConstructor()
