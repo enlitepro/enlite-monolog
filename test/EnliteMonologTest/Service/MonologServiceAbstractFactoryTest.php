@@ -90,10 +90,6 @@ class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $services = new ServiceManager();
 
-        if (!$services instanceof ContainerInterface) {
-            self::markTestSkipped('container-interop/container-interop is required.');
-        }
-
         $sut = new MonologServiceAbstractFactory();
 
         $services->setService(
@@ -105,17 +101,13 @@ class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        self::assertTrue($sut->canCreate($services, 'default'));
+        self::assertTrue($sut->canCreate(new ContainerMock($services), 'default'));
     }
 
     public function testInvoke()
     {
         $services = new ServiceManager();
 
-        if (!$services instanceof ContainerInterface) {
-            self::markTestSkipped('container-interop/container-interop is required.');
-        }
-
         $sut = new MonologServiceAbstractFactory();
 
         $services->setService(
@@ -127,7 +119,7 @@ class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $logger = $sut($services, 'default');
+        $logger = $sut(new ContainerMock($services), 'default');
 
         self::assertInstanceOf('\Monolog\Logger', $logger);
     }
