@@ -2,8 +2,8 @@
 
 namespace EnliteMonologTest\Service;
 
-use Interop\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Zend\ServiceManager\ServiceManager;
 

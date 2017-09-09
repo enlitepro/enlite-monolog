@@ -7,7 +7,6 @@ namespace EnliteMonologTest\Service;
 
 use EnliteMonolog\Service\MonologOptions;
 use EnliteMonolog\Service\MonologServiceFactory;
-use Interop\Container\ContainerInterface;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
 use Zend\ServiceManager\ServiceManager;
