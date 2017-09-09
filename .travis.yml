@@ -4,8 +4,10 @@ matrix:
   fast_finish: true
   include:
     - php: 5.3
+      dist: precise
       env: DEPS=lowest
     - php: 5.3
+      dist: precise
       env: DEPS=latest
     - php: 5.4
       env: DEPS=lowest
