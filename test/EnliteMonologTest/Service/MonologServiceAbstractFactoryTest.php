@@ -10,6 +10,9 @@ use Interop\Container\ContainerInterface;
 use Monolog\Logger;
 use Zend\ServiceManager\ServiceManager;
 
+/**
+ * @covers \EnliteMonolog\Service\MonologServiceAbstractFactory
+ */
 class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
 {
 
