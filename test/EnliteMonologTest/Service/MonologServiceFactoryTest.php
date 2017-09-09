@@ -7,6 +7,7 @@ namespace EnliteMonologTest\Service;
 
 use EnliteMonolog\Service\MonologOptions;
 use EnliteMonolog\Service\MonologServiceFactory;
+use Interop\Container\ContainerInterface;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
 use Zend\ServiceManager\ServiceManager;
@@ -384,5 +385,26 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         ));
 
         self::assertContains('[2016-01-01 00:00:00]', $line);
+    }
+
+    public function testInvoke()
+    {
+        $services = new ServiceManager();
+
+        if (!$services instanceof ContainerInterface) {
+            self::markTestSkipped('container-interop/container-interop is required.');
+        }
+
+        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+
+        $services->setService('EnliteMonologOptions', new MonologOptions($config));
+
+        $sut = new MonologServiceFactory();
+
+        $service = $sut($services, 'EnliteMonolog');
+        $this->assertInstanceOf('Monolog\Logger', $service);
+        $this->assertEquals('test', $service->getName());
+
+        $this->assertInstanceOf('Monolog\Handler\TestHandler', $service->popHandler());
     }
 }
