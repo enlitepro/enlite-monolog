@@ -46,6 +46,7 @@
         "lint:syntax": "vendor/bin/parallel-lint config/ src/ test/",
         "lint:syntax-php53": "vendor/bin/parallel-lint --exclude src/EnliteMonolog/Service/MonologServiceAwareTrait.php config/ src/ test/",
         "test:coverage": "vendor/bin/phpunit --coverage-text",
+        "test:mutations": "vendor/bin/humbug && cat humbuglog.txt",
         "test:units": "vendor/bin/phpunit"
     }
 }
