@@ -38,18 +38,23 @@ trait MonologServiceAwareTrait
     public function getMonologService()
     {
         if (null === $this->monologService) {
-            if ($this instanceof ServiceLocatorAwareInterface || method_exists($this, 'getServiceLocator')) {
-                $this->monologService = $this->getServiceLocator()->get($this->monologLoggerName);
-            } else {
-                if (property_exists($this, 'serviceLocator')
-                    && $this->serviceLocator instanceof ServiceLocatorInterface
-                ) {
-                    $this->monologService = $this->serviceLocator->get($this->monologLoggerName);
-                } else {
-                    throw new RuntimeException('Service locator not found');
-                }
+            $services = null;
+            if ($this instanceof ServiceLocatorAwareInterface
+                || method_exists($this, 'getServiceLocator')
+            ) {
+                $services = $this->getServiceLocator();
+            } elseif (property_exists($this, 'serviceLocator')) {
+                $services = $this->serviceLocator;
             }
+
+            if (!$services instanceof ServiceLocatorInterface) {
+                throw new RuntimeException('Service locator not found');
+            }
+
+            // TODO Assert type is \Monolog\Logger.
+            $this->monologService = $services->get($this->monologLoggerName);
         }
+
         return $this->monologService;
     }
 }
