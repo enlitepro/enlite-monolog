@@ -25,6 +25,7 @@
         "zendframework/zend-servicemanager": "^2 || ^3"
     },
     "require-dev": {
+        "container-interop/container-interop": "^1.0",
         "jakub-onderka/php-parallel-lint": "^0.9",
         "johnkary/phpunit-speedtrap": "^1.0",
         "squizlabs/php_codesniffer": "^2.9",

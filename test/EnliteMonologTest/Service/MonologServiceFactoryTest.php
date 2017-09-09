@@ -417,17 +417,13 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $services = new ServiceManager();
 
-        if (!$services instanceof ContainerInterface) {
-            self::markTestSkipped('container-interop/container-interop is required.');
-        }
-
         $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
 
         $services->setService('EnliteMonologOptions', new MonologOptions($config));
 
         $sut = new MonologServiceFactory();
 
-        $service = $sut($services, 'EnliteMonolog');
+        $service = $sut(new ContainerMock($services), 'EnliteMonolog');
         $this->assertInstanceOf('Monolog\Logger', $service);
         $this->assertEquals('test', $service->getName());
 

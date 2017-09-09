@@ -89,15 +89,11 @@ class MonologServiceInitializerTest extends \PHPUnit_Framework_TestCase
 
         $services = new ServiceManager();
 
-        if (!$services instanceof ContainerInterface) {
-            self::markTestSkipped('container-interop/container-interop is required.');
-        }
-
         $services->setService('EnliteMonologService', $logger);
 
         $sut = new MonologServiceInitializer();
 
-        self::assertNull($sut($services, $service));
+        self::assertNull($sut(new ContainerMock($services), $service));
 
         self::assertSame($logger, $service->getMonologService());
     }
@@ -108,12 +104,8 @@ class MonologServiceInitializerTest extends \PHPUnit_Framework_TestCase
 
         $services = new ServiceManager();
 
-        if (!$services instanceof ContainerInterface) {
-            self::markTestSkipped('container-interop/container-interop is required.');
-        }
-
         $sut = new MonologServiceInitializer();
 
-        self::assertNull($sut($services, $service));
+        self::assertNull($sut(new ContainerMock($services), $service));
     }
 }
