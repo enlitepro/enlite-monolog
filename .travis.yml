@@ -1,43 +1,57 @@
 language: php
 
-matrix:
-  fast_finish: true
-  include:
-    - php: 5.3
-      dist: precise
-      env: DEPS=lowest
-    - php: 5.3
-      dist: precise
-      env: DEPS=latest
-    - php: 5.4
-      env: DEPS=lowest
-    - php: 5.4
-      env: DEPS=latest
-    - php: 5.5
-      env: DEPS=lowest
-    - php: 5.5
-      env: DEPS=latest
-    - php: 5.6
-      env: DEPS=lowest
-    - php: 5.6
-      env: DEPS=latest
-    - php: 7.0
-      env: DEPS=lowest
-    - php: 7.0
-      env: DEPS=latest
-    - php: 7.1
-      env: DEPS=lowest
-    - php: 7.1
-      env: DEPS=latest
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.1
+  - 7.2
+  - nightly
+
+env:
+  - DEPS=latest
+  - DEPS=lowest
 
 install:
   - if [[ $DEPS == 'latest' ]]; then travis_retry composer update --no-interaction --prefer-source ; fi
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --no-interaction --prefer-source --prefer-lowest ; fi
 
 script:
-  - if [ "$TRAVIS_PHP_VERSION" == "5.3" ]; then composer lint:syntax-php53; else composer lint:syntax; fi
-  - composer lint:style
   - composer test:units
+
+jobs:
+  allow_failures:
+    - php: nightly
+  include:
+    - stage: test
+      php: 5.3
+      dist: precise
+      env: DEPS=latest
+      script:
+        - composer update --no-interaction --prefer-source
+        - composer test:units
+    - stage: test
+      php: 5.3
+      dist: precise
+      env: DEPS=lowest
+      script:
+        - composer update --no-interaction --prefer-source --prefer-lowest
+        - composer test:units
+    - stage: lint
+      php: 5.6
+      script:
+        - composer install --no-interaction --prefer-source
+        - composer lint:syntax
+    - stage: lint
+      php: 5.6
+      script:
+        - composer install --no-interaction --prefer-source
+        - composer lint:style
+    - stage: coverage
+      php: 5.6
+      script:
+        - composer install --no-interaction --prefer-source
+        - composer test:coverage
 
 notifications:
   email: false
