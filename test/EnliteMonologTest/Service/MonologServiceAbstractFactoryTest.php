@@ -6,6 +6,8 @@
 namespace EnliteMonologTest\Service;
 
 use EnliteMonolog\Service\MonologServiceAbstractFactory;
+use Interop\Container\ContainerInterface;
+use Monolog\Logger;
 use Zend\ServiceManager\ServiceManager;
 
 class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
@@ -77,6 +79,52 @@ class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
 
         $logger = $factory->createServiceWithName($serviceLocator, 'default', 'default');
         
+        self::assertInstanceOf('\Monolog\Logger', $logger);
+    }
+
+    public function testCanCreate()
+    {
+        $services = new ServiceManager();
+
+        if (!$services instanceof ContainerInterface) {
+            self::markTestSkipped('container-interop/container-interop is required.');
+        }
+
+        $sut = new MonologServiceAbstractFactory();
+
+        $services->setService(
+            'config',
+            array(
+                'EnliteMonolog' => array(
+                    'default' => array()
+                )
+            )
+        );
+
+        self::assertTrue($sut->canCreate($services, 'default'));
+    }
+
+    public function testInvoke()
+    {
+        $services = new ServiceManager();
+
+        if (!$services instanceof ContainerInterface) {
+            self::markTestSkipped('container-interop/container-interop is required.');
+        }
+
+        $sut = new MonologServiceAbstractFactory();
+
+        $services->setService(
+            'config',
+            array(
+                'EnliteMonolog' => array(
+                    'default' => array()
+                )
+            )
+        );
+
+        $logger = $sut($services, 'default');
+
         self::assertInstanceOf('\Monolog\Logger', $logger);
     }
 }
