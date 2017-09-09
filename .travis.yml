@@ -52,6 +52,12 @@ jobs:
       script:
         - composer install --no-interaction --prefer-source
         - composer test:coverage
+    - stage: mutations
+      php: 7.1
+      script:
+        - composer install --no-interaction --prefer-source
+        - composer require --dev humbug/humbug:^1.0@dev
+        - composer test:mutations
 
 notifications:
   email: false
