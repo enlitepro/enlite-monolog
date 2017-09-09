@@ -38,17 +38,17 @@ jobs:
         - composer update --no-interaction --prefer-source --prefer-lowest
         - composer test:units
     - stage: lint
-      php: 5.6
+      php: 7.1
       script:
         - composer install --no-interaction --prefer-source
         - composer lint:syntax
     - stage: lint
-      php: 5.6
+      php: 7.1
       script:
         - composer install --no-interaction --prefer-source
         - composer lint:style
     - stage: coverage
-      php: 5.6
+      php: 7.1
       script:
         - composer install --no-interaction --prefer-source
         - composer test:coverage
