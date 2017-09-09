@@ -8,6 +8,7 @@ use Zend\ServiceManager\ServiceManager;
 
 /**
  * @requires PHP 5.4
+ * @covers \EnliteMonolog\Service\MonologServiceAwareTrait
  */
 class MonologServiceAwareTraitTest extends \PHPUnit_Framework_TestCase
 {

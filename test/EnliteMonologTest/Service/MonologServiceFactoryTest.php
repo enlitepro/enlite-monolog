@@ -12,6 +12,9 @@ use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
 use Zend\ServiceManager\ServiceManager;
 
+/**
+ * @covers \EnliteMonolog\Service\MonologServiceFactory
+ */
 class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -406,5 +409,114 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test', $service->getName());
 
         $this->assertInstanceOf('Monolog\Handler\TestHandler', $service->popHandler());
+    }
+
+    public function testCreateHandlerFromOptions()
+    {
+        $sut = new MonologServiceFactory();
+
+        $services = new ServiceManager();
+
+        $options = new MonologOptions();
+        $options->setHandlers(array(
+            'HandlerMock' => array(
+                'name' => '\EnliteMonologTest\Service\HandlerMock',
+                'args' => array(
+                    'path' => '/FooBar',
+                ),
+            ),
+        ));
+
+        $result = $sut->createHandler($services, $options, array(
+            'name' => '\EnliteMonologTest\Service\HandlerMock',
+            'args' => array(
+                'handler' => 'HandlerMock',
+                'path' => '/FizBuz',
+            ),
+        ));
+
+        self::assertInstanceOf('\EnliteMonologTest\Service\HandlerMock', $result);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Handler(\EnliteMonologTest\Service\HandlerMock) has an invalid argument configuration
+     */
+    public function testCreateHandlerWithInvalidArguments()
+    {
+        $sut = new MonologServiceFactory();
+
+        $services = new ServiceManager();
+
+        $options = new MonologOptions();
+
+        $sut->createHandler($services, $options, array(
+            'name' => '\EnliteMonologTest\Service\HandlerMock',
+            'args' => array(),
+        ));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Formatter(\EnliteMonologTest\Service\FormatterMock) has an invalid argument config
+     */
+    public function testCreateFormatterWithMissingArguments()
+    {
+        $sut = new MonologServiceFactory();
+
+        $services = new ServiceManager();
+
+        $sut->createFormatter($services, array(
+            'name' => '\EnliteMonologTest\Service\FormatterMock',
+            'args' => array(),
+        ));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Formatter(\EnliteMonologTest\Service\FormatterMock) has an invalid argument config
+     */
+    public function testCreateFormatterWithInvalidArguments()
+    {
+        $sut = new MonologServiceFactory();
+
+        $services = new ServiceManager();
+
+        $sut->createFormatter($services, array(
+            'name' => '\EnliteMonologTest\Service\FormatterMock',
+            'args' => array(
+                'NotEncoder' => new \stdClass(),
+            ),
+        ));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Formatter(\EnliteMonologTest\Service\FormatterPrivateConstructorMock) has an invalid
+     */
+    public function testCreateFormatterWithPrivateConstructor()
+    {
+        $sut = new MonologServiceFactory();
+
+        $services = new ServiceManager();
+
+        $sut->createFormatter($services, array(
+            'name' => '\EnliteMonologTest\Service\FormatterPrivateConstructorMock',
+            'args' => array(),
+        ));
+    }
+
+    public function testCreateFormatterFromStdClass()
+    {
+        $sut = new MonologServiceFactory();
+
+        $services = new ServiceManager();
+
+        $result = $sut->createFormatter($services, array(
+            'name' => '\stdClass',
+            'args' => array(),
+        ));
+
+        self::assertInstanceOf('\stdClass', $result);
     }
 }

@@ -4,6 +4,9 @@ namespace EnliteMonologTest\Service;
 
 use EnliteMonolog\Service\MonologOptions;
 
+/**
+ * @covers \EnliteMonolog\Service\MonologOptions
+ */
 class MonologOptionsTest extends \PHPUnit_Framework_TestCase
 {
     /** @var MonologOptions */
