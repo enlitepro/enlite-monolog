@@ -7,7 +7,6 @@ namespace EnliteMonologTest\Service;
 
 use EnliteMonolog\Service\MonologOptions;
 use EnliteMonolog\Service\MonologServiceFactory;
-use Interop\Container\ContainerInterface;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
 use Zend\ServiceManager\ServiceManager;
@@ -70,6 +69,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new MonologServiceFactory();
 
+        /** @var HandlerMock $logger */
         $logger = $factory->createHandler($serviceManager, new MonologOptions($config), $handler);
         $this->assertInstanceOf('EnliteMonologTest\Service\HandlerMock', $logger);
         $this->assertEquals('some.log', $logger->getPath());

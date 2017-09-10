@@ -6,9 +6,6 @@
 namespace EnliteMonologTest\Service;
 
 use EnliteMonolog\Service\MonologServiceAbstractFactory;
-use Interop\Container\ContainerInterface;
-use Monolog\Logger;
-use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 
 /**
