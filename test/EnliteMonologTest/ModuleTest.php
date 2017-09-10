@@ -4,6 +4,9 @@ namespace EnliteMonologTest\Module;
 
 use EnliteMonolog\Module;
 
+/**
+ * @covers \EnliteMonolog\Module
+ */
 class ModuleTest extends \PHPUnit_Framework_TestCase
 {
     /** @var Module */

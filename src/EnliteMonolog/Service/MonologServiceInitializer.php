@@ -22,6 +22,8 @@ class MonologServiceInitializer implements InitializerInterface
     public function initialize($instance, ServiceLocatorInterface $serviceLocator)
     {
         $this->setMonologService($serviceLocator, $instance);
+
+        return null;
     }
 
     /**
