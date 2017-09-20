@@ -47,17 +47,29 @@ jobs:
       script:
         - composer install --no-interaction --prefer-source
         - composer lint:style
-    - stage: coverage
+    - stage: big-test
       php: 7.1
       script:
         - composer install --no-interaction --prefer-source
         - composer test:coverage
-    - stage: mutations
+    - stage: big-test
       php: 7.1
       script:
         - composer install --no-interaction --prefer-source
         - composer require --dev humbug/humbug:^1.0@dev
         - composer test:mutations
+    - stage: big-test
+      php: 5.6
+      script:
+        - cd test/ZF2
+        - composer install --no-interaction --prefer-source
+        - vendor/bin/phpunit
+    - stage: big-test
+      php: 5.6
+      script:
+        - cd test/ZF3
+        - composer install --no-interaction --prefer-source
+        - vendor/bin/phpunit
 
 notifications:
   email: false

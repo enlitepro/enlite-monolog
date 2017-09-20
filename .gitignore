@@ -1,6 +1,6 @@
 .idea
-composer.lock
+/composer.lock
 coverage.xml
 humbug.json
 humbuglog.txt
-/vendor
+vendor
