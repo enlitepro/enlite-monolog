@@ -16,7 +16,7 @@ class IntegrationTest extends TestCase
         $this->sut = Application::init(array(
             'module_listener_options' => array(
                 'config_glob_paths' => array(
-                    __DIR__ . '/config/monolog.global.php',
+                    __DIR__ . '/config/{{,*.}global,{,*.}local}.php',
                 ),
             ),
             'modules' => array(
