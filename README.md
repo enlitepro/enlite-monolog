@@ -91,6 +91,24 @@ $serviceLocator->get('EnliteMonologService')->addDebug('hello world');
 $serviceLocator->get('MyChromeLogger')->addInfo('hello world');
 ```
 
+## Error Handlers
+
+Update your application config:
+```php
+return [
+    'EnliteMonologErrorHandlers' => [
+        'EnliteMonologService' => [
+            'logger' => 'EnliteMonologService',
+        ],
+    ],
+];
+```
+
+Error-handler loggers must be implementations of PSR logger interface, provided by your application's container.
+
+Error, exception, and fatal error handling is enabled by default for each of these loggers,
+but you can disable or tweak these behaviors through configuration.
+
 ## Contributing
 
 This library attempts to comply with [PSR-1][], [PSR-2][], and [PSR-4][]. If

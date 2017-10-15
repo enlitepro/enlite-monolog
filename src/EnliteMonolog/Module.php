@@ -5,13 +5,26 @@
 
 namespace EnliteMonolog;
 
+use EnliteMonolog\Service\ErrorHandlerListener;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ModuleManager\Feature\InitProviderInterface;
+use Zend\ModuleManager\ModuleManagerInterface;
 
 class Module implements
     AutoloaderProviderInterface,
+    InitProviderInterface,
     ConfigProviderInterface
 {
+    /**
+     * @param ModuleManagerInterface $moduleManager
+     * @return void
+     */
+    public function init(ModuleManagerInterface $moduleManager)
+    {
+        $errorHandlerListener = new ErrorHandlerListener();
+        $errorHandlerListener->attach($moduleManager->getEventManager());
+    }
 
     /**
      * {@inheritdoc}
