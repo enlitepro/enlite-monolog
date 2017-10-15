@@ -42,9 +42,9 @@
         }
     },
     "scripts": {
-        "lint:beautify": "vendor/bin/phpcbf --standard=PSR2 --extensions=php --severity=1 config/ src/ test/ -v",
-        "lint:style": "vendor/bin/phpcs --standard=PSR2 --extensions=php --severity=1 config/ src/ test/ -v",
-        "lint:syntax": "vendor/bin/parallel-lint config/ src/ test/",
+        "lint:beautify": "vendor/bin/phpcbf --standard=PSR2 --extensions=php -v --ignore=*/vendor/* .",
+        "lint:style": "vendor/bin/phpcs --standard=PSR2 --extensions=php -v --ignore=*/vendor/* .",
+        "lint:syntax": "vendor/bin/parallel-lint --exclude vendor --exclude test/ZF2/vendor --exclude test/ZF3/vendor .",
         "lint:syntax-php53": "vendor/bin/parallel-lint --exclude src/EnliteMonolog/Service/MonologServiceAwareTrait.php config/ src/ test/",
         "test:coverage": "vendor/bin/phpunit --coverage-text",
         "test:mutations": "vendor/bin/humbug && cat humbuglog.txt",

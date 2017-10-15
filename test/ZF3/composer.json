@@ -1,0 +1,16 @@
+{
+  "name": "enlitepro/enlite-monolog-zf3-integration-test",
+  "description": "Tests enlitepro/enlite-monolog ZF3 integration.",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "EnliteMonolog\\": "../../src/EnliteMonolog"
+    }
+  },
+  "require-dev": {
+    "monolog/monolog": "^1.0.2",
+    "zendframework/zendframework": "^3.0",
+    "phpunit/phpunit": "^5.0"
+  }
+}

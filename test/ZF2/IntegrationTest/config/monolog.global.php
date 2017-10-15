@@ -1,0 +1,1 @@
+../../../../config/monolog.global.php.dist
