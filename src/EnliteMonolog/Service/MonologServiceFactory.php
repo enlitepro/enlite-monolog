@@ -147,7 +147,7 @@ class MonologServiceFactory implements FactoryInterface
 
         $formatterClassName = $formatter['name'];
 
-        if (!class_exists($formatter['name'])) {
+        if (!class_exists($formatterClassName)) {
             throw new RuntimeException('Cannot create logger formatter (' . $formatterClassName . ')');
         }
 
@@ -202,7 +202,40 @@ class MonologServiceFactory implements FactoryInterface
             }
         }
 
-        throw new RuntimeException('Unknown processor type, must be a Closure or the FQCN of an invokable class');
+        if (is_array($processor)) {
+            if (!isset($processor['name'])) {
+                throw new RuntimeException('Cannot create logger processor');
+            }
+
+            $processorClassName = $processor['name'];
+
+            if (!class_exists($processorClassName)) {
+                throw new RuntimeException('Cannot create logger processor (' . $processorClassName . ')');
+            }
+
+            $arguments = array_key_exists('args', $processor) ? $processor['args'] : array();
+
+            if (!is_array($arguments)) {
+                throw new RuntimeException('Arguments of processor (' . $processorClassName . ') must be array');
+            }
+
+            try {
+                $instance = $this->createInstanceFromArguments($processorClassName, $arguments);
+            } catch (\InvalidArgumentException $exception) {
+                throw new RuntimeException(sprintf(
+                    'Processor(%s) has an invalid argument configuration',
+                    $processorClassName
+                ), 0, $exception);
+            }
+
+            if (is_callable($instance)) {
+                return $instance;
+            }
+        }
+
+        throw new RuntimeException(
+            'Unknown processor type, must be a Closure, array or the FQCN of an invokable class'
+        );
     }
 
     /**
