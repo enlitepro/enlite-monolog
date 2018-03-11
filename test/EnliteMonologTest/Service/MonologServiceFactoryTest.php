@@ -157,7 +157,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionCode 0
-     * @expectedExceptionMessage Unknown processor type, must be a Closure or the FQCN of an invokable class
+     * @expectedExceptionMessage Unknown processor type, must be a Closure, array or the FQCN of an invokable class
      */
     public function testCreateProcessorNotExistsClassName()
     {
@@ -170,7 +170,7 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionCode 0
-     * @expectedExceptionMessage Unknown processor type, must be a Closure or the FQCN of an invokable class
+     * @expectedExceptionMessage Unknown processor type, must be a Closure, array or the FQCN of an invokable class
      */
     public function testCreateNonCallableProcessorFromServiceName()
     {
@@ -180,6 +180,113 @@ class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $sut = new MonologServiceFactory();
 
         $sut->createProcessor($services, '\stdClass');
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionCode 0
+     */
+    public function testCreateProcessorWithMissingProcessorNameConfig()
+    {
+        $serviceManager = new ServiceManager();
+        $factory = new MonologServiceFactory();
+
+        $factory->createProcessor($serviceManager, array(
+
+        ));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionCode 0
+     */
+    public function testCreateProcessorNotExistsClassNameInNamePart()
+    {
+        $serviceManager = new ServiceManager();
+        $factory = new MonologServiceFactory();
+
+        $factory->createProcessor($serviceManager, array(
+            'name' => '\InvalidProcessorClassName',
+        ));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionCode 0
+     */
+    public function testCreateProcessorWithInvalidProcessorArgumentConfig()
+    {
+        $serviceManager = new ServiceManager();
+        $factory = new MonologServiceFactory();
+
+        $factory->createProcessor($serviceManager, array(
+            'name' => '\EnliteMonologTest\Service\ProcessorMock',
+            'args' => 'MyArgs',
+        ));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionCode 0
+     */
+    public function testCreateProcessorWithWrongNamedArguments()
+    {
+        $serviceManager = new ServiceManager();
+        $factory = new MonologServiceFactory();
+
+        $factory->createProcessor($serviceManager, array(
+            'name' => '\EnliteMonologTest\Service\ProcessorMock',
+            'args' => array(
+                'notExisted' => 'test',
+            ),
+        ));
+    }
+
+    public function testCreateProcessorWithArguments()
+    {
+        $serviceManager = new ServiceManager();
+        $factory = new MonologServiceFactory();
+
+        $actual = $factory->createProcessor($serviceManager, array(
+            'name' => '\EnliteMonologTest\Service\ProcessorMock',
+            'args' => array(
+                'test',
+            ),
+        ));
+
+        self::assertInstanceOf('\EnliteMonologTest\Service\ProcessorMock', $actual);
+    }
+
+    public function testCreateProcessorWithoutArguments()
+    {
+        $serviceManager = new ServiceManager();
+        $factory = new MonologServiceFactory();
+
+        $actual = $factory->createProcessor($serviceManager, array(
+            'name' => '\Monolog\Processor\MemoryUsageProcessor',
+        ));
+
+        self::assertInstanceOf('\Monolog\Processor\MemoryUsageProcessor', $actual);
+    }
+
+    public function testCreateProcessorWithNamedArguments()
+    {
+        $serviceManager = new ServiceManager();
+        $factory = new MonologServiceFactory();
+
+        $argument = 'test';
+        $actual = $factory->createProcessor($serviceManager, array(
+            'name' => '\EnliteMonologTest\Service\ProcessorMock',
+            'args' => array(
+                'argument' => $argument,
+            ),
+        ));
+
+        self::assertInstanceOf('\EnliteMonologTest\Service\ProcessorMock', $actual);
+        $reflection = new \ReflectionClass($actual);
+        $property = $reflection->getProperty('argument');
+        $property->setAccessible(true);
+        self::assertSame($argument, $property->getValue($actual), 'Unable to set arguments by name');
     }
 
     public function testCreateFormatterFromServiceName()
