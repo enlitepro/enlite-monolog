@@ -53,7 +53,7 @@ By default it write logs to `data/logs/application.log`. If you want change this
                 'default' => array(
                     'name' => 'Monolog\Handler\StreamHandler',
                     'args' => array(
-                        'path' => 'data/log/application.log',
+                        'stream' => 'data/log/application.log',
                         'level' => \Monolog\Logger::DEBUG,
                         'bubble' => true
                     ),
