@@ -19,26 +19,15 @@ script:
 jobs:
   include:
     - stage: lint
-      php: 7.2
-      script:
-        - composer install --no-interaction
-        - composer lint:syntax
-    - stage: lint
-      php: 7.2
+      php: 7.3
       script:
         - composer install --no-interaction
         - composer lint:style
     - stage: big-test
-      php: 7.2
+      php: 7.3
       script:
         - composer install --no-interaction
         - composer test:coverage
-    - stage: big-test
-      php: 7.2
-      script:
-        - composer install --no-interaction
-        - composer require --dev humbug/humbug:^1.0@dev
-        - composer test:mutations
     - stage: big-test
       php: 7.2
       script:
