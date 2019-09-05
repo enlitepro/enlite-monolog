@@ -23,34 +23,11 @@ jobs:
       script:
         - composer install --no-interaction
         - composer lint:style
-    - stage: big-test
+    - stage: coverage
       php: 7.3
       script:
         - composer install --no-interaction
         - composer test:coverage
-    - stage: big-test
-      php: 7.2
-      script:
-        - cd test/ZF2
-        - composer install --no-interaction
-        - vendor/bin/phpunit
-    - stage: big-test
-      php: 7.2
-      script:
-        - cd test/ZF3
-        - composer install --no-interaction
-        - vendor/bin/phpunit
-    - stage: big-test
-      php: 7.3
-      script:
-        - cd test/ZF2
-        - composer install --no-interaction
-        - vendor/bin/phpunit
-    - stage: big-test
-      php: 7.3
-      script:
-        - cd test/ZF3
-        - composer install --no-interaction
-        - vendor/bin/phpunit
+
 notifications:
   email: false

@@ -15,6 +15,9 @@
         <testsuite name="Test Suite">
             <directory>./test/EnliteMonologTest</directory>
         </testsuite>
+        <testsuite name="Integration">
+            <directory>./test/IntegrationTest</directory>
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist>

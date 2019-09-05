@@ -12,18 +12,66 @@ The recommended way to install is through composer from command line.
 composer require enlitepro/enlite-monolog
 ```
 
-USAGE
-=====
+Add `EnliteMonolog` to your `config/application.config.php` to enable module.
 
-1. Add `EnliteMonolog` to your `config/application.config.php` to enable module.
+Copy the config file `config/monolog.global.php.dist` from the module to `config/autoload/monolog.global.php` in your project.
+
+By default logger write logs to `data/logs/application.log` by copied configuration.
+If you want change this behaviour, add your config following:
 
 ```php
-// usage over service locator
-$serviceLocator->get('EnliteMonologService')->addDebug('hello world');
+return [
+    'EnliteMonolog' => [
+        'EnliteMonologService' => [
+            // Logger name
+            // 'name' => 'EnliteMonolog',
 
-use EnliteMonolog\Service\MonologServiceAwareInterface,
-    EnliteMonolog\Service\MonologServiceAwareTrait;
+            // Handlers, it can be service locator alias(string) or config(array)
+            'handlers' => [
+                // by config
+                'default' => [
+                    'name' => \Monolog\Handler\StreamHandler::class,
+                    'args' => [
+                        'stream' => 'data/log/application.log',
+                        'level' => \Monolog\Logger::DEBUG,
+                        'bubble' => true
+                    ],
+                    'formatter' => [
+                        'name' => \Monolog\Formatter\LogstashFormatter::class,
+                        'args' => [
+                            'applicationName' => 'My Application',
+                        ],
+                    ],
+                ],
 
+                // by service locator
+                'MyMonologHandler'
+            ],
+        ],
+
+        // you can specify another logger
+        // for example ChromePHPHandler
+
+        'MyChromeLogger' => [
+            'name' => 'MyName',
+            'handlers' => [
+                [
+                    'name' => \Monolog\Handler\ChromePHPHandler::class,
+                ],
+            ],
+        ],
+    ],
+];
+```
+
+now you can use it:
+
+```php
+$container->get('EnliteMonologService')->debug('hello world');
+$container->get('MyChromeLogger')->info('hello world');
+```
+
+```php
 // usage in your services
 class MyService implements MonologServiceAwareInterface
 {
@@ -31,64 +79,9 @@ class MyService implements MonologServiceAwareInterface
 
     public function whatever()
     {
-        $this->getMonologService()->addDebug('hello world');
+        $this->getMonologService()->debug('hello world');
     }
 }
-
-```
-
-2. Copy the config file `config/monolog.global.php.dist` from the module to config/autoload your project.
-
-By default it write logs to `data/logs/application.log`. If you want change this behaviour, add your config following:
-
-```php
-    'EnliteMonolog' => array(
-        'EnliteMonologService' => array(
-            // Logger name
-            // 'name' => 'EnliteMonolog',
-
-            // Handlers, it can be service locator alias(string) or config(array)
-            'handlers' => array(
-                // by config
-                'default' => array(
-                    'name' => 'Monolog\Handler\StreamHandler',
-                    'args' => array(
-                        'stream' => 'data/log/application.log',
-                        'level' => \Monolog\Logger::DEBUG,
-                        'bubble' => true
-                    ),
-                    'formatter' => array(
-                        'name' => 'Monolog\Formatter\LogstashFormatter',
-                        'args' => array(
-                            'applicationName' => 'My Application',
-                        ),
-                    ),
-                ),
-
-                // by service locator
-                'MyMonologHandler'
-            )
-        ),
-
-        // you can specify another logger
-        // for example ChromePHPHandler
-
-        'MyChromeLogger' => array(
-            'name' => 'MyName',
-            'handlers' => array(
-                array(
-                    'name' => 'Monolog\Handler\ChromePHPHandler',
-                )
-            )
-        )
-    ),
-```
-
-now you can use it
-
-```php
-$serviceLocator->get('EnliteMonologService')->addDebug('hello world');
-$serviceLocator->get('MyChromeLogger')->addInfo('hello world');
 ```
 
 ## Contributing

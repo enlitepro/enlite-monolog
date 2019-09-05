@@ -29,7 +29,8 @@
         "ext-json": "*",
         "psr/container": "^1.0.0",
         "squizlabs/php_codesniffer": "^3.4.2",
-        "phpunit/phpunit": "^8.3.4"
+        "phpunit/phpunit": "^8.3.4",
+        "zendframework/zend-mvc": "^2.7.15 || ^3.1.1"
     },
     "autoload": {
         "psr-4": {
@@ -45,7 +46,6 @@
         "lint:beautify": "vendor/bin/phpcbf --standard=PSR2 --extensions=php -v --ignore=*/vendor/* .",
         "lint:style": "vendor/bin/phpcs --standard=PSR2 --extensions=php -v --ignore=*/vendor/* .",
         "test:coverage": "phpunit --coverage-text",
-        "test:mutations": "humbug && cat humbuglog.txt",
         "test:units": "phpunit"
     }
 }

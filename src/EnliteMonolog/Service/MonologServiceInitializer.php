@@ -37,9 +37,9 @@ final class MonologServiceInitializer implements InitializerInterface
 
     /**
      * @param ServiceLocatorInterface|ContainerInterface $container
-     * @param $instance
+     * @param mixed $instance
      */
-    private function setMonologService($container, object $instance): void
+    private function setMonologService($container, $instance): void
     {
         if ($instance instanceof MonologServiceAwareInterface) {
             $instance->setMonologService($container->get('EnliteMonologService'));
