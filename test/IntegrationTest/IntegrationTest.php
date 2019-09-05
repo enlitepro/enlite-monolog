@@ -13,16 +13,20 @@ final class IntegrationTest extends TestCase
 
     protected function setUp(): void
     {
+        $modules = [
+            'EnliteMonolog',
+        ];
+        if (class_exists(\Zend\Router\Module::class)) {
+            $modules[] = \Zend\Router\Module::class;
+        }
+
         $this->sut = Application::init([
             'module_listener_options' => [
                 'config_glob_paths' => [
                     __DIR__ . '/config/{{,*.}global,{,*.}local}.php',
                 ],
             ],
-            'modules' => [
-                class_exists(\Zend\Router\Module::class) ? \Zend\Router\Module::class : null,
-                'EnliteMonolog',
-            ],
+            'modules' => $modules,
         ]);
     }
 
