@@ -6,29 +6,13 @@
 namespace EnliteMonolog\Service;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\InitializerInterface;
+use Zend\ServiceManager\Initializer\InitializerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 final class MonologServiceInitializer implements InitializerInterface
 {
-
     /**
-     * Initialize
-     *
-     * @param $instance
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function initialize($instance, ServiceLocatorInterface $serviceLocator)
-    {
-        $this->setMonologService($serviceLocator, $instance);
-
-        return null;
-    }
-
-    /**
-     * @param ContainerInterface $container
-     * @param $instance
+     * @param mixed $instance
      */
     public function __invoke(ContainerInterface $container, $instance)
     {

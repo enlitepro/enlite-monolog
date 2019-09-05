@@ -22,9 +22,6 @@ trait MonologServiceAwareTrait
      */
     protected $monologLoggerName = 'EnliteMonologService';
 
-    /**
-     * @param Logger $monologService
-     */
     public function setMonologService(Logger $monologService)
     {
         $this->monologService = $monologService;
@@ -36,16 +33,12 @@ trait MonologServiceAwareTrait
     public function getMonologService(): Logger
     {
         if (null === $this->monologService) {
-            if ($this instanceof ServiceLocatorAwareInterface || method_exists($this, 'getServiceLocator')) {
-                $this->monologService = $this->getServiceLocator()->get($this->monologLoggerName);
+            if (property_exists($this, 'serviceLocator')
+                && $this->serviceLocator instanceof ServiceLocatorInterface
+            ) {
+                $this->monologService = $this->serviceLocator->get($this->monologLoggerName);
             } else {
-                if (property_exists($this, 'serviceLocator')
-                    && $this->serviceLocator instanceof ServiceLocatorInterface
-                ) {
-                    $this->monologService = $this->serviceLocator->get($this->monologLoggerName);
-                } else {
-                    throw new RuntimeException('Service locator not found');
-                }
+                throw new RuntimeException('Service locator not found');
             }
         }
         return $this->monologService;

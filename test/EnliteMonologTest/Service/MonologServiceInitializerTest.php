@@ -35,20 +35,11 @@ class MonologServiceInitializerTest extends TestCase
             ],
         ];
 
-        if ($this->isZF2()) {
-            $serviceManager = new ServiceManager(new Config($configArray));
-        } else { //ZF3
-            $serviceManager = new ServiceManager($configArray);
-        }
+        $serviceManager = new ServiceManager($configArray);
 
         /** @var MonologServiceAwareInterface $service */
         $service = $serviceManager->get('test');
         $this->assertInstanceOf(Logger::class, $service->getMonologService());
-    }
-
-    private function isZF2(): bool
-    {
-        return class_exists('\Zend\Stdlib\CallbackHandler');
     }
 
     public function testInitializeViaServiceLocator(): void
@@ -64,7 +55,7 @@ class MonologServiceInitializerTest extends TestCase
 
         $sut = new MonologServiceInitializer();
 
-        self::assertNull($sut->initialize($service, $services));
+        self::assertNull($sut->__invoke($services, $service));
 
         self::assertSame($logger, $service->getMonologService());
     }
@@ -77,7 +68,7 @@ class MonologServiceInitializerTest extends TestCase
 
         $sut = new MonologServiceInitializer();
 
-        self::assertNull($sut->initialize($service, $services));
+        self::assertNull($sut->__invoke($services, $service));
     }
 
     public function testInvoke(): void

@@ -61,20 +61,6 @@ class MonologServiceAwareTraitTest extends TestCase
         self::assertSame($logger, $sut->getMonologService());
     }
 
-    public function testGetMonologServiceViaServiceLocatorMethod(): void
-    {
-        $sut = new TraitMock3();
-
-        $logger = new Logger(__METHOD__);
-
-        $services = new ServiceManager();
-        $services->setService('EnliteMonologService', $logger);
-
-        $sut->setServiceLocator($services);
-
-        self::assertSame($logger, $sut->getMonologService());
-    }
-
     public function testGetMonologServiceViaServiceLocatorProperty(): void
     {
         $sut = new TraitMock4();

@@ -7,7 +7,7 @@ namespace EnliteMonolog\Service;
 
 use Interop\Container\ContainerInterface;
 use Monolog\Logger;
-use Zend\ServiceManager\AbstractFactoryInterface;
+use Zend\ServiceManager\Factory\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 final class MonologServiceAbstractFactory implements AbstractFactoryInterface
@@ -17,13 +17,6 @@ final class MonologServiceAbstractFactory implements AbstractFactoryInterface
      */
     protected $config;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
-    {
-        return $this->has($serviceLocator, $requestedName);
-    }
 
     /**
      * {@inheritdoc}
@@ -42,14 +35,6 @@ final class MonologServiceAbstractFactory implements AbstractFactoryInterface
     {
         $config = $this->getConfig($container);
         return isset($config[$requestedName]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
-    {
-        return $this->createLogger($serviceLocator, $requestedName);
     }
 
     /**

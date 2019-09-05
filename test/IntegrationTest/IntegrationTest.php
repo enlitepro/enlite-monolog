@@ -15,11 +15,9 @@ final class IntegrationTest extends TestCase
     protected function setUp(): void
     {
         $modules = [
-            'EnliteMonolog',
+            \EnliteMonolog\Module::class,
+            Module::class,
         ];
-        if (class_exists(Module::class)) {
-            $modules[] = Module::class;
-        }
 
         $this->sut = Application::init([
             'module_listener_options' => [

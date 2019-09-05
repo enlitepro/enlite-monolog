@@ -13,24 +13,11 @@ use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
 use Monolog\Formatter\FormatterInterface;
 use RuntimeException;
-use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 final class MonologServiceFactory implements FactoryInterface
 {
-
-    /**
-     * {@inheritdoc}
-     * @throws \Interop\Container\Exception\ContainerException
-     * @throws \RuntimeException
-     * @throws \Interop\Container\Exception\NotFoundException
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        /** @var MonologOptions $options */
-        $options = $serviceLocator->get('EnliteMonologOptions');
-        return $this->createLogger($serviceLocator, $options);
-    }
 
     /**
      * {@inheritdoc}
@@ -39,9 +26,9 @@ final class MonologServiceFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        /** @var MonologOptions $options */
-        $options = $container->get('EnliteMonologOptions');
-        return $this->createLogger($container, $options);
+        /** @var MonologOptions $enliteMonologOptions */
+        $enliteMonologOptions = $container->get('EnliteMonologOptions');
+        return $this->createLogger($container, $enliteMonologOptions);
     }
 
     /**

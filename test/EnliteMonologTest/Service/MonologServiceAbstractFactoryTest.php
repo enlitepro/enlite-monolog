@@ -63,8 +63,8 @@ class MonologServiceAbstractFactoryTest extends TestCase
                 ],
             ]
         );
-        $this->assertTrue($factory->canCreateServiceWithName($serviceLocator, 'default', 'default'));
-        $this->assertFalse($factory->canCreateServiceWithName($serviceLocator, 'test', 'test'));
+        $this->assertTrue($factory->canCreate($serviceLocator, 'default', 'default'));
+        $this->assertFalse($factory->canCreate($serviceLocator, 'test', 'test'));
     }
 
     public function testCreateServiceWithName(): void
@@ -80,7 +80,7 @@ class MonologServiceAbstractFactoryTest extends TestCase
             ]
         );
 
-        $logger = $factory->createServiceWithName($serviceLocator, 'default', 'default');
+        $logger = $factory->__invoke($serviceLocator, 'default');
 
         self::assertInstanceOf(Logger::class, $logger);
     }
