@@ -5,6 +5,7 @@ namespace EnliteMonologTest\IntegrationTest;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Zend\Mvc\Application;
+use Zend\Router\Module;
 
 final class IntegrationTest extends TestCase
 {
@@ -16,8 +17,8 @@ final class IntegrationTest extends TestCase
         $modules = [
             'EnliteMonolog',
         ];
-        if (class_exists(\Zend\Router\Module::class)) {
-            $modules[] = \Zend\Router\Module::class;
+        if (class_exists(Module::class)) {
+            $modules[] = Module::class;
         }
 
         $this->sut = Application::init([

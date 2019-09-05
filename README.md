@@ -71,8 +71,21 @@ $container->get('EnliteMonologService')->debug('hello world');
 $container->get('MyChromeLogger')->info('hello world');
 ```
 
+To auto inject logger to your classes you need to setup initializer (it's disabled by default, [that's why](https://docs.zendframework.com/zend-servicemanager/configuring-the-service-manager/#best-practices_2).):
+
 ```php
-// usage in your services
+return [
+    'service_manager' => [
+        'initializers' => [
+            \EnliteMonolog\Service\MonologServiceInitializer::class,
+        ],
+    ],
+];
+```
+
+Now logger is available in your class.
+
+```php
 class MyService implements MonologServiceAwareInterface
 {
     use MonologServiceAwareTrait;
