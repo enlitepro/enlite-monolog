@@ -22,8 +22,8 @@
         "php": "^7.2",
         "monolog/monolog": "^2.0.0",
         "zendframework/zend-modulemanager": "^2",
-        "zendframework/zend-stdlib": "^3.2.1",
-        "zendframework/zend-servicemanager": "^3.4"
+        "zendframework/zend-stdlib": "^2.7.7 || ^3.2.1",
+        "zendframework/zend-servicemanager": "^2.7.11 || ^3.4"
     },
     "require-dev": {
         "ext-json": "*",
