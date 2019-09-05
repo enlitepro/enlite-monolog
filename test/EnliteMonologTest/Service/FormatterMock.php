@@ -3,20 +3,17 @@
 namespace EnliteMonologTest\Service;
 
 use Monolog\Formatter\FormatterInterface;
+use RuntimeException;
 
-class FormatterMock implements FormatterInterface
+final class FormatterMock implements FormatterInterface
 {
     /** @var callable */
     private $encoder;
 
-    /**
-     * FormatterMock constructor.
-     * @param callable $encoder
-     */
-    public function __construct($encoder)
+    public function __construct(callable $encoder)
     {
         if (!is_callable($encoder)) {
-            throw new \RuntimeException('Encoder must be callable.');
+            throw new RuntimeException('Encoder must be callable.');
         }
 
         $this->encoder = $encoder;
@@ -25,7 +22,7 @@ class FormatterMock implements FormatterInterface
     /**
      * Formats a log record.
      *
-     * @param  array $record A record to format
+     * @param array $record A record to format
      * @return mixed The formatted record
      */
     public function format(array $record)
@@ -36,11 +33,11 @@ class FormatterMock implements FormatterInterface
     /**
      * Formats a set of log records.
      *
-     * @param  array $records A set of records to format
+     * @param array $records A set of records to format
      * @return mixed The formatted set of records
      */
     public function formatBatch(array $records)
     {
-        return array_map(array($this, 'format'), $records);
+        return array_map([$this, 'format'], $records);
     }
 }

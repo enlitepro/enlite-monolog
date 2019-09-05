@@ -6,7 +6,7 @@ use EnliteMonolog\Service\MonologServiceAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class TraitMock implements ServiceLocatorAwareInterface
+final class TraitMock implements ServiceLocatorAwareInterface
 {
     use MonologServiceAwareTrait;
 

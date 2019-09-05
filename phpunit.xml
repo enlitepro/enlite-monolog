@@ -16,9 +16,6 @@
             <directory>./test/EnliteMonologTest</directory>
         </testsuite>
     </testsuites>
-    <listeners>
-        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener" />
-    </listeners>
     <filter>
         <whitelist>
             <directory suffix=".php">src</directory>

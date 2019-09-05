@@ -5,7 +5,7 @@ namespace EnliteMonologTest\Service;
 use EnliteMonolog\Service\MonologServiceAwareTrait;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class TraitMock3
+final class TraitMock3
 {
     use MonologServiceAwareTrait;
 

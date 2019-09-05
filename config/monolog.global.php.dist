@@ -1,22 +1,30 @@
 <?php
 
-return array(
-    'EnliteMonolog' => array(
+use Monolog\Handler\StreamHandler;
+
+return [
+    'service_manager' => [
+        'initializers' => [
+            // You can enable initializer if you want
+            \EnliteMonolog\Service\MonologServiceInitializer::class,
+        ],
+    ],
+    'EnliteMonolog' => [
         // Logger name
-        'EnliteMonologService' => array(
+        'EnliteMonologService' => [
             // name of
             'name' => 'default',
             // Handlers, it can be service manager alias(string) or config(array)
-            'handlers' => array(
-                'default' => array(
-                    'name' => 'Monolog\Handler\StreamHandler',
-                    'args' => array(
+            'handlers' => [
+                'default' => [
+                    'name' => StreamHandler::class,
+                    'args' => [
                         'stream' => 'data/log/application.log',
                         'level' => \Monolog\Logger::DEBUG,
-                        'bubble' => true
-                    )
-                )
-            )
-        )
-    )
-);
+                        'bubble' => true,
+                    ],
+                ],
+            ],
+        ],
+    ],
+];

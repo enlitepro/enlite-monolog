@@ -4,3 +4,4 @@ coverage.xml
 humbug.json
 humbuglog.txt
 vendor
+.phpunit.result.cache

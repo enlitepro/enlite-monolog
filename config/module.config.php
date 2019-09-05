@@ -1,12 +1,9 @@
 <?php
 
-return array(
-    'service_manager' => array(
-        'abstract_factories' => array(
-            'EnliteMonolog\Service\MonologServiceAbstractFactory'
-        ),
-        'initializers' => array(
-            'EnliteMonolog\Service\MonologServiceInitializer'
-        )
-    )
-);
+return [
+    'service_manager' => [
+        'abstract_factories' => [
+            \EnliteMonolog\Service\MonologServiceAbstractFactory::class,
+        ],
+    ],
+];

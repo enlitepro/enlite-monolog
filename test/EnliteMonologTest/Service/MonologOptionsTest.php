@@ -3,67 +3,68 @@
 namespace EnliteMonologTest\Service;
 
 use EnliteMonolog\Service\MonologOptions;
+use Monolog\Test\TestCase;
 
 /**
  * @covers \EnliteMonolog\Service\MonologOptions
  */
-class MonologOptionsTest extends \PHPUnit_Framework_TestCase
+final class MonologOptionsTest extends TestCase
 {
     /** @var MonologOptions */
     private $sut;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->sut = new MonologOptions();
     }
-    
-    public function testGetDefaultName()
+
+    public function testGetDefaultName(): void
     {
         self::assertEquals('EnliteMonolog', $this->sut->getName());
     }
-    
-    public function testSetName()
+
+    public function testSetName(): void
     {
         $this->sut->setName($expected = 'MyLogger');
-        
+
         self::assertEquals($expected, $this->sut->getName());
     }
-    
-    public function testGetDefaultHandlers()
+
+    public function testGetDefaultHandlers(): void
     {
         $actual = $this->sut->getHandlers();
 
-        self::assertInternalType('array', $actual);
+        self::assertIsArray($actual);
         self::assertCount(0, $actual);
     }
-    
-    public function testSetHandlers()
-    {
-        $this->sut->setHandlers(array(
-            $expected = 'MyHandlerService',
-        ));
 
-        self::assertInternalType('array', $this->sut->getHandlers());
+    public function testSetHandlers(): void
+    {
+        $this->sut->setHandlers([
+            $expected = 'MyHandlerService',
+        ]);
+
+        self::assertIsArray($this->sut->getHandlers());
         self::assertContains($expected, $this->sut->getHandlers());
     }
-    
-    public function testGetDefaultProcessors()
+
+    public function testGetDefaultProcessors(): void
     {
         $actual = $this->sut->getProcessors();
 
-        self::assertInternalType('array', $actual);
+        self::assertIsArray($actual);
         self::assertCount(0, $actual);
     }
-    
-    public function testSetProcessors()
-    {
-        $this->sut->setProcessors(array(
-            $expected = 'MyProcessorService',
-        ));
 
-        self::assertInternalType('array', $this->sut->getProcessors());
+    public function testSetProcessors(): void
+    {
+        $this->sut->setProcessors([
+            $expected = 'MyProcessorService',
+        ]);
+
+        self::assertIsArray($this->sut->getProcessors());
         self::assertContains($expected, $this->sut->getProcessors());
     }
 }

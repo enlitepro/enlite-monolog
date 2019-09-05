@@ -6,84 +6,86 @@
 namespace EnliteMonologTest\Service;
 
 use EnliteMonolog\Service\MonologServiceAbstractFactory;
+use PHPUnit\Framework\TestCase;
 use Zend\ServiceManager\ServiceManager;
+use Monolog\Logger;
 
 /**
  * @covers \EnliteMonolog\Service\MonologServiceAbstractFactory
  */
-class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
+class MonologServiceAbstractFactoryTest extends TestCase
 {
 
-    public function testGetConfigWithNoneConfig()
+    public function testGetConfigWithNoneConfig(): void
     {
         $factory = new MonologServiceAbstractFactory();
         $serviceLocator = new ServiceManager();
-        $serviceLocator->setService('config', array());
+        $serviceLocator->setService('config', []);
 
-        $this->assertEquals(array(), $factory->getConfig($serviceLocator));
+        $this->assertEquals([], $factory->getConfig($serviceLocator));
     }
 
-    public function testGetConfigWithConfig()
+    public function testGetConfigWithConfig(): void
     {
         $factory = new MonologServiceAbstractFactory();
         $serviceLocator = new ServiceManager();
         $serviceLocator->setService(
             'config',
-            array(
-                 'EnliteMonolog' => array(
-                    'EnliteMonolog' => array()
-                 )
-            )
+            [
+                'EnliteMonolog' => [
+                    'EnliteMonolog' => [],
+                ],
+            ]
         );
 
-        $this->assertEquals(array('EnliteMonolog' => array()), $factory->getConfig($serviceLocator));
+        $this->assertEquals(['EnliteMonolog' => []], $factory->getConfig($serviceLocator));
     }
 
-    public function testGetConfigWithAlreadyFetchConfig()
+    public function testGetConfigWithAlreadyFetchConfig(): void
     {
         $factory = new MonologServiceAbstractFactory();
-        $factory->setConfig(array('a' => 'b'));
+        $factory->setConfig(['a' => 'b']);
         $serviceLocator = new ServiceManager();
 
 
-        $this->assertEquals(array('a' => 'b'), $factory->getConfig($serviceLocator));
+        $this->assertEquals(['a' => 'b'], $factory->getConfig($serviceLocator));
     }
 
-    public function testCanCreateServiceWithName()
+    public function testCanCreateServiceWithName(): void
     {
         $factory = new MonologServiceAbstractFactory();
         $serviceLocator = new ServiceManager();
         $serviceLocator->setService(
             'config',
-            array(
-                 'EnliteMonolog' => array(
-                     'default' => array()
-                 )
-            )
+            [
+                'EnliteMonolog' => [
+                    'default' => [],
+                ],
+            ]
         );
         $this->assertTrue($factory->canCreateServiceWithName($serviceLocator, 'default', 'default'));
         $this->assertFalse($factory->canCreateServiceWithName($serviceLocator, 'test', 'test'));
     }
 
-    public function testCreateServiceWithName()
+    public function testCreateServiceWithName(): void
     {
         $factory = new MonologServiceAbstractFactory();
         $serviceLocator = new ServiceManager();
         $serviceLocator->setService(
             'config',
-            array(
-                 'EnliteMonolog' => array(
-                     'default' => array()
-                 )
-            )
+            [
+                'EnliteMonolog' => [
+                    'default' => [],
+                ],
+            ]
         );
 
         $logger = $factory->createServiceWithName($serviceLocator, 'default', 'default');
-        
-        self::assertInstanceOf('\Monolog\Logger', $logger);
+
+        self::assertInstanceOf(Logger::class, $logger);
     }
 
-    public function testCanCreate()
+    public function testCanCreate(): void
     {
         $services = new ServiceManager();
 
@@ -91,17 +93,17 @@ class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
 
         $services->setService(
             'config',
-            array(
-                'EnliteMonolog' => array(
-                    'default' => array()
-                )
-            )
+            [
+                'EnliteMonolog' => [
+                    'default' => [],
+                ],
+            ]
         );
 
         self::assertTrue($sut->canCreate(new ContainerMock($services), 'default'));
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $services = new ServiceManager();
 
@@ -109,32 +111,32 @@ class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
 
         $services->setService(
             'config',
-            array(
-                'EnliteMonolog' => array(
-                    'default' => array()
-                )
-            )
+            [
+                'EnliteMonolog' => [
+                    'default' => [],
+                ],
+            ]
         );
 
         $logger = $sut(new ContainerMock($services), 'default');
 
-        self::assertInstanceOf('\Monolog\Logger', $logger);
+        self::assertInstanceOf(Logger::class, $logger);
     }
 
-    public function testCreateServiceFromServiceManager()
+    public function testCreateServiceFromServiceManager(): void
     {
         $services = new ServiceManager();
         $services->addAbstractFactory(new MonologServiceAbstractFactory());
-        $services->setService('config', array(
-            'EnliteMonolog' => array(
-                'FooBar' => array(
+        $services->setService('config', [
+            'EnliteMonolog' => [
+                'FooBar' => [
                     'name' => 'FooBar',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
         $logger = $services->get('FooBar');
 
-        self::assertInstanceOf('\Monolog\Logger', $logger);
+        self::assertInstanceOf(Logger::class, $logger);
     }
 }

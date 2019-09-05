@@ -8,29 +8,32 @@ namespace EnliteMonologTest\Service;
 use EnliteMonolog\Service\MonologServiceAwareInterface;
 use EnliteMonolog\Service\MonologServiceInitializer;
 use Monolog\Logger;
+use Monolog\Test\TestCase;
+use stdClass;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
+use EnliteMonologTest\Service\ServiceMock;
 
 /**
  * @covers \EnliteMonolog\Service\MonologServiceInitializer
  */
-class MonologServiceInitializerTest extends \PHPUnit_Framework_TestCase
+class MonologServiceInitializerTest extends TestCase
 {
-    public function testInitialize()
+    public function testInitialize(): void
     {
-        $configArray = array(
-            'invokables' => array(
-                'test' => 'EnliteMonologTest\Service\ServiceMock',
-            ),
-            'factories' => array(
+        $configArray = [
+            'invokables' => [
+                'test' => ServiceMock::class,
+            ],
+            'factories' => [
                 'EnliteMonologService' => function () {
                     return new Logger('abc');
-                }
-            ),
-            'initializers' => array(
-                'EnliteMonolog\Service\MonologServiceInitializer'
-            )
-        );
+                },
+            ],
+            'initializers' => [
+                MonologServiceInitializer::class,
+            ],
+        ];
 
         if ($this->isZF2()) {
             $serviceManager = new ServiceManager(new Config($configArray));
@@ -40,15 +43,15 @@ class MonologServiceInitializerTest extends \PHPUnit_Framework_TestCase
 
         /** @var MonologServiceAwareInterface $service */
         $service = $serviceManager->get('test');
-        $this->assertInstanceOf('Monolog\Logger', $service->getMonologService());
+        $this->assertInstanceOf(Logger::class, $service->getMonologService());
     }
 
-    private function isZF2()
+    private function isZF2(): bool
     {
         return class_exists('\Zend\Stdlib\CallbackHandler');
     }
 
-    public function testInitializeViaServiceLocator()
+    public function testInitializeViaServiceLocator(): void
     {
         $service = new ServiceMock();
 
@@ -66,9 +69,9 @@ class MonologServiceInitializerTest extends \PHPUnit_Framework_TestCase
         self::assertSame($logger, $service->getMonologService());
     }
 
-    public function testInitializeInvalidInstanceViaServiceLocator()
+    public function testInitializeInvalidInstanceViaServiceLocator(): void
     {
-        $service = new \stdClass();
+        $service = new stdClass();
 
         $services = new ServiceManager();
 
@@ -77,7 +80,7 @@ class MonologServiceInitializerTest extends \PHPUnit_Framework_TestCase
         self::assertNull($sut->initialize($service, $services));
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $service = new ServiceMock();
 
@@ -96,9 +99,9 @@ class MonologServiceInitializerTest extends \PHPUnit_Framework_TestCase
         self::assertSame($logger, $service->getMonologService());
     }
 
-    public function testInvokeInvalidInstance()
+    public function testInvokeInvalidInstance(): void
     {
-        $service = new \stdClass();
+        $service = new stdClass();
 
         $services = new ServiceManager();
 

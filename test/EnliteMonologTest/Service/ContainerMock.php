@@ -7,15 +7,11 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Zend\ServiceManager\ServiceManager;
 
-class ContainerMock implements ContainerInterface
+final class ContainerMock implements ContainerInterface
 {
     /** @var ServiceManager */
     private $services;
 
-    /**
-     * ContainerMock constructor.
-     * @param ServiceManager $services
-     */
     public function __construct(ServiceManager $services)
     {
         $this->services = $services;
@@ -26,10 +22,10 @@ class ContainerMock implements ContainerInterface
      *
      * @param string $id Identifier of the entry to look for.
      *
-     * @throws NotFoundExceptionInterface  No entry was found for **this** identifier.
+     * @return mixed Entry.
      * @throws ContainerExceptionInterface Error while retrieving the entry.
      *
-     * @return mixed Entry.
+     * @throws NotFoundExceptionInterface  No entry was found for **this** identifier.
      */
     public function get($id)
     {

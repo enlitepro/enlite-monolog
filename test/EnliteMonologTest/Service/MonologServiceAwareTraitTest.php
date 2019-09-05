@@ -4,15 +4,16 @@ namespace EnliteMonologTest\Service;
 
 use EnliteMonolog\Service\MonologServiceAwareTrait;
 use Monolog\Logger;
+use PHPUnit\Framework\TestCase;
 use Zend\ServiceManager\ServiceManager;
 
 /**
  * @requires PHP 5.4
  * @covers \EnliteMonolog\Service\MonologServiceAwareTrait
  */
-class MonologServiceAwareTraitTest extends \PHPUnit_Framework_TestCase
+class MonologServiceAwareTraitTest extends TestCase
 {
-    public function testSetMonologService()
+    public function testSetMonologService(): void
     {
         /** @var MonologServiceAwareTrait $trait */
         $trait = $this->getMockForTrait('\EnliteMonolog\Service\MonologServiceAwareTrait');
@@ -24,7 +25,7 @@ class MonologServiceAwareTraitTest extends \PHPUnit_Framework_TestCase
         self::assertSame($logger, $trait->getMonologService());
     }
 
-    public function testGetMonologServiceViaServiceLocatorAwareInterface()
+    public function testGetMonologServiceViaServiceLocatorAwareInterface(): void
     {
         if (!\interface_exists('\Zend\ServiceManager\ServiceLocatorAwareInterface')) {
             self::markTestSkipped('\Zend\ServiceManager\ServiceLocatorAwareInterface is required.');
@@ -42,7 +43,7 @@ class MonologServiceAwareTraitTest extends \PHPUnit_Framework_TestCase
         self::assertSame($logger, $sut->getMonologService());
     }
 
-    public function testGetMonologServiceViaServiceLocatorAwareTrait()
+    public function testGetMonologServiceViaServiceLocatorAwareTrait(): void
     {
         if (!\trait_exists('\Zend\ServiceManager\ServiceLocatorAwareTrait')) {
             self::markTestSkipped('\Zend\ServiceManager\ServiceLocatorAwareTrait is required.');
@@ -60,7 +61,7 @@ class MonologServiceAwareTraitTest extends \PHPUnit_Framework_TestCase
         self::assertSame($logger, $sut->getMonologService());
     }
 
-    public function testGetMonologServiceViaServiceLocatorMethod()
+    public function testGetMonologServiceViaServiceLocatorMethod(): void
     {
         $sut = new TraitMock3();
 
@@ -74,7 +75,7 @@ class MonologServiceAwareTraitTest extends \PHPUnit_Framework_TestCase
         self::assertSame($logger, $sut->getMonologService());
     }
 
-    public function testGetMonologServiceViaServiceLocatorProperty()
+    public function testGetMonologServiceViaServiceLocatorProperty(): void
     {
         $sut = new TraitMock4();
 
@@ -88,10 +89,7 @@ class MonologServiceAwareTraitTest extends \PHPUnit_Framework_TestCase
         self::assertSame($logger, $sut->getMonologService());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testNotGetMonologService()
+    public function testNotGetMonologService(): void
     {
         $sut = new TraitMock5();
 
@@ -101,6 +99,8 @@ class MonologServiceAwareTraitTest extends \PHPUnit_Framework_TestCase
         $services->setService('EnliteMonologService', $logger);
 
         $sut->setServiceLocator($services);
+
+        $this->expectException(\RuntimeException::class);
 
         $sut->getMonologService();
     }

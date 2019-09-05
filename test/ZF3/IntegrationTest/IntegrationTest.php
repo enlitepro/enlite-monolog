@@ -6,33 +6,33 @@ use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Zend\Mvc\Application;
 
-class IntegrationTest extends TestCase
+final class IntegrationTest extends TestCase
 {
     /** @var Application */
     private $sut;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->sut = Application::init(array(
-            'module_listener_options' => array(
-                'config_glob_paths' => array(
+        $this->sut = Application::init([
+            'module_listener_options' => [
+                'config_glob_paths' => [
                     __DIR__ . '/config/{{,*.}global,{,*.}local}.php',
-                ),
-            ),
-            'modules' => array(
+                ],
+            ],
+            'modules' => [
                 'Zend\Router',
                 'EnliteMonolog',
-            ),
-        ));
+            ],
+        ]);
     }
 
-    public function testEnliteMonologServiceAvailableViaApplicationContainer()
+    public function testEnliteMonologServiceAvailableViaApplicationContainer(): void
     {
         $services = $this->sut->getServiceManager();
 
         /** @var Logger $logger */
         $logger = $services->get('EnliteMonologService');
 
-        self::assertInstanceOf('\Monolog\Logger', $logger);
+        self::assertInstanceOf(Logger::class, $logger);
     }
 }

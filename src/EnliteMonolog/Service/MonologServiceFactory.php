@@ -8,6 +8,7 @@ namespace EnliteMonolog\Service;
 use Closure;
 use Exception;
 use Interop\Container\ContainerInterface;
+use Monolog\Handler\FormattableHandlerInterface;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
 use Monolog\Formatter\FormatterInterface;
@@ -15,7 +16,7 @@ use RuntimeException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class MonologServiceFactory implements FactoryInterface
+final class MonologServiceFactory implements FactoryInterface
 {
 
     /**
@@ -46,12 +47,11 @@ class MonologServiceFactory implements FactoryInterface
     /**
      * @param ServiceLocatorInterface|ContainerInterface $container
      * @param MonologOptions $options
-     * @return Logger
      * @throws \Interop\Container\Exception\NotFoundException
      * @throws \RuntimeException
      * @throws \Interop\Container\Exception\ContainerException
      */
-    public function createLogger($container, MonologOptions $options)
+    public function createLogger($container, MonologOptions $options): Logger
     {
         $logger = new Logger($options->getName());
 
@@ -72,12 +72,11 @@ class MonologServiceFactory implements FactoryInterface
      * @param MonologOptions $options
      * @param string|array $handler
      * @throws \RuntimeException
-     * @return HandlerInterface
      * @throws \Interop\Container\Exception\NotFoundException
      * @throws \Interop\Container\Exception\ContainerException
      *
      */
-    public function createHandler($container, MonologOptions $options, $handler)
+    public function createHandler($container, MonologOptions $options, $handler): HandlerInterface
     {
         if (is_string($handler) && $container->has($handler)) {
             return $container->get($handler);
@@ -94,7 +93,7 @@ class MonologServiceFactory implements FactoryInterface
             throw new RuntimeException('Cannot create logger handler (' . $handlerClassName . ')');
         }
 
-        $arguments = array_key_exists('args', $handler) ? $handler['args'] : array();
+        $arguments = array_key_exists('args', $handler) ? $handler['args'] : [];
 
         if (!is_array($arguments)) {
             throw new RuntimeException('Arguments of handler(' . $handlerClassName . ') must be array');
@@ -119,7 +118,7 @@ class MonologServiceFactory implements FactoryInterface
             ), 0, $exception);
         }
 
-        if (isset($handler['formatter'])) {
+        if (isset($handler['formatter']) && $instance instanceof FormattableHandlerInterface) {
             $formatter = $this->createFormatter($container, $handler['formatter']);
             $instance->setFormatter($formatter);
         }
@@ -130,12 +129,11 @@ class MonologServiceFactory implements FactoryInterface
     /**
      * @param ServiceLocatorInterface|ContainerInterface $container
      * @param string|array $formatter
-     * @return FormatterInterface
      * @throws \Interop\Container\Exception\NotFoundException
      * @throws \Interop\Container\Exception\ContainerException
      * @throws RuntimeException
      */
-    public function createFormatter($container, $formatter)
+    public function createFormatter($container, $formatter): FormatterInterface
     {
         if (is_string($formatter) && $container->has($formatter)) {
             return $container->get($formatter);
@@ -151,7 +149,7 @@ class MonologServiceFactory implements FactoryInterface
             throw new RuntimeException('Cannot create logger formatter (' . $formatterClassName . ')');
         }
 
-        $arguments = array_key_exists('args', $formatter) ? $formatter['args'] : array();
+        $arguments = array_key_exists('args', $formatter) ? $formatter['args'] : [];
 
         if (!is_array($arguments)) {
             throw new RuntimeException('Arguments of formatter(' . $formatterClassName . ') must be array');
@@ -173,14 +171,13 @@ class MonologServiceFactory implements FactoryInterface
     /**
      * @param ServiceLocatorInterface|ContainerInterface $container
      * @param $processor
-     * @return Closure
      * @throws \Interop\Container\Exception\NotFoundException
      * @throws \Interop\Container\Exception\ContainerException
      * @throws RuntimeException
      */
-    public function createProcessor($container, $processor)
+    public function createProcessor($container, $processor): callable
     {
-        if ($processor instanceof Closure) {
+        if (is_callable($processor)) {
             return $processor;
         }
 
@@ -213,7 +210,7 @@ class MonologServiceFactory implements FactoryInterface
                 throw new RuntimeException('Cannot create logger processor (' . $processorClassName . ')');
             }
 
-            $arguments = array_key_exists('args', $processor) ? $processor['args'] : array();
+            $arguments = array_key_exists('args', $processor) ? $processor['args'] : [];
 
             if (!is_array($arguments)) {
                 throw new RuntimeException('Arguments of processor (' . $processorClassName . ') must be array');
@@ -241,13 +238,9 @@ class MonologServiceFactory implements FactoryInterface
     /**
      * Handles the constructor arguments and if they're named, just sort them to fit constructor ordering.
      *
-     * @param string $className
-     * @param array  $arguments
-     *
-     * @return object
      * @throws \InvalidArgumentException If given arguments are not valid for provided className constructor.
      */
-    private function createInstanceFromArguments($className, array $arguments)
+    private function createInstanceFromArguments(string $className, array $arguments): object
     {
         $reflection = new \ReflectionClass($className);
         $constructor = $reflection->getConstructor();
@@ -282,7 +275,7 @@ class MonologServiceFactory implements FactoryInterface
             return $reflection->newInstanceArgs($arguments);
         }
 
-        $parameters = array();
+        $parameters = [];
 
         foreach ($constructor->getParameters() as $parameter) {
             $parameterName = $parameter->getName();

@@ -9,7 +9,7 @@ use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\InitializerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class MonologServiceInitializer implements InitializerInterface
+final class MonologServiceInitializer implements InitializerInterface
 {
 
     /**
@@ -39,7 +39,7 @@ class MonologServiceInitializer implements InitializerInterface
      * @param ServiceLocatorInterface|ContainerInterface $container
      * @param $instance
      */
-    private function setMonologService($container, $instance)
+    private function setMonologService($container, object $instance): void
     {
         if ($instance instanceof MonologServiceAwareInterface) {
             $instance->setMonologService($container->get('EnliteMonologService'));

@@ -12,7 +12,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 trait MonologServiceAwareTrait
 {
-
     /**
      * @var Logger
      */
@@ -33,9 +32,8 @@ trait MonologServiceAwareTrait
 
     /**
      * @throws \RuntimeException
-     * @return Logger
      */
-    public function getMonologService()
+    public function getMonologService(): Logger
     {
         if (null === $this->monologService) {
             if ($this instanceof ServiceLocatorAwareInterface || method_exists($this, 'getServiceLocator')) {

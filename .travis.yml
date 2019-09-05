@@ -1,12 +1,6 @@
 language: php
 
-dist: trusty
-
 php:
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.1
   - 7.2
   - 7.3
   - 7.4snapshot
@@ -23,56 +17,51 @@ script:
   - composer test:units
 
 jobs:
-  allow_failures:
-    - php: 7.4snapshot
   include:
-    - stage: test
-      php: 5.3
-      dist: precise
-      env: DEPS=latest
-      script:
-        - composer update --no-interaction --prefer-source
-        - composer test:units
-    - stage: test
-      php: 5.3
-      dist: precise
-      env: DEPS=lowest
-      script:
-        - composer update --no-interaction --prefer-source --prefer-lowest
-        - composer test:units
     - stage: lint
-      php: 7.1
+      php: 7.2
       script:
-        - composer install --no-interaction --prefer-source
+        - composer install --no-interaction
         - composer lint:syntax
     - stage: lint
-      php: 7.1
+      php: 7.2
       script:
-        - composer install --no-interaction --prefer-source
+        - composer install --no-interaction
         - composer lint:style
     - stage: big-test
-      php: 7.1
+      php: 7.2
       script:
-        - composer install --no-interaction --prefer-source
+        - composer install --no-interaction
         - composer test:coverage
     - stage: big-test
-      php: 7.1
+      php: 7.2
       script:
-        - composer install --no-interaction --prefer-source
+        - composer install --no-interaction
         - composer require --dev humbug/humbug:^1.0@dev
         - composer test:mutations
     - stage: big-test
-      php: 5.6
+      php: 7.2
       script:
         - cd test/ZF2
-        - composer install --no-interaction --prefer-source
+        - composer install --no-interaction
         - vendor/bin/phpunit
     - stage: big-test
-      php: 5.6
+      php: 7.2
       script:
         - cd test/ZF3
-        - composer install --no-interaction --prefer-source
+        - composer install --no-interaction
         - vendor/bin/phpunit
-
+    - stage: big-test
+      php: 7.3
+      script:
+        - cd test/ZF2
+        - composer install --no-interaction
+        - vendor/bin/phpunit
+    - stage: big-test
+      php: 7.3
+      script:
+        - cd test/ZF3
+        - composer install --no-interaction
+        - vendor/bin/phpunit
 notifications:
   email: false

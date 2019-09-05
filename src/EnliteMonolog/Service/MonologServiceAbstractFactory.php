@@ -6,10 +6,11 @@
 namespace EnliteMonolog\Service;
 
 use Interop\Container\ContainerInterface;
+use Monolog\Logger;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class MonologServiceAbstractFactory implements AbstractFactoryInterface
+final class MonologServiceAbstractFactory implements AbstractFactoryInterface
 {
     /**
      * @var array
@@ -59,7 +60,7 @@ class MonologServiceAbstractFactory implements AbstractFactoryInterface
         return $this->createLogger($container, $requestedName);
     }
 
-    private function createLogger($container, $requestedName)
+    private function createLogger($container, $requestedName): Logger
     {
         $config = $this->getConfig($container);
 
@@ -69,9 +70,8 @@ class MonologServiceAbstractFactory implements AbstractFactoryInterface
 
     /**
      * @param ServiceLocatorInterface|ContainerInterface $container
-     * @return array
      */
-    public function getConfig($container)
+    public function getConfig($container): array
     {
         if (null !== $this->config) {
             return $this->config;
@@ -79,19 +79,12 @@ class MonologServiceAbstractFactory implements AbstractFactoryInterface
 
         $config = $container->get('config');
 
-        if (isset($config['EnliteMonolog'])) {
-            $this->config = $config['EnliteMonolog'];
-        } else {
-            $this->config = array();
-        }
+        $this->config = $config['EnliteMonolog'] ?? [];
 
         return $this->config;
     }
 
-    /**
-     * @param array $config
-     */
-    public function setConfig($config)
+    public function setConfig(array $config): void
     {
         $this->config = $config;
     }

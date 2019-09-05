@@ -2,7 +2,7 @@
 
 namespace EnliteMonologTest\Service;
 
-class ProcessorMock
+final class ProcessorMock
 {
     private $argument;
 

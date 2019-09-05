@@ -3,43 +3,32 @@
 namespace EnliteMonologTest\Module;
 
 use EnliteMonolog\Module;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \EnliteMonolog\Module
  */
-class ModuleTest extends \PHPUnit_Framework_TestCase
+final class ModuleTest extends TestCase
 {
     /** @var Module */
     private $sut;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->sut = new Module();
     }
-    
-    public function testGetAutoloaderConfig()
-    {
-        $actual = $this->sut->getAutoloaderConfig();
-        
-        self::assertInternalType('array', $actual);
-    }
-    
-    public function testAutoloaderConfigIsSerializable()
-    {
-        self::assertInternalType('array', unserialize(serialize($this->sut->getAutoloaderConfig())));
-    }
-    
-    public function testGetConfig()
+
+    public function testGetConfig(): void
     {
         $actual = $this->sut->getConfig();
-        
-        self::assertInternalType('array', $actual);
+
+        self::assertIsArray($actual);
     }
-    
-    public function testConfigIsSerializable()
+
+    public function testConfigIsSerializable(): void
     {
-        self::assertInternalType('array', unserialize(serialize($this->sut->getConfig())));
+        self::assertIsArray(unserialize(serialize($this->sut->getConfig())));
     }
 }
