@@ -1,15 +1,10 @@
 language: php
 
-dist: trusty
-
 php:
-  - 5.4
-  - 5.5
-  - 5.6
   - 7.1
   - 7.2
   - 7.3
-  - 7.4snapshot
+  - 7.4
 
 env:
   - DEPS=latest
@@ -23,23 +18,7 @@ script:
   - composer test:units
 
 jobs:
-  allow_failures:
-    - php: 7.4snapshot
   include:
-    - stage: test
-      php: 5.3
-      dist: precise
-      env: DEPS=latest
-      script:
-        - composer update --no-interaction --prefer-source
-        - composer test:units
-    - stage: test
-      php: 5.3
-      dist: precise
-      env: DEPS=lowest
-      script:
-        - composer update --no-interaction --prefer-source --prefer-lowest
-        - composer test:units
     - stage: test
       name: 'Lint Syntax'
       php: 7.1
@@ -67,14 +46,14 @@ jobs:
         - composer test:mutations
     - stage: test
       name: 'ZF2 Integration'
-      php: 5.6
+      php: 7.1
       script:
         - cd test/ZF2
         - composer install --no-interaction --prefer-source
         - vendor/bin/phpunit
     - stage: test
       name: 'ZF3 Integration'
-      php: 5.6
+      php: 7.1
       script:
         - cd test/ZF3
         - composer install --no-interaction --prefer-source

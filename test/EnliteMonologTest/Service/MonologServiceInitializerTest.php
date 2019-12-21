@@ -8,13 +8,14 @@ namespace EnliteMonologTest\Service;
 use EnliteMonolog\Service\MonologServiceAwareInterface;
 use EnliteMonolog\Service\MonologServiceInitializer;
 use Monolog\Logger;
+use PHPUnit\Framework\TestCase;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 
 /**
  * @covers \EnliteMonolog\Service\MonologServiceInitializer
  */
-class MonologServiceInitializerTest extends \PHPUnit_Framework_TestCase
+class MonologServiceInitializerTest extends TestCase
 {
     public function testInitialize()
     {

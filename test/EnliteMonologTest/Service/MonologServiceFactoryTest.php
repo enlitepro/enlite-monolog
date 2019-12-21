@@ -9,12 +9,13 @@ use EnliteMonolog\Service\MonologOptions;
 use EnliteMonolog\Service\MonologServiceFactory;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
+use PHPUnit\Framework\TestCase;
 use Zend\ServiceManager\ServiceManager;
 
 /**
  * @covers \EnliteMonolog\Service\MonologServiceFactory
  */
-class MonologServiceFactoryTest extends \PHPUnit_Framework_TestCase
+class MonologServiceFactoryTest extends TestCase
 {
 
     public function testCreateService()
