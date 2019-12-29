@@ -40,34 +40,40 @@ jobs:
       script:
         - composer update --no-interaction --prefer-source --prefer-lowest
         - composer test:units
-    - stage: lint
+    - stage: test
+      name: 'Lint Syntax'
       php: 7.1
       script:
         - composer install --no-interaction --prefer-source
         - composer lint:syntax
-    - stage: lint
+    - stage: test
+      name: 'Lint Style'
       php: 7.1
       script:
         - composer install --no-interaction --prefer-source
         - composer lint:style
-    - stage: big-test
+    - stage: test
+      name: 'Coverage'
       php: 7.1
       script:
         - composer install --no-interaction --prefer-source
         - composer test:coverage
-    - stage: big-test
+    - stage: test
+      name: 'Mutations'
       php: 7.1
       script:
         - composer install --no-interaction --prefer-source
         - composer require --dev humbug/humbug:^1.0@dev
         - composer test:mutations
-    - stage: big-test
+    - stage: test
+      name: 'ZF2 Integration'
       php: 5.6
       script:
         - cd test/ZF2
         - composer install --no-interaction --prefer-source
         - vendor/bin/phpunit
-    - stage: big-test
+    - stage: test
+      name: 'ZF3 Integration'
       php: 5.6
       script:
         - cd test/ZF3
