@@ -47,7 +47,7 @@
         "lint:syntax": "vendor/bin/parallel-lint --exclude vendor --exclude test/ZF2/vendor --exclude test/ZF3/vendor .",
         "lint:syntax-php53": "vendor/bin/parallel-lint --exclude src/EnliteMonolog/Service/MonologServiceAwareTrait.php config/ src/ test/",
         "test:coverage": "vendor/bin/phpunit --coverage-text",
-        "test:mutations": "vendor/bin/infection && cat humbuglog.txt",
+        "test:mutations": "vendor/bin/infection && cat infection.txt",
         "test:units": "vendor/bin/phpunit"
     }
 }
