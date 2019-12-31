@@ -1,6 +1,6 @@
 .idea
 /composer.lock
 coverage.xml
-humbug.json
-humbuglog.txt
+infection.json
+infection.txt
 vendor

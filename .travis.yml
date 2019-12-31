@@ -63,7 +63,7 @@ jobs:
       php: 7.1
       script:
         - composer install --no-interaction --prefer-source
-        - composer require --dev humbug/humbug:^1.0@dev
+        - composer require --dev infection/infection
         - composer test:mutations
     - stage: test
       name: 'ZF2 Integration'
