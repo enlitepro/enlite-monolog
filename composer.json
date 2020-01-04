@@ -20,13 +20,13 @@
     },
     "require": {
         "php": "^7.1",
+        "container-interop/container-interop": "^1.0",
         "monolog/monolog": "^1.0.2",
         "zendframework/zend-modulemanager": "^2",
         "zendframework/zend-stdlib": "^2 || ^3",
         "zendframework/zend-servicemanager": "^2 || ^3"
     },
     "require-dev": {
-        "container-interop/container-interop": "^1.0",
         "jakub-onderka/php-parallel-lint": "^1.0",
         "johnkary/phpunit-speedtrap": "^3.0",
         "squizlabs/php_codesniffer": "^3.0",
