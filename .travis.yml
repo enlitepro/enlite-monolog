@@ -45,18 +45,32 @@ jobs:
         - composer require --dev infection/infection
         - composer test:mutations
     - stage: test
-      name: 'ZF2 Integration'
+      name: 'ZF2 Integration, DEPS=LATEST'
       php: 7.1
       script:
         - cd test/ZF2
         - composer install --no-interaction --prefer-source
         - vendor/bin/phpunit
     - stage: test
-      name: 'ZF3 Integration'
+      name: 'ZF2 Integration, DEPS=LOWEST'
+      php: 7.1
+      script:
+        - cd test/ZF2
+        - composer update --prefer-lowest --no-interaction
+        - vendor/bin/phpunit
+    - stage: test
+      name: 'ZF3 Integration, DEPS=LATEST'
       php: 7.1
       script:
         - cd test/ZF3
         - composer install --no-interaction --prefer-source
+        - vendor/bin/phpunit
+    - stage: test
+      name: 'ZF3 Integration, DEPS=LOWEST'
+      php: 7.1
+      script:
+        - cd test/ZF3
+        - composer update --prefer-lowest --no-interaction
         - vendor/bin/phpunit
 
 notifications:
