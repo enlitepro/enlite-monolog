@@ -6,6 +6,8 @@
 namespace EnliteMonolog\Service;
 
 use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
+use Interop\Container\Exception\NotFoundException;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -33,9 +35,11 @@ class MonologServiceAbstractFactory implements AbstractFactoryInterface
     }
 
     /**
-     * @param ServiceLocatorInterface|ContainerInterface $container
+     * @param ContainerInterface $container
      * @param $requestedName
      * @return bool
+     * @throws ContainerException
+     * @throws NotFoundException
      */
     private function has($container, $requestedName)
     {
@@ -68,8 +72,10 @@ class MonologServiceAbstractFactory implements AbstractFactoryInterface
     }
 
     /**
-     * @param ServiceLocatorInterface|ContainerInterface $container
+     * @param ContainerInterface $container
      * @return array
+     * @throws ContainerException
+     * @throws NotFoundException
      */
     public function getConfig($container)
     {
