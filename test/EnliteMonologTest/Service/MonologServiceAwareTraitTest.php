@@ -16,7 +16,7 @@ class MonologServiceAwareTraitTest extends TestCase
     public function testSetMonologService()
     {
         /** @var MonologServiceAwareTrait $trait */
-        $trait = $this->getMockForTrait('\EnliteMonolog\Service\MonologServiceAwareTrait');
+        $trait = $this->getMockForTrait(MonologServiceAwareTrait::class);
 
         $logger = new Logger(__METHOD__);
 

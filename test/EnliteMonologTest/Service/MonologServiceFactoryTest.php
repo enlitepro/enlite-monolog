@@ -5,11 +5,17 @@
 
 namespace EnliteMonologTest\Service;
 
+use DateTime;
 use EnliteMonolog\Service\MonologOptions;
 use EnliteMonolog\Service\MonologServiceFactory;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\NullHandler;
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
+use Monolog\Processor\MemoryUsageProcessor;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Zend\ServiceManager\ServiceManager;
 
 /**
@@ -20,7 +26,7 @@ class MonologServiceFactoryTest extends TestCase
 
     public function testCreateService()
     {
-        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+        $config = array('name' => 'test', 'handlers' => array(array('name' => TestHandler::class)));
 
         $serviceManager = new ServiceManager();
         $serviceManager->setService('EnliteMonologOptions', new MonologOptions($config));
@@ -28,15 +34,15 @@ class MonologServiceFactoryTest extends TestCase
         $factory = new MonologServiceFactory();
 
         $service = $factory->createService($serviceManager);
-        $this->assertInstanceOf('Monolog\Logger', $service);
+        $this->assertInstanceOf(Logger::class, $service);
         $this->assertEquals('test', $service->getName());
 
-        $this->assertInstanceOf('Monolog\Handler\TestHandler', $service->popHandler());
+        $this->assertInstanceOf(TestHandler::class, $service->popHandler());
     }
 
     public function testCreateHandlerFromServiceLocator()
     {
-        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+        $config = array('name' => 'test', 'handlers' => array(array('name' => TestHandler::class)));
 
         $serviceManager = new ServiceManager();
         $serviceManager->setService('TestHandler', 'works');
@@ -49,30 +55,30 @@ class MonologServiceFactoryTest extends TestCase
 
     public function testCreateHandlerByClassNameWithoutArgs()
     {
-        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+        $config = array('name' => 'test', 'handlers' => array(array('name' => TestHandler::class)));
 
         $serviceManager = new ServiceManager();
-        $handler = array('name' => 'Monolog\Handler\TestHandler');
+        $handler = array('name' => TestHandler::class);
 
         $factory = new MonologServiceFactory();
     
         $actual = $factory->createHandler($serviceManager, new MonologOptions($config), $handler);
-        $this->assertInstanceOf('Monolog\Handler\TestHandler', $actual);
+        $this->assertInstanceOf(TestHandler::class, $actual);
     }
 
     public function testCreateHandlerByClassNameWithArgs()
     {
-        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+        $config = array('name' => 'test', 'handlers' => array(array('name' => TestHandler::class)));
 
         $serviceManager = new ServiceManager();
 
-        $handler = array('name' => 'EnliteMonologTest\Service\HandlerMock', 'args' => array('some.log'));
+        $handler = array('name' => HandlerMock::class, 'args' => array('some.log'));
 
         $factory = new MonologServiceFactory();
 
         /** @var HandlerMock $logger */
         $logger = $factory->createHandler($serviceManager, new MonologOptions($config), $handler);
-        $this->assertInstanceOf('EnliteMonologTest\Service\HandlerMock', $logger);
+        $this->assertInstanceOf(HandlerMock::class, $logger);
         $this->assertEquals('some.log', $logger->getPath());
     }
 
@@ -82,7 +88,7 @@ class MonologServiceFactoryTest extends TestCase
      */
     public function testCreateHandlerByEmptyClassname()
     {
-        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+        $config = array('name' => 'test', 'handlers' => array(array('name' => TestHandler::class)));
 
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
@@ -96,7 +102,7 @@ class MonologServiceFactoryTest extends TestCase
      */
     public function testCreateHandlerNotExistsClassname()
     {
-        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+        $config = array('name' => 'test', 'handlers' => array(array('name' => TestHandler::class)));
 
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
@@ -110,13 +116,13 @@ class MonologServiceFactoryTest extends TestCase
      */
     public function testCreateHandlerWithBadArgs()
     {
-        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+        $config = array('name' => 'test', 'handlers' => array(array('name' => TestHandler::class)));
 
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
 
         $factory->createHandler($serviceManager, new MonologOptions($config), array(
-            'name' => 'Monolog\Handler\TestHandler',
+            'name' => TestHandler::class,
             'args' => ''
         ));
     }
@@ -150,9 +156,9 @@ class MonologServiceFactoryTest extends TestCase
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
 
-        $actual = $factory->createProcessor($serviceManager, '\Monolog\Processor\MemoryUsageProcessor');
+        $actual = $factory->createProcessor($serviceManager, MemoryUsageProcessor::class);
 
-        self::assertInstanceOf('\Monolog\Processor\MemoryUsageProcessor', $actual);
+        self::assertInstanceOf(MemoryUsageProcessor::class, $actual);
     }
 
     /**
@@ -165,7 +171,7 @@ class MonologServiceFactoryTest extends TestCase
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
 
-        $factory->createProcessor($serviceManager, '\stdClass');
+        $factory->createProcessor($serviceManager, stdClass::class);
     }
 
     /**
@@ -176,11 +182,11 @@ class MonologServiceFactoryTest extends TestCase
     public function testCreateNonCallableProcessorFromServiceName()
     {
         $services = new ServiceManager();
-        $services->setService('\stdClass', new \stdClass());
+        $services->setService(stdClass::class, new stdClass());
 
         $sut = new MonologServiceFactory();
 
-        $sut->createProcessor($services, '\stdClass');
+        $sut->createProcessor($services, stdClass::class);
     }
 
     /**
@@ -221,7 +227,7 @@ class MonologServiceFactoryTest extends TestCase
         $factory = new MonologServiceFactory();
 
         $factory->createProcessor($serviceManager, array(
-            'name' => '\EnliteMonologTest\Service\ProcessorMock',
+            'name' => ProcessorMock::class,
             'args' => 'MyArgs',
         ));
     }
@@ -236,7 +242,7 @@ class MonologServiceFactoryTest extends TestCase
         $factory = new MonologServiceFactory();
 
         $factory->createProcessor($serviceManager, array(
-            'name' => '\EnliteMonologTest\Service\ProcessorMock',
+            'name' => ProcessorMock::class,
             'args' => array(
                 'notExisted' => 'test',
             ),
@@ -249,13 +255,13 @@ class MonologServiceFactoryTest extends TestCase
         $factory = new MonologServiceFactory();
 
         $actual = $factory->createProcessor($serviceManager, array(
-            'name' => '\EnliteMonologTest\Service\ProcessorMock',
+            'name' => ProcessorMock::class,
             'args' => array(
                 'test',
             ),
         ));
 
-        self::assertInstanceOf('\EnliteMonologTest\Service\ProcessorMock', $actual);
+        self::assertInstanceOf(ProcessorMock::class, $actual);
     }
 
     public function testCreateProcessorWithoutArguments()
@@ -264,10 +270,10 @@ class MonologServiceFactoryTest extends TestCase
         $factory = new MonologServiceFactory();
 
         $actual = $factory->createProcessor($serviceManager, array(
-            'name' => '\Monolog\Processor\MemoryUsageProcessor',
+            'name' => MemoryUsageProcessor::class,
         ));
 
-        self::assertInstanceOf('\Monolog\Processor\MemoryUsageProcessor', $actual);
+        self::assertInstanceOf(MemoryUsageProcessor::class, $actual);
     }
 
     public function testCreateProcessorWithNamedArguments()
@@ -277,13 +283,13 @@ class MonologServiceFactoryTest extends TestCase
 
         $argument = 'test';
         $actual = $factory->createProcessor($serviceManager, array(
-            'name' => '\EnliteMonologTest\Service\ProcessorMock',
+            'name' => ProcessorMock::class,
             'args' => array(
                 'argument' => $argument,
             ),
         ));
 
-        self::assertInstanceOf('\EnliteMonologTest\Service\ProcessorMock', $actual);
+        self::assertInstanceOf(ProcessorMock::class, $actual);
         $reflection = new \ReflectionClass($actual);
         $property = $reflection->getProperty('argument');
         $property->setAccessible(true);
@@ -295,7 +301,7 @@ class MonologServiceFactoryTest extends TestCase
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'MyFormatter',
-            $expected = $this->getMockBuilder('\Monolog\Formatter\FormatterInterface')->getMock()
+            $expected = $this->getMockBuilder(FormatterInterface::class)->getMock()
         );
 
         $factory = new MonologServiceFactory();
@@ -343,7 +349,7 @@ class MonologServiceFactoryTest extends TestCase
         $factory = new MonologServiceFactory();
 
         $factory->createFormatter($serviceManager, array(
-            'name' => '\Monolog\Formatter\LineFormatter',
+            'name' => LineFormatter::class,
             'args' => 'MyArgs',
         ));
     }
@@ -354,14 +360,14 @@ class MonologServiceFactoryTest extends TestCase
         $factory = new MonologServiceFactory();
 
         $actual = $factory->createFormatter($serviceManager, array(
-            'name' => '\Monolog\Formatter\LineFormatter',
+            'name' => LineFormatter::class,
             'args' => array(
                 'format' => LineFormatter::SIMPLE_FORMAT,
                 'dateFormat' => 'Y-m-d H:i:s',
             ),
         ));
 
-        self::assertInstanceOf('\Monolog\Formatter\LineFormatter', $actual);
+        self::assertInstanceOf(LineFormatter::class, $actual);
     }
 
     public function testCreateFormatterWithoutArguments()
@@ -370,10 +376,10 @@ class MonologServiceFactoryTest extends TestCase
         $factory = new MonologServiceFactory();
 
         $actual = $factory->createFormatter($serviceManager, array(
-            'name' => '\Monolog\Formatter\LineFormatter',
+            'name' => LineFormatter::class,
         ));
 
-        self::assertInstanceOf('\Monolog\Formatter\LineFormatter', $actual);
+        self::assertInstanceOf(LineFormatter::class, $actual);
     }
 
     public function testCreateFormatterWithNamedArguments()
@@ -383,13 +389,13 @@ class MonologServiceFactoryTest extends TestCase
 
         $dateFormat = 'Y-m-d\TH:i:sZ';
         $actual = $factory->createFormatter($serviceManager, array(
-            'name' => '\Monolog\Formatter\LineFormatter',
+            'name' => LineFormatter::class,
             'args' => array(
                 'dateFormat' => $dateFormat,
             ),
         ));
 
-        self::assertInstanceOf('\Monolog\Formatter\LineFormatter', $actual);
+        self::assertInstanceOf(LineFormatter::class, $actual);
         $reflection = new \ReflectionClass($actual);
         $property = $reflection->getProperty('dateFormat');
         $property->setAccessible(true);
@@ -401,7 +407,7 @@ class MonologServiceFactoryTest extends TestCase
     {
         $options = new MonologOptions();
         $options->setProcessors(array(
-            '\Monolog\Processor\MemoryUsageProcessor',
+            MemoryUsageProcessor::class,
         ));
 
         $serviceManager = new ServiceManager();
@@ -409,8 +415,8 @@ class MonologServiceFactoryTest extends TestCase
 
         $actual = $factory->createLogger($serviceManager, $options);
 
-        self::assertInstanceOf('\Monolog\Logger', $actual);
-        self::assertInstanceOf('\Monolog\Processor\MemoryUsageProcessor', $actual->popProcessor());
+        self::assertInstanceOf(Logger::class, $actual);
+        self::assertInstanceOf(MemoryUsageProcessor::class, $actual->popProcessor());
     }
 
     public function testCreateHandlerWithFormatter()
@@ -419,26 +425,26 @@ class MonologServiceFactoryTest extends TestCase
         $factory = new MonologServiceFactory();
 
         $actual = $factory->createHandler($serviceManager, new MonologOptions(), array(
-            'name' => '\Monolog\Handler\NullHandler',
+            'name' => NullHandler::class,
             'formatter' => array(
-                'name' => '\Monolog\Formatter\LineFormatter',
+                'name' => LineFormatter::class,
             ),
         ));
 
-        self::assertInstanceOf('\Monolog\Handler\NullHandler', $actual);
-        self::assertInstanceOf('\Monolog\Formatter\LineFormatter', $actual->getFormatter());
+        self::assertInstanceOf(NullHandler::class, $actual);
+        self::assertInstanceOf(LineFormatter::class, $actual->getFormatter());
     }
 
     public function testCreateHandlerWithRandomOrderArgs()
     {
-        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+        $config = array('name' => 'test', 'handlers' => array(array('name' => TestHandler::class)));
 
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
 
-        /** @var \Monolog\Handler\TestHandler $handler */
+        /** @var TestHandler $handler */
         $handler = $factory->createHandler($serviceManager, new MonologOptions($config), array(
-            'name' => 'Monolog\Handler\TestHandler',
+            'name' => TestHandler::class,
             'args' => array(
                 'bubble' => false
             )
@@ -454,16 +460,16 @@ class MonologServiceFactoryTest extends TestCase
             'name' => 'test',
             'handlers' => array(
                 'testHandler' => 'TestHandler',
-                'nullHandler' => array('name' => 'Monolog\Handler\NullHandler'),
+                'nullHandler' => array('name' => NullHandler::class),
             )
         );
 
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
 
-        /** @var \Monolog\Handler\TestHandler $handler */
+        /** @var TestHandler $handler */
         $handler = $factory->createHandler($serviceManager, new MonologOptions($config), array(
-            'name' => 'Monolog\Handler\TestHandler',
+            'name' => TestHandler::class,
             'args' => array(
                 'bubble' => false
             )
@@ -476,10 +482,10 @@ class MonologServiceFactoryTest extends TestCase
         $service->addError('HandleThis!');
 
         $handler1 = $service->popHandler();
-        $this->assertInstanceOf('Monolog\Handler\TestHandler', $handler1);
+        $this->assertInstanceOf(TestHandler::class, $handler1);
 
         $handler2 = $service->popHandler();
-        $this->assertInstanceOf('Monolog\Handler\NullHandler', $handler2);
+        $this->assertInstanceOf(NullHandler::class, $handler2);
 
         self::assertTrue($handler->hasErrorRecords());
     }
@@ -495,12 +501,12 @@ class MonologServiceFactoryTest extends TestCase
 
         $factory = new MonologServiceFactory();
         $handler = $factory->createHandler($serviceManager, $monologOptions, array(
-            'name' => '\Monolog\Handler\NullHandler',
+            'name' => NullHandler::class,
         ));
 
         $formatter = $handler->getFormatter();
 
-        self::assertInstanceOf('\Monolog\Formatter\FormatterInterface', $formatter);
+        self::assertInstanceOf(FormatterInterface::class, $formatter);
 
         return $formatter;
     }
@@ -510,7 +516,7 @@ class MonologServiceFactoryTest extends TestCase
         $formatter = $this->testHandlerGetsDefaultFormatter();
 
         $line = $formatter->format(array(
-            'datetime' => new \DateTime('2016-01-01 00:00:00', timezone_open('UTC')),
+            'datetime' => new DateTime('2016-01-01 00:00:00', timezone_open('UTC')),
             'channel' => 'test',
             'level_name' => 'ERROR',
             'message' => 'foobar',
@@ -525,17 +531,17 @@ class MonologServiceFactoryTest extends TestCase
     {
         $services = new ServiceManager();
 
-        $config = array('name' => 'test', 'handlers' => array(array('name' => 'Monolog\Handler\TestHandler')));
+        $config = array('name' => 'test', 'handlers' => array(array('name' => TestHandler::class)));
 
         $services->setService('EnliteMonologOptions', new MonologOptions($config));
 
         $sut = new MonologServiceFactory();
 
         $service = $sut(new ContainerMock($services), 'EnliteMonolog');
-        $this->assertInstanceOf('Monolog\Logger', $service);
+        $this->assertInstanceOf(Logger::class, $service);
         $this->assertEquals('test', $service->getName());
 
-        $this->assertInstanceOf('Monolog\Handler\TestHandler', $service->popHandler());
+        $this->assertInstanceOf(TestHandler::class, $service->popHandler());
     }
 
     public function testCreateHandlerFromOptions()
@@ -547,7 +553,7 @@ class MonologServiceFactoryTest extends TestCase
         $options = new MonologOptions();
         $options->setHandlers(array(
             'HandlerMock' => array(
-                'name' => '\EnliteMonologTest\Service\HandlerMock',
+                'name' => HandlerMock::class,
                 'args' => array(
                     'path' => '/FooBar',
                 ),
@@ -555,20 +561,20 @@ class MonologServiceFactoryTest extends TestCase
         ));
 
         $result = $sut->createHandler($services, $options, array(
-            'name' => '\EnliteMonologTest\Service\HandlerMock',
+            'name' => HandlerMock::class,
             'args' => array(
                 'handler' => 'HandlerMock',
                 'path' => '/FizBuz',
             ),
         ));
 
-        self::assertInstanceOf('\EnliteMonologTest\Service\HandlerMock', $result);
+        self::assertInstanceOf(HandlerMock::class, $result);
     }
 
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionCode 0
-     * @expectedExceptionMessage Handler(\EnliteMonologTest\Service\HandlerMock) has an invalid argument configuration
+     * @expectedExceptionMessage Handler(EnliteMonologTest\Service\HandlerMock) has an invalid argument configuration
      */
     public function testCreateHandlerWithInvalidArguments()
     {
@@ -579,7 +585,7 @@ class MonologServiceFactoryTest extends TestCase
         $options = new MonologOptions();
 
         $sut->createHandler($services, $options, array(
-            'name' => '\EnliteMonologTest\Service\HandlerMock',
+            'name' => HandlerMock::class,
             'args' => array(),
         ));
     }
@@ -587,7 +593,7 @@ class MonologServiceFactoryTest extends TestCase
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionCode 0
-     * @expectedExceptionMessage Formatter(\EnliteMonologTest\Service\FormatterMock) has an invalid argument config
+     * @expectedExceptionMessage Formatter(EnliteMonologTest\Service\FormatterMock) has an invalid argument config
      */
     public function testCreateFormatterWithMissingArguments()
     {
@@ -596,7 +602,7 @@ class MonologServiceFactoryTest extends TestCase
         $services = new ServiceManager();
 
         $sut->createFormatter($services, array(
-            'name' => '\EnliteMonologTest\Service\FormatterMock',
+            'name' => FormatterMock::class,
             'args' => array(),
         ));
     }
@@ -604,7 +610,7 @@ class MonologServiceFactoryTest extends TestCase
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionCode 0
-     * @expectedExceptionMessage Formatter(\EnliteMonologTest\Service\FormatterMock) has an invalid argument config
+     * @expectedExceptionMessage Formatter(EnliteMonologTest\Service\FormatterMock) has an invalid argument config
      */
     public function testCreateFormatterWithInvalidArguments()
     {
@@ -613,7 +619,7 @@ class MonologServiceFactoryTest extends TestCase
         $services = new ServiceManager();
 
         $sut->createFormatter($services, array(
-            'name' => '\EnliteMonologTest\Service\FormatterMock',
+            'name' => FormatterMock::class,
             'args' => array(
                 'NotEncoder' => new \stdClass(),
             ),
@@ -623,7 +629,7 @@ class MonologServiceFactoryTest extends TestCase
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionCode 0
-     * @expectedExceptionMessage Formatter(\EnliteMonologTest\Service\FormatterPrivateConstructorMock) has an invalid
+     * @expectedExceptionMessage Formatter(EnliteMonologTest\Service\FormatterPrivateConstructorMock) has an invalid
      */
     public function testCreateFormatterWithPrivateConstructor()
     {
@@ -632,7 +638,7 @@ class MonologServiceFactoryTest extends TestCase
         $services = new ServiceManager();
 
         $sut->createFormatter($services, array(
-            'name' => '\EnliteMonologTest\Service\FormatterPrivateConstructorMock',
+            'name' => FormatterPrivateConstructorMock::class,
             'args' => array(),
         ));
     }
@@ -644,10 +650,10 @@ class MonologServiceFactoryTest extends TestCase
         $services = new ServiceManager();
 
         $result = $sut->createFormatter($services, array(
-            'name' => '\stdClass',
+            'name' => stdClass::class,
             'args' => array(),
         ));
 
-        self::assertInstanceOf('\stdClass', $result);
+        self::assertInstanceOf(stdClass::class, $result);
     }
 }
