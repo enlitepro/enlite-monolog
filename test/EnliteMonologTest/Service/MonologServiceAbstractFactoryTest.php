@@ -6,6 +6,7 @@
 namespace EnliteMonologTest\Service;
 
 use EnliteMonolog\Service\MonologServiceAbstractFactory;
+use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Zend\ServiceManager\ServiceManager;
 
@@ -81,7 +82,7 @@ class MonologServiceAbstractFactoryTest extends TestCase
 
         $logger = $factory->createServiceWithName($serviceLocator, 'default', 'default');
         
-        self::assertInstanceOf('\Monolog\Logger', $logger);
+        self::assertInstanceOf(Logger::class, $logger);
     }
 
     public function testCanCreate()
@@ -119,7 +120,7 @@ class MonologServiceAbstractFactoryTest extends TestCase
 
         $logger = $sut(new ContainerMock($services), 'default');
 
-        self::assertInstanceOf('\Monolog\Logger', $logger);
+        self::assertInstanceOf(Logger::class, $logger);
     }
 
     public function testCreateServiceFromServiceManager()
@@ -136,6 +137,6 @@ class MonologServiceAbstractFactoryTest extends TestCase
 
         $logger = $services->get('FooBar');
 
-        self::assertInstanceOf('\Monolog\Logger', $logger);
+        self::assertInstanceOf(Logger::class, $logger);
     }
 }

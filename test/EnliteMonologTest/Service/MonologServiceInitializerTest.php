@@ -21,7 +21,7 @@ class MonologServiceInitializerTest extends TestCase
     {
         $configArray = array(
             'invokables' => array(
-                'test' => 'EnliteMonologTest\Service\ServiceMock',
+                'test' => ServiceMock::class,
             ),
             'factories' => array(
                 'EnliteMonologService' => function () {
@@ -29,7 +29,7 @@ class MonologServiceInitializerTest extends TestCase
                 }
             ),
             'initializers' => array(
-                'EnliteMonolog\Service\MonologServiceInitializer'
+                MonologServiceInitializer::class
             )
         );
 
@@ -41,7 +41,7 @@ class MonologServiceInitializerTest extends TestCase
 
         /** @var MonologServiceAwareInterface $service */
         $service = $serviceManager->get('test');
-        $this->assertInstanceOf('Monolog\Logger', $service->getMonologService());
+        $this->assertInstanceOf(Logger::class, $service->getMonologService());
     }
 
     private function isZF2()

@@ -6,6 +6,8 @@
 namespace EnliteMonolog\Service;
 
 use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
+use Interop\Container\Exception\NotFoundException;
 use Zend\ServiceManager\InitializerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -18,6 +20,8 @@ class MonologServiceInitializer implements InitializerInterface
      * @param $instance
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
+     * @throws ContainerException
+     * @throws NotFoundException
      */
     public function initialize($instance, ServiceLocatorInterface $serviceLocator)
     {
@@ -29,6 +33,8 @@ class MonologServiceInitializer implements InitializerInterface
     /**
      * @param ContainerInterface $container
      * @param $instance
+     * @throws ContainerException
+     * @throws NotFoundException
      */
     public function __invoke(ContainerInterface $container, $instance)
     {
@@ -36,8 +42,10 @@ class MonologServiceInitializer implements InitializerInterface
     }
 
     /**
-     * @param ServiceLocatorInterface|ContainerInterface $container
+     * @param ContainerInterface $container
      * @param $instance
+     * @throws ContainerException
+     * @throws NotFoundException
      */
     private function setMonologService($container, $instance)
     {

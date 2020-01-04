@@ -32,7 +32,7 @@ trait MonologServiceAwareTrait
     }
 
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @return Logger
      */
     public function getMonologService()

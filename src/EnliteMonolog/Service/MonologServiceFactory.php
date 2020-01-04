@@ -8,9 +8,14 @@ namespace EnliteMonolog\Service;
 use Closure;
 use Exception;
 use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
+use Interop\Container\Exception\NotFoundException;
+use InvalidArgumentException;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
 use Monolog\Formatter\FormatterInterface;
+use ReflectionClass;
+use ReflectionException;
 use RuntimeException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -20,9 +25,10 @@ class MonologServiceFactory implements FactoryInterface
 
     /**
      * {@inheritdoc}
-     * @throws \Interop\Container\Exception\ContainerException
-     * @throws \RuntimeException
-     * @throws \Interop\Container\Exception\NotFoundException
+     * @throws ContainerException
+     * @throws RuntimeException
+     * @throws NotFoundException
+     * @throws ReflectionException
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -33,8 +39,10 @@ class MonologServiceFactory implements FactoryInterface
 
     /**
      * {@inheritdoc}
-     * @throws \Interop\Container\Exception\NotFoundException
-     * @throws \RuntimeException
+     * @throws NotFoundException
+     * @throws RuntimeException
+     * @throws ContainerException
+     * @throws ReflectionException
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
@@ -47,9 +55,10 @@ class MonologServiceFactory implements FactoryInterface
      * @param ServiceLocatorInterface|ContainerInterface $container
      * @param MonologOptions $options
      * @return Logger
-     * @throws \Interop\Container\Exception\NotFoundException
-     * @throws \RuntimeException
-     * @throws \Interop\Container\Exception\ContainerException
+     * @throws NotFoundException
+     * @throws RuntimeException
+     * @throws ContainerException
+     * @throws ReflectionException
      */
     public function createLogger($container, MonologOptions $options)
     {
@@ -71,10 +80,11 @@ class MonologServiceFactory implements FactoryInterface
      * @param ServiceLocatorInterface|ContainerInterface $container
      * @param MonologOptions $options
      * @param string|array $handler
-     * @throws \RuntimeException
      * @return HandlerInterface
-     * @throws \Interop\Container\Exception\NotFoundException
-     * @throws \Interop\Container\Exception\ContainerException
+     * @throws RuntimeException
+     * @throws NotFoundException
+     * @throws ContainerException
+     * @throws ReflectionException
      *
      */
     public function createHandler($container, MonologOptions $options, $handler)
@@ -112,7 +122,7 @@ class MonologServiceFactory implements FactoryInterface
         try {
             /** @var HandlerInterface $instance */
             $instance = $this->createInstanceFromArguments($handlerClassName, $arguments);
-        } catch (\InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException $exception) {
             throw new RuntimeException(sprintf(
                 'Handler(%s) has an invalid argument configuration',
                 $handlerClassName
@@ -128,12 +138,13 @@ class MonologServiceFactory implements FactoryInterface
     }
 
     /**
-     * @param ServiceLocatorInterface|ContainerInterface $container
+     * @param ContainerInterface $container
      * @param string|array $formatter
      * @return FormatterInterface
-     * @throws \Interop\Container\Exception\NotFoundException
-     * @throws \Interop\Container\Exception\ContainerException
+     * @throws NotFoundException
+     * @throws ContainerException
      * @throws RuntimeException
+     * @throws ReflectionException
      */
     public function createFormatter($container, $formatter)
     {
@@ -160,7 +171,7 @@ class MonologServiceFactory implements FactoryInterface
         try {
             /** @var FormatterInterface $instance */
             $instance = $this->createInstanceFromArguments($formatterClassName, $arguments);
-        } catch (\InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException $exception) {
             throw new RuntimeException(sprintf(
                 'Formatter(%s) has an invalid argument configuration',
                 $formatterClassName
@@ -171,12 +182,13 @@ class MonologServiceFactory implements FactoryInterface
     }
 
     /**
-     * @param ServiceLocatorInterface|ContainerInterface $container
+     * @param ContainerInterface $container
      * @param $processor
      * @return Closure
-     * @throws \Interop\Container\Exception\NotFoundException
-     * @throws \Interop\Container\Exception\ContainerException
+     * @throws NotFoundException
+     * @throws ContainerException
      * @throws RuntimeException
+     * @throws ReflectionException
      */
     public function createProcessor($container, $processor)
     {
@@ -221,7 +233,7 @@ class MonologServiceFactory implements FactoryInterface
 
             try {
                 $instance = $this->createInstanceFromArguments($processorClassName, $arguments);
-            } catch (\InvalidArgumentException $exception) {
+            } catch (InvalidArgumentException $exception) {
                 throw new RuntimeException(sprintf(
                     'Processor(%s) has an invalid argument configuration',
                     $processorClassName
@@ -242,14 +254,15 @@ class MonologServiceFactory implements FactoryInterface
      * Handles the constructor arguments and if they're named, just sort them to fit constructor ordering.
      *
      * @param string $className
-     * @param array  $arguments
+     * @param array $arguments
      *
      * @return object
-     * @throws \InvalidArgumentException If given arguments are not valid for provided className constructor.
+     * @throws InvalidArgumentException If given arguments are not valid for provided className constructor.
+     * @throws ReflectionException
      */
     private function createInstanceFromArguments($className, array $arguments)
     {
-        $reflection = new \ReflectionClass($className);
+        $reflection = new ReflectionClass($className);
         $constructor = $reflection->getConstructor();
 
         // There is no or at least a non-accessible constructor for provided class name,
@@ -259,7 +272,7 @@ class MonologServiceFactory implements FactoryInterface
         }
 
         if (!$constructor->isPublic()) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 '%s::__construct is not accessible',
                 $className
             ));
@@ -269,7 +282,7 @@ class MonologServiceFactory implements FactoryInterface
         $argumentCount = count($arguments);
 
         if ($requiredArgsCount > $argumentCount) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 '%s::__construct() requires at least %d arguments; %d given',
                 $className,
                 $requiredArgsCount,
@@ -293,7 +306,7 @@ class MonologServiceFactory implements FactoryInterface
             }
 
             if (!$parameter->isOptional()) {
-                throw new \InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(sprintf(
                     'Missing at least one required parameters `%s`',
                     $parameterName
                 ));
