@@ -23,25 +23,21 @@ jobs:
       name: 'Lint Syntax'
       php: 7.1
       script:
-        - composer install --no-interaction --prefer-source
         - composer lint:syntax
     - stage: test
       name: 'Lint Style'
       php: 7.1
       script:
-        - composer install --no-interaction --prefer-source
         - composer lint:style
     - stage: test
       name: 'Coverage'
       php: 7.1
       script:
-        - composer install --no-interaction --prefer-source
         - composer test:coverage
     - stage: test
       name: 'Mutations'
       php: 7.1
       script:
-        - composer install --no-interaction --prefer-source
         - composer require --dev infection/infection
         - composer test:mutations
     - stage: test
@@ -49,14 +45,14 @@ jobs:
       php: 7.1
       script:
         - cd test/ZF2
-        - composer install --no-interaction --prefer-source
+        - composer install --no-interaction
         - vendor/bin/phpunit
     - stage: test
       name: 'ZF3 Integration'
       php: 7.1
       script:
         - cd test/ZF3
-        - composer install --no-interaction --prefer-source
+        - composer install --no-interaction
         - vendor/bin/phpunit
 
 notifications:
