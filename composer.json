@@ -19,6 +19,7 @@
         }
     },
     "require": {
+        "php": "^7.1",
         "monolog/monolog": "^1.0.2",
         "zendframework/zend-modulemanager": "^2",
         "zendframework/zend-stdlib": "^2 || ^3",
@@ -26,10 +27,10 @@
     },
     "require-dev": {
         "container-interop/container-interop": "^1.0",
-        "jakub-onderka/php-parallel-lint": "^0.9",
-        "johnkary/phpunit-speedtrap": "^1.0",
-        "squizlabs/php_codesniffer": "^2.9",
-        "phpunit/phpunit": "^5|^4.8"
+        "jakub-onderka/php-parallel-lint": "^1.0",
+        "johnkary/phpunit-speedtrap": "^3.0",
+        "squizlabs/php_codesniffer": "^3.0",
+        "phpunit/phpunit": "^8 | ^7.5.15"
     },
     "autoload": {
         "psr-4": {
@@ -45,7 +46,6 @@
         "lint:beautify": "vendor/bin/phpcbf --standard=PSR2 --extensions=php -v --ignore=*/vendor/* .",
         "lint:style": "vendor/bin/phpcs --standard=PSR2 --extensions=php -v --ignore=*/vendor/* .",
         "lint:syntax": "vendor/bin/parallel-lint --exclude vendor --exclude test/ZF2/vendor --exclude test/ZF3/vendor .",
-        "lint:syntax-php53": "vendor/bin/parallel-lint --exclude src/EnliteMonolog/Service/MonologServiceAwareTrait.php config/ src/ test/",
         "test:coverage": "vendor/bin/phpunit --coverage-text",
         "test:mutations": "vendor/bin/infection && cat infection.txt",
         "test:units": "vendor/bin/phpunit"

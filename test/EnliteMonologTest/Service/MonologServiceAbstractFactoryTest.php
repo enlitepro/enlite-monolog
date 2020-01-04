@@ -6,12 +6,13 @@
 namespace EnliteMonologTest\Service;
 
 use EnliteMonolog\Service\MonologServiceAbstractFactory;
+use PHPUnit\Framework\TestCase;
 use Zend\ServiceManager\ServiceManager;
 
 /**
  * @covers \EnliteMonolog\Service\MonologServiceAbstractFactory
  */
-class MonologServiceAbstractFactoryTest extends \PHPUnit_Framework_TestCase
+class MonologServiceAbstractFactoryTest extends TestCase
 {
 
     public function testGetConfigWithNoneConfig()
