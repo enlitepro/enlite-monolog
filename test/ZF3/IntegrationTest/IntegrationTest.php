@@ -11,7 +11,7 @@ class IntegrationTest extends TestCase
     /** @var Application */
     private $sut;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sut = Application::init(array(
             'module_listener_options' => array(
