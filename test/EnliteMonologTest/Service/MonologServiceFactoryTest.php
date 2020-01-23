@@ -10,6 +10,7 @@ use EnliteMonolog\Service\MonologOptions;
 use EnliteMonolog\Service\MonologServiceFactory;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\FormattableHandlerInterface;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
@@ -421,6 +422,10 @@ class MonologServiceFactoryTest extends TestCase
 
     public function testCannotCreateWithFormatterWithoutCorrectInterface()
     {
+        if (! interface_exists(FormattableHandlerInterface::class)) {
+            $this->markTestSkipped('Monolog v2');
+        }
+
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
 
@@ -539,7 +544,7 @@ class MonologServiceFactoryTest extends TestCase
             'context' => array(),
         ));
 
-        self::assertContains('[2016-01-01T00:00:00+00:00]', $line);
+        self::assertContains('2016-01-01', $line);
     }
 
     public function testInvoke()

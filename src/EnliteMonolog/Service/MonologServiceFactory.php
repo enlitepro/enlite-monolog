@@ -130,7 +130,8 @@ class MonologServiceFactory implements FactoryInterface
         }
 
         if (isset($handler['formatter'])) {
-            if ($instance instanceof FormattableHandlerInterface) {
+            if ($instance instanceof FormattableHandlerInterface
+                || !interface_exists(FormattableHandlerInterface::class)) {
                 $formatter = $this->createFormatter($container, $handler['formatter']);
                 $instance->setFormatter($formatter);
             } else {
