@@ -19,7 +19,7 @@ USAGE
 
 ```php
 // usage over service locator
-$serviceLocator->get('EnliteMonologService')->addDebug('hello world');
+$serviceLocator->get('EnliteMonologService')->debug('hello world');
 
 use EnliteMonolog\Service\MonologServiceAwareInterface,
     EnliteMonolog\Service\MonologServiceAwareTrait;
@@ -31,7 +31,7 @@ class MyService implements MonologServiceAwareInterface
 
     public function whatever()
     {
-        $this->getMonologService()->addDebug('hello world');
+        $this->getMonologService()->debug('hello world');
     }
 }
 
@@ -87,8 +87,8 @@ By default it write logs to `data/logs/application.log`. If you want change this
 now you can use it
 
 ```php
-$serviceLocator->get('EnliteMonologService')->addDebug('hello world');
-$serviceLocator->get('MyChromeLogger')->addInfo('hello world');
+$serviceLocator->get('EnliteMonologService')->debug('hello world');
+$serviceLocator->get('MyChromeLogger')->debug('hello world');
 ```
 
 ## Contributing
