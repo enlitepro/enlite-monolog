@@ -1,4 +1,6 @@
 <?php
+// @codingStandardsIgnoreFile
+
 /**
  * @author Evgeny Shpilevsky <evgeny@shpilevsky.com>
  */

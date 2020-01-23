@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 namespace EnliteMonologTest\Service;
 
 use Monolog\Formatter\FormatterInterface;
