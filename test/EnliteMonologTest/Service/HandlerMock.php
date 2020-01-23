@@ -23,15 +23,17 @@ class HandlerMock implements HandlerInterface
         return $this->path;
     }
 
-    public function isHandling(array $record)
+    public function isHandling(array $record): bool
     {
+        return true;
     }
 
-    public function handle(array $record)
+    public function handle(array $record): bool
     {
+        return true;
     }
 
-    public function handleBatch(array $records)
+    public function handleBatch(array $records): void
     {
     }
 
@@ -48,6 +50,10 @@ class HandlerMock implements HandlerInterface
     }
 
     public function getFormatter()
+    {
+    }
+
+    public function close(): void
     {
     }
 }

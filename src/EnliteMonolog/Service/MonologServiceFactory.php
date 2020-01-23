@@ -11,6 +11,7 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Interop\Container\Exception\NotFoundException;
 use InvalidArgumentException;
+use Monolog\Handler\FormattableHandlerInterface;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
 use Monolog\Formatter\FormatterInterface;
@@ -93,7 +94,6 @@ class MonologServiceFactory implements FactoryInterface
             return $container->get($handler);
         }
 
-
         if (!isset($handler['name'])) {
             throw new RuntimeException('Cannot create logger handler');
         }
@@ -130,8 +130,16 @@ class MonologServiceFactory implements FactoryInterface
         }
 
         if (isset($handler['formatter'])) {
-            $formatter = $this->createFormatter($container, $handler['formatter']);
-            $instance->setFormatter($formatter);
+            if ($instance instanceof FormattableHandlerInterface) {
+                $formatter = $this->createFormatter($container, $handler['formatter']);
+                $instance->setFormatter($formatter);
+            } else {
+                throw new RuntimeException(sprintf(
+                    'Handler(%s) doesn\'t implements %s to attach formatter.',
+                    $handlerClassName,
+                    FormattableHandlerInterface::class
+                ));
+            }
         }
 
         return $instance;

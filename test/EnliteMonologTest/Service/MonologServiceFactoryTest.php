@@ -419,19 +419,34 @@ class MonologServiceFactoryTest extends TestCase
         self::assertInstanceOf(MemoryUsageProcessor::class, $actual->popProcessor());
     }
 
+    public function testCannotCreateWithFormatterWithoutCorrectInterface()
+    {
+        $serviceManager = new ServiceManager();
+        $factory = new MonologServiceFactory();
+
+        $this->expectException(\RuntimeException::class);
+
+        $factory->createHandler($serviceManager, new MonologOptions(), array(
+            'name' => NullHandler::class,
+            'formatter' => array(
+                'name' => LineFormatter::class,
+            ),
+        ));
+    }
+
     public function testCreateHandlerWithFormatter()
     {
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
 
         $actual = $factory->createHandler($serviceManager, new MonologOptions(), array(
-            'name' => NullHandler::class,
+            'name' => TestHandler::class,
             'formatter' => array(
                 'name' => LineFormatter::class,
             ),
         ));
 
-        self::assertInstanceOf(NullHandler::class, $actual);
+        self::assertInstanceOf(TestHandler::class, $actual);
         self::assertInstanceOf(LineFormatter::class, $actual->getFormatter());
     }
 
@@ -479,7 +494,7 @@ class MonologServiceFactoryTest extends TestCase
 
         $service = $factory->createService($serviceManager);
 
-        $service->addError('HandleThis!');
+        $service->error('HandleThis!');
 
         $handler1 = $service->popHandler();
         $this->assertInstanceOf(TestHandler::class, $handler1);
@@ -501,7 +516,7 @@ class MonologServiceFactoryTest extends TestCase
 
         $factory = new MonologServiceFactory();
         $handler = $factory->createHandler($serviceManager, $monologOptions, array(
-            'name' => NullHandler::class,
+            'name' => TestHandler::class,
         ));
 
         $formatter = $handler->getFormatter();
@@ -524,7 +539,7 @@ class MonologServiceFactoryTest extends TestCase
             'context' => array(),
         ));
 
-        self::assertContains('[2016-01-01 00:00:00]', $line);
+        self::assertContains('[2016-01-01T00:00:00+00:00]', $line);
     }
 
     public function testInvoke()
