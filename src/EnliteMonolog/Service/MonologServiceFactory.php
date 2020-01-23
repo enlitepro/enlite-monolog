@@ -131,6 +131,7 @@ class MonologServiceFactory implements FactoryInterface
 
         if (isset($handler['formatter'])) {
             if ($instance instanceof FormattableHandlerInterface
+                || !defined('Monolog\Logger::API')
                 || \Monolog\Logger::API === 1) {
                 $formatter = $this->createFormatter($container, $handler['formatter']);
                 $instance->setFormatter($formatter);

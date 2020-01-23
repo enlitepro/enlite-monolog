@@ -422,7 +422,7 @@ class MonologServiceFactoryTest extends TestCase
 
     public function testCannotCreateWithFormatterWithoutCorrectInterface()
     {
-        if (\Monolog\Logger::API === 1) {
+        if (!defined('Monolog\Logger::API') || \Monolog\Logger::API === 1) {
             $this->markTestSkipped('Not supported by Monolog v1');
         }
 
