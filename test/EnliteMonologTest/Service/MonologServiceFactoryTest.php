@@ -422,8 +422,8 @@ class MonologServiceFactoryTest extends TestCase
 
     public function testCannotCreateWithFormatterWithoutCorrectInterface()
     {
-        if (! interface_exists(FormattableHandlerInterface::class)) {
-            $this->markTestSkipped('Monolog v2');
+        if (\Monolog\Logger::API === 1) {
+            $this->markTestSkipped('Not supported by Monolog v1');
         }
 
         $serviceManager = new ServiceManager();
