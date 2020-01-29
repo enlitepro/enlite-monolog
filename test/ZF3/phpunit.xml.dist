@@ -6,6 +6,7 @@
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTestsThatDoNotTestAnything="true"
          forceCoversAnnotation="true"
+         convertWarningsToExceptions="false"
          colors="true"
          verbose="true">
     <php>
