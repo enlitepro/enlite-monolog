@@ -8,8 +8,8 @@ namespace EnliteMonolog\Service;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Interop\Container\Exception\NotFoundException;
-use Zend\ServiceManager\InitializerInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\InitializerInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class MonologServiceInitializer implements InitializerInterface
 {

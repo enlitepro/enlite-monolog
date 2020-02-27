@@ -17,7 +17,7 @@ use Monolog\Logger;
 use Monolog\Processor\MemoryUsageProcessor;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * @covers \EnliteMonolog\Service\MonologServiceFactory

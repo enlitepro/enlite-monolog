@@ -18,8 +18,8 @@ use Monolog\Formatter\FormatterInterface;
 use ReflectionClass;
 use ReflectionException;
 use RuntimeException;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class MonologServiceFactory implements FactoryInterface
 {

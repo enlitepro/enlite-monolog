@@ -4,7 +4,7 @@ namespace EnliteMonologTest\ZF2\IntegrationTest;
 
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
-use Zend\Mvc\Application;
+use Laminas\Mvc\Application;
 
 class IntegrationTest extends TestCase
 {

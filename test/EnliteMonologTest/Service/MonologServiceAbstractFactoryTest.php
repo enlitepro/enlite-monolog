@@ -8,7 +8,7 @@ namespace EnliteMonologTest\Service;
 use EnliteMonolog\Service\MonologServiceAbstractFactory;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * @covers \EnliteMonolog\Service\MonologServiceAbstractFactory

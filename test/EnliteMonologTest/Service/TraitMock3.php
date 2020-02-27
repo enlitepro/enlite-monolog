@@ -3,7 +3,7 @@
 namespace EnliteMonologTest\Service;
 
 use EnliteMonolog\Service\MonologServiceAwareTrait;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class TraitMock3
 {

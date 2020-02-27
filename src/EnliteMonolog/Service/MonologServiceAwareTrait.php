@@ -7,8 +7,8 @@ namespace EnliteMonolog\Service;
 
 use Monolog\Logger;
 use RuntimeException;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorAwareInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 trait MonologServiceAwareTrait
 {
