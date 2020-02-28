@@ -15,6 +15,7 @@
     "laminas/laminas-view": "^2.1",
     "laminas/laminas-serializer": "^2.1",
     "laminas/laminas-log": "^2.1",
+    "laminas/laminas-i18n": "^2.1",
     "phpunit/phpunit": "^8.5.2"
   }
 }
