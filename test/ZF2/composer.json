@@ -17,6 +17,7 @@
     "laminas/laminas-log": "^2.1",
     "laminas/laminas-i18n": "^2.1",
     "laminas/laminas-config": "^2.1",
+    "laminas/laminas-stdlib": "^2.1.2",
     "phpunit/phpunit": "^8.5.2"
   }
 }
