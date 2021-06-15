@@ -21,51 +21,37 @@ jobs:
   include:
     - stage: test
       name: 'Lint Syntax'
-      php: 7.3
+      php: 7.4
       script:
         - composer lint:syntax
     - stage: test
       name: 'Lint Style'
-      php: 7.3
+      php: 7.4
       script:
         - composer lint:style
     - stage: test
       name: 'Coverage'
-      php: 7.3
+      php: 7.4
       script:
         - composer test:coverage
     - stage: test
       name: 'Mutations'
-      php: 7.3
+      php: 7.4
       script:
         - composer require --dev infection/infection
         - composer test:mutations
     - stage: test
-      name: 'ZF2 Integration, DEPS=LATEST'
-      php: 7.3
+      name: 'Integration, DEPS=LATEST'
+      php: 7.4
       script:
-        - cd test/ZF2
+        - cd test/integration
         - composer install --no-interaction
         - vendor/bin/phpunit
     - stage: test
-      name: 'ZF2 Integration, DEPS=LOWEST'
-      php: 7.3
+      name: 'Integration, DEPS=LOWEST'
+      php: 7.4
       script:
-        - cd test/ZF2
-        - composer update --prefer-lowest --no-interaction
-        - vendor/bin/phpunit
-    - stage: test
-      name: 'ZF3 Integration, DEPS=LATEST'
-      php: 7.3
-      script:
-        - cd test/ZF3
-        - composer install --no-interaction
-        - vendor/bin/phpunit
-    - stage: test
-      name: 'ZF3 Integration, DEPS=LOWEST'
-      php: 7.3
-      script:
-        - cd test/ZF3
+        - cd test/integration
         - composer update --prefer-lowest --no-interaction
         - vendor/bin/phpunit
 

@@ -1,6 +1,6 @@
 {
-  "name": "enlitepro/enlite-monolog-zf3-integration-test",
-  "description": "Tests enlitepro/enlite-monolog ZF3 integration.",
+  "name": "enlitepro/enlite-monolog-integration-test",
+  "description": "Tests enlitepro/enlite-monolog integration.",
   "minimum-stability": "stable",
   "license": "MIT",
   "autoload": {

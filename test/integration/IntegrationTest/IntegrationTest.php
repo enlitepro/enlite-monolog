@@ -1,6 +1,6 @@
 <?php
 
-namespace EnliteMonologTest\ZF2\IntegrationTest;
+namespace EnliteMonologTest\Integration\IntegrationTest;
 
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
@@ -20,6 +20,7 @@ class IntegrationTest extends TestCase
                 ),
             ),
             'modules' => array(
+                'Laminas\Router',
                 'EnliteMonolog',
             ),
         ));
