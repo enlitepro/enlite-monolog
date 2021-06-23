@@ -24,23 +24,23 @@ class ModuleTest extends TestCase
     {
         $actual = $this->sut->getAutoloaderConfig();
         
-        self::assertInternalType('array', $actual);
+        self::assertIsArray($actual);
     }
     
     public function testAutoloaderConfigIsSerializable()
     {
-        self::assertInternalType('array', unserialize(serialize($this->sut->getAutoloaderConfig())));
+        self::assertIsArray(unserialize(serialize($this->sut->getAutoloaderConfig())));
     }
     
     public function testGetConfig()
     {
         $actual = $this->sut->getConfig();
         
-        self::assertInternalType('array', $actual);
+        self::assertIsArray($actual);
     }
     
     public function testConfigIsSerializable()
     {
-        self::assertInternalType('array', unserialize(serialize($this->sut->getConfig())));
+        self::assertIsArray(unserialize(serialize($this->sut->getConfig())));
     }
 }
