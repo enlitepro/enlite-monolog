@@ -1,0 +1,29 @@
+name: "Check Coding Standards"
+
+on:
+  pull_request:
+    branches:
+      - "master"
+  push:
+    branches:
+      - "master"
+
+jobs:
+  coding-standards:
+    name: "Check Coding Standards"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "7.4"
+      - name: "Install Dependencies"
+        uses: "ramsey/composer-install@v1"
+        with:
+          dependency-versions: "locked"
+      - name: "Coding Syntax"
+        run: "composer lint:syntax"
+      - name: "Coding Style"
+        run: "composer lint:style"

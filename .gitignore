@@ -1,6 +1,5 @@
 .idea
 .phpunit.result.cache
-/composer.lock
 coverage.xml
 infection.json
 infection.txt

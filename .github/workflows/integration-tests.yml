@@ -1,0 +1,36 @@
+
+name: "Integration Tests"
+
+on:
+  pull_request:
+    branches:
+      - "master"
+  push:
+    branches:
+      - "master"
+
+jobs:
+  integration-tests:
+    name: "Integration Tests"
+    runs-on: "ubuntu-latest"
+    strategy:
+      matrix:
+        dependencies:
+          - "--prefer-lowest"
+          - ""
+        zf-version:
+          - "ZF2"
+          - "ZF3"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "7.4"
+      - name: "Change Working Directory"
+        run: "cd test/${{ matrix.zf-version }}"
+      - name: "Install dependencies"
+        run: "composer update ${{ matrix.dependencies }} --no-interaction"
+      - name: "${{ matrix.zf-version }} Integration Tests"
+        run: "vendor/bin/phpunit"
