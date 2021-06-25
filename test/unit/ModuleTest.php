@@ -20,18 +20,6 @@ class ModuleTest extends TestCase
         $this->sut = new Module();
     }
     
-    public function testGetAutoloaderConfig()
-    {
-        $actual = $this->sut->getAutoloaderConfig();
-        
-        self::assertIsArray($actual);
-    }
-    
-    public function testAutoloaderConfigIsSerializable()
-    {
-        self::assertIsArray(unserialize(serialize($this->sut->getAutoloaderConfig())));
-    }
-    
     public function testGetConfig()
     {
         $actual = $this->sut->getConfig();

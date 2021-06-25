@@ -16,13 +16,16 @@
     "extra": {
         "branch-alias": {
             "dev-master": "3.0.x-dev"
+        },
+        "laminas": {
+            "component": "EnliteMonolog",
+            "config-provider": "EnliteMonolog\\ConfigProvider"
         }
     },
     "require": {
         "php": "^7.1",
         "container-interop/container-interop": "^1.0",
         "monolog/monolog": "^1.3 || ^2.0",
-        "laminas/laminas-modulemanager": "^2",
         "laminas/laminas-stdlib": "^3",
         "laminas/laminas-servicemanager": "^3"
     },
