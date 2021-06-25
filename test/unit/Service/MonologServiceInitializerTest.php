@@ -33,20 +33,11 @@ class MonologServiceInitializerTest extends TestCase
             )
         );
 
-        if ($this->isZF2()) {
-            $serviceManager = new ServiceManager(new Config($configArray));
-        } else { //ZF3
-            $serviceManager = new ServiceManager($configArray);
-        }
+        $serviceManager = new ServiceManager($configArray);
 
         /** @var MonologServiceAwareInterface $service */
         $service = $serviceManager->get('test');
         $this->assertInstanceOf(Logger::class, $service->getMonologService());
-    }
-
-    private function isZF2()
-    {
-        return class_exists('\Laminas\Stdlib\CallbackHandler');
     }
 
     public function testInitializeViaServiceLocator()
