@@ -36,7 +36,7 @@ class MonologOptionsTest extends TestCase
     {
         $actual = $this->sut->getHandlers();
 
-        self::assertInternalType('array', $actual);
+        self::assertIsArray($actual);
         self::assertCount(0, $actual);
     }
     
@@ -46,7 +46,7 @@ class MonologOptionsTest extends TestCase
             $expected = 'MyHandlerService',
         ));
 
-        self::assertInternalType('array', $this->sut->getHandlers());
+        self::assertIsArray($this->sut->getHandlers());
         self::assertContains($expected, $this->sut->getHandlers());
     }
     
@@ -54,7 +54,7 @@ class MonologOptionsTest extends TestCase
     {
         $actual = $this->sut->getProcessors();
 
-        self::assertInternalType('array', $actual);
+        self::assertIsArray($actual);
         self::assertCount(0, $actual);
     }
     
@@ -64,7 +64,7 @@ class MonologOptionsTest extends TestCase
             $expected = 'MyProcessorService',
         ));
 
-        self::assertInternalType('array', $this->sut->getProcessors());
+        self::assertIsArray($this->sut->getProcessors());
         self::assertContains($expected, $this->sut->getProcessors());
     }
 }

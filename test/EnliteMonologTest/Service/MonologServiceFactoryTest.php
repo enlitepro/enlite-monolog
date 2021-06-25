@@ -83,10 +83,6 @@ class MonologServiceFactoryTest extends TestCase
         $this->assertEquals('some.log', $logger->getPath());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionCode 0
-     */
     public function testCreateHandlerByEmptyClassname()
     {
         $config = array('name' => 'test', 'handlers' => array(array('name' => TestHandler::class)));
@@ -94,13 +90,12 @@ class MonologServiceFactoryTest extends TestCase
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
 
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionCode(0);
+
         $factory->createHandler($serviceManager, new MonologOptions($config), array());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionCode 0
-     */
     public function testCreateHandlerNotExistsClassname()
     {
         $config = array('name' => 'test', 'handlers' => array(array('name' => TestHandler::class)));
@@ -108,19 +103,21 @@ class MonologServiceFactoryTest extends TestCase
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
 
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionCode(0);
+
         $factory->createHandler($serviceManager, new MonologOptions($config), array('name' => 'unknown_class_name'));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionCode 0
-     */
     public function testCreateHandlerWithBadArgs()
     {
         $config = array('name' => 'test', 'handlers' => array(array('name' => TestHandler::class)));
 
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
+
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionCode(0);
 
         $factory->createHandler($serviceManager, new MonologOptions($config), array(
             'name' => TestHandler::class,
@@ -162,24 +159,20 @@ class MonologServiceFactoryTest extends TestCase
         self::assertInstanceOf(MemoryUsageProcessor::class, $actual);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionCode 0
-     * @expectedExceptionMessage Unknown processor type, must be a Closure, array or the FQCN of an invokable class
-     */
     public function testCreateProcessorNotExistsClassName()
     {
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
 
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionCode(0);
+        self::expectExceptionMessage(
+            'Unknown processor type, must be a Closure, array or the FQCN of an invokable class'
+        );
+
         $factory->createProcessor($serviceManager, stdClass::class);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionCode 0
-     * @expectedExceptionMessage Unknown processor type, must be a Closure, array or the FQCN of an invokable class
-     */
     public function testCreateNonCallableProcessorFromServiceName()
     {
         $services = new ServiceManager();
@@ -187,45 +180,48 @@ class MonologServiceFactoryTest extends TestCase
 
         $sut = new MonologServiceFactory();
 
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionCode(0);
+        self::expectExceptionMessage(
+            'Unknown processor type, must be a Closure, array or the FQCN of an invokable class'
+        );
+
         $sut->createProcessor($services, stdClass::class);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionCode 0
-     */
     public function testCreateProcessorWithMissingProcessorNameConfig()
     {
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
+
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionCode(0);
 
         $factory->createProcessor($serviceManager, array(
 
         ));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionCode 0
-     */
     public function testCreateProcessorNotExistsClassNameInNamePart()
     {
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
+
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionCode(0);
 
         $factory->createProcessor($serviceManager, array(
             'name' => '\InvalidProcessorClassName',
         ));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionCode 0
-     */
     public function testCreateProcessorWithInvalidProcessorArgumentConfig()
     {
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
+
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionCode(0);
 
         $factory->createProcessor($serviceManager, array(
             'name' => ProcessorMock::class,
@@ -233,14 +229,13 @@ class MonologServiceFactoryTest extends TestCase
         ));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionCode 0
-     */
     public function testCreateProcessorWithWrongNamedArguments()
     {
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
+
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionCode(0);
 
         $factory->createProcessor($serviceManager, array(
             'name' => ProcessorMock::class,
@@ -312,42 +307,39 @@ class MonologServiceFactoryTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionCode 0
-     */
     public function testCreateFormatterWithMissingFormatterNameConfig()
     {
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
+
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionCode(0);
 
         $factory->createFormatter($serviceManager, array(
 
         ));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionCode 0
-     */
     public function testCreateFormatterNotExistsClassName()
     {
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
+
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionCode(0);
 
         $factory->createFormatter($serviceManager, array(
             'name' => '\InvalidFormatterClassName',
         ));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionCode 0
-     */
     public function testCreateFormatterWithInvalidFormatterArgumentConfig()
     {
         $serviceManager = new ServiceManager();
         $factory = new MonologServiceFactory();
+
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionCode(0);
 
         $factory->createFormatter($serviceManager, array(
             'name' => LineFormatter::class,
@@ -544,7 +536,7 @@ class MonologServiceFactoryTest extends TestCase
             'context' => array(),
         ));
 
-        self::assertContains('2016-01-01', $line);
+        self::assertStringContainsString('2016-01-01', $line);
     }
 
     public function testInvoke()
@@ -591,11 +583,6 @@ class MonologServiceFactoryTest extends TestCase
         self::assertInstanceOf(HandlerMock::class, $result);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionCode 0
-     * @expectedExceptionMessage Handler(EnliteMonologTest\Service\HandlerMock) has an invalid argument configuration
-     */
     public function testCreateHandlerWithInvalidArguments()
     {
         $sut = new MonologServiceFactory();
@@ -604,22 +591,29 @@ class MonologServiceFactoryTest extends TestCase
 
         $options = new MonologOptions();
 
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionCode(0);
+        self::expectExceptionMessage(
+            'Handler(EnliteMonologTest\Service\HandlerMock) has an invalid argument configuration'
+        );
+
         $sut->createHandler($services, $options, array(
             'name' => HandlerMock::class,
             'args' => array(),
         ));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionCode 0
-     * @expectedExceptionMessage Formatter(EnliteMonologTest\Service\FormatterMock) has an invalid argument config
-     */
     public function testCreateFormatterWithMissingArguments()
     {
         $sut = new MonologServiceFactory();
 
         $services = new ServiceManager();
+
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionCode(0);
+        self::expectExceptionMessage(
+            'Formatter(EnliteMonologTest\Service\FormatterMock) has an invalid argument config'
+        );
 
         $sut->createFormatter($services, array(
             'name' => FormatterMock::class,
@@ -627,16 +621,17 @@ class MonologServiceFactoryTest extends TestCase
         ));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionCode 0
-     * @expectedExceptionMessage Formatter(EnliteMonologTest\Service\FormatterMock) has an invalid argument config
-     */
     public function testCreateFormatterWithInvalidArguments()
     {
         $sut = new MonologServiceFactory();
 
         $services = new ServiceManager();
+
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionCode(0);
+        self::expectExceptionMessage(
+            'Formatter(EnliteMonologTest\Service\FormatterMock) has an invalid argument config'
+        );
 
         $sut->createFormatter($services, array(
             'name' => FormatterMock::class,
@@ -646,16 +641,17 @@ class MonologServiceFactoryTest extends TestCase
         ));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionCode 0
-     * @expectedExceptionMessage Formatter(EnliteMonologTest\Service\FormatterPrivateConstructorMock) has an invalid
-     */
     public function testCreateFormatterWithPrivateConstructor()
     {
         $sut = new MonologServiceFactory();
 
         $services = new ServiceManager();
+
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionCode(0);
+        self::expectExceptionMessage(
+            'Formatter(EnliteMonologTest\Service\FormatterPrivateConstructorMock) has an invalid'
+        );
 
         $sut->createFormatter($services, array(
             'name' => FormatterPrivateConstructorMock::class,

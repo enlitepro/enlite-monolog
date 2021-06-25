@@ -47,7 +47,7 @@
         "lint:style": "vendor/bin/phpcs --standard=PSR2 --extensions=php -v --ignore=*/vendor/* .",
         "lint:syntax": "vendor/bin/parallel-lint --exclude vendor --exclude test/ZF2/vendor --exclude test/ZF3/vendor .",
         "test:coverage": "vendor/bin/phpunit --coverage-text",
-        "test:mutations": "vendor/bin/infection && cat infection.txt",
+        "test:mutations": "XDEBUG_MODE=coverage vendor/bin/infection && cat infection.txt",
         "test:units": "vendor/bin/phpunit"
     }
 }
