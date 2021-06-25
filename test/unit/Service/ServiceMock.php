@@ -10,22 +10,14 @@ use Monolog\Logger;
 
 class ServiceMock implements MonologServiceAwareInterface
 {
-
     protected $service;
 
-    /**
-     * @param Logger $monologService
-     * @return void
-     */
-    public function setMonologService(Logger $monologService)
+    public function setMonologService(Logger $monologService): void
     {
         $this->service = $monologService;
     }
 
-    /**
-     * @return Logger
-     */
-    public function getMonologService()
+    public function getMonologService(): ?Logger
     {
         return $this->service;
     }

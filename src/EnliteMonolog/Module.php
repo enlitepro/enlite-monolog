@@ -18,19 +18,19 @@ class Module implements
      */
     public function getAutoloaderConfig()
     {
-        return array(
-            'Laminas\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
+        return [
+            'Laminas\Loader\StandardAutoloader' => [
+                'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/../../src/' . __NAMESPACE__,
-                ),
-            )
-        );
+                ],
+            ],
+        ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         return include __DIR__ . "/../../config/module.config.php";
     }

@@ -25,42 +25,6 @@ class MonologServiceAwareTraitTest extends TestCase
         self::assertSame($logger, $trait->getMonologService());
     }
 
-    public function testGetMonologServiceViaServiceLocatorAwareInterface()
-    {
-        if (!\interface_exists('\Laminas\ServiceManager\ServiceLocatorAwareInterface')) {
-            self::markTestSkipped('\Laminas\ServiceManager\ServiceLocatorAwareInterface is required.');
-        }
-
-        $sut = new TraitMock();
-
-        $logger = new Logger(__METHOD__);
-
-        $services = new ServiceManager();
-        $services->setService('EnliteMonologService', $logger);
-
-        $sut->setServiceLocator($services);
-
-        self::assertSame($logger, $sut->getMonologService());
-    }
-
-    public function testGetMonologServiceViaServiceLocatorAwareTrait()
-    {
-        if (!\trait_exists('\Laminas\ServiceManager\ServiceLocatorAwareTrait')) {
-            self::markTestSkipped('\Laminas\ServiceManager\ServiceLocatorAwareTrait is required.');
-        }
-
-        $sut = new TraitMock2();
-
-        $logger = new Logger(__METHOD__);
-
-        $services = new ServiceManager();
-        $services->setService('EnliteMonologService', $logger);
-
-        $sut->setServiceLocator($services);
-
-        self::assertSame($logger, $sut->getMonologService());
-    }
-
     public function testGetMonologServiceViaServiceLocatorMethod()
     {
         $sut = new TraitMock3();

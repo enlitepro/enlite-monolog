@@ -53,7 +53,7 @@ class MonologServiceInitializerTest extends TestCase
 
         $sut = new MonologServiceInitializer();
 
-        self::assertNull($sut->initialize($service, $services));
+        self::assertNull($sut($services, $service));
 
         self::assertSame($logger, $service->getMonologService());
     }
@@ -66,7 +66,7 @@ class MonologServiceInitializerTest extends TestCase
 
         $sut = new MonologServiceInitializer();
 
-        self::assertNull($sut->initialize($service, $services));
+        self::assertNull($sut($services, $service));
     }
 
     public function testInvoke()
