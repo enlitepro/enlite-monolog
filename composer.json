@@ -45,7 +45,7 @@
     "scripts": {
         "lint:beautify": "vendor/bin/phpcbf --standard=PSR2 --extensions=php -v --ignore=*/vendor/* .",
         "lint:style": "vendor/bin/phpcs --standard=PSR2 --extensions=php -v --ignore=*/vendor/* .",
-        "lint:syntax": "vendor/bin/parallel-lint --exclude vendor --exclude test/integration/vendor --exclude test/integration/vendor .",
+        "lint:syntax": "vendor/bin/parallel-lint --exclude vendor --exclude test/integration/vendor .",
         "test:coverage": "vendor/bin/phpunit --coverage-text",
         "test:mutations": "XDEBUG_MODE=coverage vendor/bin/infection && cat infection.txt",
         "test:units": "vendor/bin/phpunit"
