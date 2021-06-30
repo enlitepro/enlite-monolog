@@ -23,7 +23,5 @@ jobs:
         uses: "ramsey/composer-install@v1"
         with:
           dependency-versions: "locked"
-      - name: "Coding Syntax"
-        run: "composer lint:syntax"
       - name: "Coding Style"
         run: "composer lint:style"
