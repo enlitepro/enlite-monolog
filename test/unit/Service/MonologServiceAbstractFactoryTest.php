@@ -8,7 +8,7 @@ namespace EnliteMonologTest\Service;
 use EnliteMonolog\Service\MonologServiceAbstractFactory;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * @covers \EnliteMonolog\Service\MonologServiceAbstractFactory
@@ -51,40 +51,6 @@ class MonologServiceAbstractFactoryTest extends TestCase
         $this->assertEquals(array('a' => 'b'), $factory->getConfig($serviceLocator));
     }
 
-    public function testCanCreateServiceWithName()
-    {
-        $factory = new MonologServiceAbstractFactory();
-        $serviceLocator = new ServiceManager();
-        $serviceLocator->setService(
-            'config',
-            array(
-                 'EnliteMonolog' => array(
-                     'default' => array()
-                 )
-            )
-        );
-        $this->assertTrue($factory->canCreateServiceWithName($serviceLocator, 'default', 'default'));
-        $this->assertFalse($factory->canCreateServiceWithName($serviceLocator, 'test', 'test'));
-    }
-
-    public function testCreateServiceWithName()
-    {
-        $factory = new MonologServiceAbstractFactory();
-        $serviceLocator = new ServiceManager();
-        $serviceLocator->setService(
-            'config',
-            array(
-                 'EnliteMonolog' => array(
-                     'default' => array()
-                 )
-            )
-        );
-
-        $logger = $factory->createServiceWithName($serviceLocator, 'default', 'default');
-        
-        self::assertInstanceOf(Logger::class, $logger);
-    }
-
     public function testCanCreate()
     {
         $services = new ServiceManager();
@@ -100,7 +66,8 @@ class MonologServiceAbstractFactoryTest extends TestCase
             )
         );
 
-        self::assertTrue($sut->canCreate(new ContainerMock($services), 'default'));
+        self::assertTrue($sut->canCreate($services, 'default'));
+        self::assertFalse($sut->canCreate($services, 'test'));
     }
 
     public function testInvoke()
@@ -118,7 +85,7 @@ class MonologServiceAbstractFactoryTest extends TestCase
             )
         );
 
-        $logger = $sut(new ContainerMock($services), 'default');
+        $logger = $sut($services, 'default');
 
         self::assertInstanceOf(Logger::class, $logger);
     }

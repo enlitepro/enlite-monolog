@@ -5,7 +5,7 @@
 
 namespace EnliteMonolog\Service;
 
-use Zend\Stdlib\AbstractOptions;
+use Laminas\Stdlib\AbstractOptions;
 
 class MonologOptions extends AbstractOptions
 {
@@ -22,57 +22,39 @@ class MonologOptions extends AbstractOptions
      *
      * @var array
      */
-    protected $handlers = array();
+    protected $handlers = [];
 
     /**
      * @var array
      */
-    protected $processors = array();
+    protected $processors = [];
 
-    /**
-     * @param string $name
-     */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param array $handlers
-     */
-    public function setHandlers(array $handlers)
+    public function setHandlers(array $handlers): void
     {
         $this->handlers = $handlers;
     }
 
-    /**
-     * @return array
-     */
-    public function getHandlers()
+    public function getHandlers(): array
     {
         return $this->handlers;
     }
 
-    /**
-     * @param array $processors
-     */
-    public function setProcessors($processors = array())
+    public function setProcessors(array $processors = []): void
     {
         $this->processors = $processors;
     }
 
-    /**
-     * @return array
-     */
-    public function getProcessors()
+    public function getProcessors(): array
     {
         return $this->processors;
     }

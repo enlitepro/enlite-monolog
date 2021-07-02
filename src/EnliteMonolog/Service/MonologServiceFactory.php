@@ -11,6 +11,7 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Interop\Container\Exception\NotFoundException;
 use InvalidArgumentException;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Monolog\Handler\FormattableHandlerInterface;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
@@ -18,26 +19,10 @@ use Monolog\Formatter\FormatterInterface;
 use ReflectionClass;
 use ReflectionException;
 use RuntimeException;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class MonologServiceFactory implements FactoryInterface
 {
-
-    /**
-     * {@inheritdoc}
-     * @throws ContainerException
-     * @throws RuntimeException
-     * @throws NotFoundException
-     * @throws ReflectionException
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        /** @var MonologOptions $options */
-        $options = $serviceLocator->get('EnliteMonologOptions');
-        return $this->createLogger($serviceLocator, $options);
-    }
-
     /**
      * {@inheritdoc}
      * @throws NotFoundException

@@ -5,7 +5,7 @@ namespace EnliteMonologTest\Service;
 use Interop\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 class ContainerMock implements ContainerInterface
 {

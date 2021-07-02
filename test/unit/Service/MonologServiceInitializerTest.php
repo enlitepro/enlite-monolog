@@ -9,8 +9,8 @@ use EnliteMonolog\Service\MonologServiceAwareInterface;
 use EnliteMonolog\Service\MonologServiceInitializer;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
-use Zend\ServiceManager\Config;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\Config;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * @covers \EnliteMonolog\Service\MonologServiceInitializer
@@ -33,20 +33,11 @@ class MonologServiceInitializerTest extends TestCase
             )
         );
 
-        if ($this->isZF2()) {
-            $serviceManager = new ServiceManager(new Config($configArray));
-        } else { //ZF3
-            $serviceManager = new ServiceManager($configArray);
-        }
+        $serviceManager = new ServiceManager($configArray);
 
         /** @var MonologServiceAwareInterface $service */
         $service = $serviceManager->get('test');
         $this->assertInstanceOf(Logger::class, $service->getMonologService());
-    }
-
-    private function isZF2()
-    {
-        return class_exists('\Zend\Stdlib\CallbackHandler');
     }
 
     public function testInitializeViaServiceLocator()
@@ -62,7 +53,7 @@ class MonologServiceInitializerTest extends TestCase
 
         $sut = new MonologServiceInitializer();
 
-        self::assertNull($sut->initialize($service, $services));
+        self::assertNull($sut($services, $service));
 
         self::assertSame($logger, $service->getMonologService());
     }
@@ -75,7 +66,7 @@ class MonologServiceInitializerTest extends TestCase
 
         $sut = new MonologServiceInitializer();
 
-        self::assertNull($sut->initialize($service, $services));
+        self::assertNull($sut($services, $service));
     }
 
     public function testInvoke()

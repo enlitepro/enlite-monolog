@@ -18,9 +18,6 @@ jobs:
         dependencies:
           - "--prefer-lowest"
           - ""
-        zf-version:
-          - "ZF2"
-          - "ZF3"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v2"
@@ -29,8 +26,8 @@ jobs:
         with:
           php-version: "7.4"
       - name: "Change Working Directory"
-        run: "cd test/${{ matrix.zf-version }}"
+        run: "cd test/integration"
       - name: "Install dependencies"
         run: "composer update ${{ matrix.dependencies }} --no-interaction"
-      - name: "${{ matrix.zf-version }} Integration Tests"
+      - name: "Integration Tests"
         run: "vendor/bin/phpunit"

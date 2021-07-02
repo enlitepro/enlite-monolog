@@ -17,7 +17,7 @@ use Monolog\Logger;
 use Monolog\Processor\MemoryUsageProcessor;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * @covers \EnliteMonolog\Service\MonologServiceFactory
@@ -34,7 +34,7 @@ class MonologServiceFactoryTest extends TestCase
 
         $factory = new MonologServiceFactory();
 
-        $service = $factory->createService($serviceManager);
+        $service = $factory($serviceManager, 'service');
         $this->assertInstanceOf(Logger::class, $service);
         $this->assertEquals('test', $service->getName());
 
@@ -489,7 +489,7 @@ class MonologServiceFactoryTest extends TestCase
         $serviceManager->setService('TestHandler', $handler);
         $serviceManager->setService('EnliteMonologOptions', new MonologOptions($config));
 
-        $service = $factory->createService($serviceManager);
+        $service = $factory($serviceManager, 'service');
 
         $service->error('HandleThis!');
 

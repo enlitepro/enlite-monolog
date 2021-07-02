@@ -9,15 +9,7 @@ use Monolog\Logger;
 
 interface MonologServiceAwareInterface
 {
+    public function setMonologService(Logger $monologService): void;
 
-    /**
-     * @param Logger $monologService
-     * @return void
-     */
-    public function setMonologService(Logger $monologService);
-
-    /**
-     * @return Logger
-     */
-    public function getMonologService();
+    public function getMonologService(): ?Logger;
 }

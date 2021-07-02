@@ -3,14 +3,14 @@
 namespace EnliteMonologTest\Service;
 
 use EnliteMonolog\Service\MonologServiceAwareTrait;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
-class TraitMock5
+class TraitMock4
 {
     use MonologServiceAwareTrait;
 
     /** @var ServiceLocatorInterface */
-    private $services;
+    private $serviceLocator;
 
     /**
      * Set service locator
@@ -19,6 +19,6 @@ class TraitMock5
      */
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
-        $this->services = $serviceLocator;
+        $this->serviceLocator = $serviceLocator;
     }
 }

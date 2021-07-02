@@ -6,10 +6,8 @@
 namespace EnliteMonolog\Service;
 
 use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\ContainerException;
 use Interop\Container\Exception\NotFoundException;
-use Zend\ServiceManager\AbstractFactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
 
 class MonologServiceAbstractFactory implements AbstractFactoryInterface
 {
@@ -21,38 +19,10 @@ class MonologServiceAbstractFactory implements AbstractFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
-    {
-        return $this->has($serviceLocator, $requestedName);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function canCreate(ContainerInterface $container, $requestedName)
-    {
-        return $this->has($container, $requestedName);
-    }
-
-    /**
-     * @param ContainerInterface $container
-     * @param $requestedName
-     * @return bool
-     * @throws ContainerException
-     * @throws NotFoundException
-     */
-    private function has($container, $requestedName)
     {
         $config = $this->getConfig($container);
         return isset($config[$requestedName]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
-    {
-        return $this->createLogger($serviceLocator, $requestedName);
     }
 
     /**
@@ -72,12 +42,9 @@ class MonologServiceAbstractFactory implements AbstractFactoryInterface
     }
 
     /**
-     * @param ContainerInterface $container
-     * @return array
-     * @throws ContainerException
      * @throws NotFoundException
      */
-    public function getConfig($container)
+    public function getConfig(ContainerInterface $container): array
     {
         if (null !== $this->config) {
             return $this->config;
@@ -97,7 +64,7 @@ class MonologServiceAbstractFactory implements AbstractFactoryInterface
     /**
      * @param array $config
      */
-    public function setConfig($config)
+    public function setConfig(array $config): void
     {
         $this->config = $config;
     }

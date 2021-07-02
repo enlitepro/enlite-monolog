@@ -5,7 +5,7 @@ namespace EnliteMonologTest\Service;
 use EnliteMonolog\Service\MonologServiceAwareTrait;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * @requires PHP 5.4
@@ -23,42 +23,6 @@ class MonologServiceAwareTraitTest extends TestCase
         $trait->setMonologService($logger);
 
         self::assertSame($logger, $trait->getMonologService());
-    }
-
-    public function testGetMonologServiceViaServiceLocatorAwareInterface()
-    {
-        if (!\interface_exists('\Zend\ServiceManager\ServiceLocatorAwareInterface')) {
-            self::markTestSkipped('\Zend\ServiceManager\ServiceLocatorAwareInterface is required.');
-        }
-
-        $sut = new TraitMock();
-
-        $logger = new Logger(__METHOD__);
-
-        $services = new ServiceManager();
-        $services->setService('EnliteMonologService', $logger);
-
-        $sut->setServiceLocator($services);
-
-        self::assertSame($logger, $sut->getMonologService());
-    }
-
-    public function testGetMonologServiceViaServiceLocatorAwareTrait()
-    {
-        if (!\trait_exists('\Zend\ServiceManager\ServiceLocatorAwareTrait')) {
-            self::markTestSkipped('\Zend\ServiceManager\ServiceLocatorAwareTrait is required.');
-        }
-
-        $sut = new TraitMock2();
-
-        $logger = new Logger(__METHOD__);
-
-        $services = new ServiceManager();
-        $services->setService('EnliteMonologService', $logger);
-
-        $sut->setServiceLocator($services);
-
-        self::assertSame($logger, $sut->getMonologService());
     }
 
     public function testGetMonologServiceViaServiceLocatorMethod()
