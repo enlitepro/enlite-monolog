@@ -23,6 +23,8 @@ jobs:
         uses: "ramsey/composer-install@v1"
         with:
           dependency-versions: "locked"
+      - name: "Allow infection extension installer"
+        run: "composer config --no-plugins allow-plugins.infection/extension-installer true"
       - name: "Install Infection"
         run: "composer require --dev --with-all-dependencies infection/infection"
       - name: "Mutation Tests"
