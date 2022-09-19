@@ -24,6 +24,6 @@ jobs:
         with:
           dependency-versions: "locked"
       - name: "Install Infection"
-        run: "composer require --dev infection/infection"
+        run: "composer require --dev --with-all-dependencies infection/infection"
       - name: "Mutation Tests"
         run: "composer test:mutations"
