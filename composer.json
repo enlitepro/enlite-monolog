@@ -20,9 +20,10 @@
     },
     "require": {
         "monolog/monolog": "^1.0.2",
-        "zendframework/zend-modulemanager": "^2",
-        "zendframework/zend-stdlib": "^2 || ^3",
-        "zendframework/zend-servicemanager": "^2 || ^3"
+        "laminas/laminas-modulemanager": "^2",
+        "laminas/laminas-stdlib": "^2 || ^3",
+        "laminas/laminas-servicemanager": "^2 || ^3",
+        "laminas/laminas-dependency-plugin": "^2.1"
     },
     "require-dev": {
         "container-interop/container-interop": "^1.0",
@@ -49,5 +50,10 @@
         "test:coverage": "vendor/bin/phpunit --coverage-text",
         "test:mutations": "vendor/bin/infection && cat infection.txt",
         "test:units": "vendor/bin/phpunit"
+    },
+    "config": {
+        "allow-plugins": {
+            "laminas/laminas-dependency-plugin": true
+        }
     }
 }

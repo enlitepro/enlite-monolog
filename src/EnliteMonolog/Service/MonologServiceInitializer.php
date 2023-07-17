@@ -6,8 +6,8 @@
 namespace EnliteMonolog\Service;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\InitializerInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\InitializerInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class MonologServiceInitializer implements InitializerInterface
 {

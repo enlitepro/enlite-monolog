@@ -4,7 +4,7 @@ namespace EnliteMonologTest\Service;
 
 use EnliteMonolog\Service\MonologServiceAwareTrait;
 use Monolog\Logger;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * @requires PHP 5.4
@@ -26,8 +26,8 @@ class MonologServiceAwareTraitTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMonologServiceViaServiceLocatorAwareInterface()
     {
-        if (!\interface_exists('\Zend\ServiceManager\ServiceLocatorAwareInterface')) {
-            self::markTestSkipped('\Zend\ServiceManager\ServiceLocatorAwareInterface is required.');
+        if (!\interface_exists('\Laminas\ServiceManager\ServiceLocatorAwareInterface')) {
+            self::markTestSkipped('\Laminas\ServiceManager\ServiceLocatorAwareInterface is required.');
         }
 
         $sut = new TraitMock();
@@ -44,8 +44,8 @@ class MonologServiceAwareTraitTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMonologServiceViaServiceLocatorAwareTrait()
     {
-        if (!\trait_exists('\Zend\ServiceManager\ServiceLocatorAwareTrait')) {
-            self::markTestSkipped('\Zend\ServiceManager\ServiceLocatorAwareTrait is required.');
+        if (!\trait_exists('\Laminas\ServiceManager\ServiceLocatorAwareTrait')) {
+            self::markTestSkipped('\Laminas\ServiceManager\ServiceLocatorAwareTrait is required.');
         }
 
         $sut = new TraitMock2();

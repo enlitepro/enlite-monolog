@@ -8,8 +8,8 @@ namespace EnliteMonologTest\Service;
 use EnliteMonolog\Service\MonologServiceAwareInterface;
 use EnliteMonolog\Service\MonologServiceInitializer;
 use Monolog\Logger;
-use Zend\ServiceManager\Config;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\Config;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * @covers \EnliteMonolog\Service\MonologServiceInitializer
@@ -45,7 +45,7 @@ class MonologServiceInitializerTest extends \PHPUnit_Framework_TestCase
 
     private function isZF2()
     {
-        return class_exists('\Zend\Stdlib\CallbackHandler');
+        return class_exists('\Laminas\Stdlib\CallbackHandler');
     }
 
     public function testInitializeViaServiceLocator()
